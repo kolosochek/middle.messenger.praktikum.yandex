@@ -13,8 +13,8 @@ const AuthPage = `
             <div class="b-auth-page">
                 <form class="b-form">
                     <h2 class="b-page-title">Sign In</h2>
-                    {{> InputComponent title='Login' name='login_input' type='text' required='true' errorMessage='Login is empty'}}
-                    {{> InputComponent title='Password' name='password_input' type='password' required='true'}}
+                    {{> InputComponent title='Login' name='login' type='text' required='true' errorMessage='Login is empty'}}
+                    {{> InputComponent title='Password' name='password' type='password' required='true'}}
                     <div class="b-submit-wrapper">
                         <button class="b-submit" type="submit">Authorize</button>
                     </div>

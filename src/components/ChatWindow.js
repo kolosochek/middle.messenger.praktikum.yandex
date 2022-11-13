@@ -37,7 +37,8 @@ const ChatWindow = `
                         </div>
                     </div>
                 </div>
-                <section class="b-chat">
+                <section class="b-chat-wrapper">
+                <div class="b-chat">
                     {{#each this.messages}}
                     <div class="b-chat-message-wrapper{{#if_eq this.message.author 'Me'}} state__mine{{/if_eq}}">
                         <p class="b-chat-message">
@@ -74,6 +75,7 @@ const ChatWindow = `
                             </svg> Location</a>
                         </div>
                     </div>
+                </div>
                 </section>
             </div>
             {{/with}}

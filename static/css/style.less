@@ -185,8 +185,9 @@ body .b-submit {
 				/* Aside */
 				.b-conversations-wrapper {
 					display: flex;
-					min-height: 100vh;
-					width: 360px;
+					overflow: hidden;
+					height: 100vh;
+					min-width: 360px;
 					margin-right: auto;
 					border-right: 1px solid @link-color;
 					background-color: @shadow-color;
@@ -196,6 +197,11 @@ body .b-submit {
 						display: flex;
 						flex-direction: column;
 						padding: 10px;
+						overflow-x: hidden;
+						
+						&::-webkit-scrollbar {
+							display: none;
+						} 
 
 
 						/* profile */
@@ -334,12 +340,13 @@ body .b-submit {
 						display: flex;
 						flex-direction: column;
 						width: 100%;
+						height: 100vh;
 
 
 
 						.b-chat-info-wrapper {
 							display: flex;
-							height: 88px;
+							min-height: 88px;
 							border-bottom: 1px solid @link-color;
 							position: relative;
 
@@ -384,44 +391,65 @@ body .b-submit {
 							}
 						}
 
-						.b-chat {
+						.b-chat-wrapper {
 							margin-top: auto;
 							padding: 0 20px;
 							font-size: 1.3em;
+							overflow-x: hidden;
+							display: flex;
+							flex-direction: column-reverse;
 
-							.b-chat-message-wrapper {
-								padding: 7px 0;
-
-								.b-chat-message {
-
-									.b-message-author {
-										color: @link-color;
-										padding-left: 5px;
-										font-size: 0.9em;
-									}
-
-									.b-message-time {
-										color: @background-color;
-										background-color: @link-color;
-										border-radius: 15px;
-										margin-top: auto;
-										padding: 4px 8px;
-										font-size: 0.9em;
-									}
-
-									.b-message-text {
-										line-height: 1.2em;
-									}
-								}
+							&::-webkit-scrollbar {
+								width: 20px;
+								border-left: 1px solid @link-color;
+								border-right: 1px solid @link-color;
 							}
 
-							.state__mine {
-								text-align: right;
+							&::-webkit-scrollbar-track {
+							}
+							&::-webkit-scrollbar-thumb {
+								border-left: 1px solid @link-color;
+								border-right: 1px solid @link-color;
+								background: @background-color;
+							}
+							  
+
+							.b-chat {
+
+								.b-chat-message-wrapper {
+									padding: 7px 0;
+
+									.b-chat-message {
+
+										.b-message-author {
+											color: @link-color;
+											padding-left: 5px;
+											font-size: 0.9em;
+										}
+
+										.b-message-time {
+											color: @background-color;
+											background-color: @link-color;
+											border-radius: 15px;
+											margin-top: auto;
+											padding: 4px 8px;
+											font-size: 0.9em;
+										}
+
+										.b-message-text {
+											line-height: 1.2em;
+										}
+									}
+								}
+
+								.state__mine {
+									text-align: right;
+								}
 							}
 						}
 
 						.b-chat-reply-wrapper {
-							height: 50px;
+							min-height: 50px;
 							position: relative;
 							border-top: 1px solid @link-color;
 
@@ -474,7 +502,7 @@ body .b-submit {
 								display: none;
 								position: absolute;
 								bottom: 57px;
-    							left: 10px;
+								left: 10px;
 
 								.b-chat-reply-attachment {
 									display: flex;
@@ -759,6 +787,7 @@ body .b-submit {
 		position: relative;
 		z-index: 10000;
 	}
+
 	/* profile page modal window */
 	.b-modal-window.b-profile-page {
 		display: flex;

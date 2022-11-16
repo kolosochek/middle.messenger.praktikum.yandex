@@ -4,14 +4,7 @@ import ImageComponent from "./ImageComponent";
 
 Handlebars.registerPartial('AvatarComponent', AvatarComponent);
 Handlebars.registerPartial('ImageComponent', ImageComponent);
-Handlebars.registerHelper('if_eq', function(a, b, opts) {
-    if (a == b) {
-        return opts.fn(this);
-    } else {
-        return opts.inverse(this);
-    }
-});
-
+Handlebars.registerHelper('if_eq', (a, b, opts) => a == b ? opts.fn(this) : opts.inverse(this) );
 
 const addUserTemplate = `<form action=# class=b-modal-window-content><h3 class=b-modal-window-title>Add user</h3><input class=b-input type=text /><button class=b-submit>Add</button></form>`
 const removeUserTemplate = `<form action=# class=b-modal-window-content><h3 class=b-modal-window-title>Remove user</h3><input class=b-input type=text /><button class=b-submit>Remove</button></form>`
@@ -44,7 +37,6 @@ const ChatWindow = `
                         <p class="b-chat-message">
                         <span class="b-message-time">{{this.message.time}}</span><span class="b-message-author">{{this.message.author}}: </span>
                             <span class="b-message-text">{{this.message.text}}</span>
-                            
                         </p>
                     </div>                        
                     {{/each}}

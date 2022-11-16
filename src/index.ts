@@ -10,93 +10,90 @@ import data from '../data.js';
 import user from '../user.js';
 
 
-// get chat by id
-// @return Conversation object
-const getActiveChat = (data, active_chat_id=window.localStorage.getItem('active_chat_id')) => {
-    for (const conversation of data) {
-        if (conversation.chat_id == active_chat_id) {
-            return conversation;
-        }
+// base view component
+class View {
+    constructor(public viewName:string, public viewTemplate: string, public viewContext:object = {}, protected id: number = Math.floor(Math.random() * 10000)){}
+    // render da view
+    public renderView = ():string => {
+        const compiled = Handlebars.compile(this.viewTemplate);
+        return compiled(this.viewContext);
     }
 }
 
-// render given template by context using Handlebars compiler
-// @return escaped HTML
-const renderTemplate = (template, context = {}) => {
-    const compiled = Handlebars.compile(template);
-    const html = compiled(context);
-    return html;
+// index page view
+class IndexViewClass extends View {
+    // get chat by id
+    // @return Conversation object
+    public activeChatId:string = window.localStorage.getItem('active_chat_id');
+    public getActiveChatId = ():void => { this.activeChatId = window.localStorage.getItem('active_chat_id'); }
+    public getActiveChat = (data):object => {
+        // let's update activeChatId to make a proper ID of that that we wanna get
+        this.getActiveChatId();
+        for (const conversation of data) {
+            if (conversation.chat_id == this.activeChatId) {
+                return conversation;
+            }
+        }
+    } 
+    // 
+    public getViewContext = ():void => {
+        this.viewContext = { 
+            conversationsList: data, 
+            activeChat: this.getActiveChat(data), 
+            active_chat_id: this.activeChatId 
+        }
+    }
+    public activeChat:object = this.getActiveChat(data);
+    //
+    public renderView = ():string => {
+        this.getViewContext();  
+        const compiled = Handlebars.compile(this.viewTemplate);
+        return compiled(this.viewContext);
+    }
+
+}
+
+class LogoutViewClass extends View {
+    public renderView = ():string => {
+        window.localStorage.removeItem('isAuthorized');
+        const compiled = Handlebars.compile(this.viewTemplate);
+        return compiled(this.viewContext);
+    }
 }
 
 // index page view
-const IndexView = () => {
-    const template = IndexPage;
-    const context = { conversationsList: data, activeChat: getActiveChat(data), active_chat_id: window.localStorage.getItem('active_chat_id') };
-    return renderTemplate(template, context);
-}
+const IndexView = new IndexViewClass(viewName="IndexPage", viewTemplate=IndexPage); 
 
 // auth page view
-const AuthView = () => {
-    const template = AuthPage;
-    const context = {}
-    return renderTemplate(template, context);
-}
+const AuthView = new View(viewName='AuthPage', viewTemplate=AuthPage);
+
 // logout page view
-const LogoutView = () => {
-    window.localStorage.removeItem('isAuthorized');
-    const template = AuthPage;
-    const context = {}
-    return renderTemplate(template, context);
-}
+const LogoutView = new LogoutViewClass(viewName='AuthPage', viewTemplate=AuthPage);
 
 // signup page view
-const SignupView = () => {
-    const template = SignUpPage;
-    const context = {}
-    return renderTemplate(template, context);
-}
+const SignUpView = new View(viewName='SignUpPage', viewTemplate=SignUpPage);
 
 // profile page view
-const ProfileView = () => {
-    const template = ProfilePage;
-    const context = { profile: user, mode: 'view' }
-    return renderTemplate(template, context);
-}
+const ProfileView = new View(viewName='ProfilePage', viewTemplate=ProfilePage ,viewContext={profile: user, mode: 'view'});
 
-// profile page view
-const ProfileEditView = () => {
-    const template = ProfilePage;
-    const context = { profile: user, mode: 'edit' }
-    return renderTemplate(template, context);
-}
+// profile edit view
+const ProfileEditView = new View(viewName='ProfileEdit', viewTemplate=ProfilePage ,viewContext={profile: user, mode: 'edit'});
 
-// profile page view
-const ProfilePasswordView = () => {
-    const template = ProfilePage;
-    const context = { profile: user, mode: 'change-password' }
-    return renderTemplate(template, context);
-}
+// profile password-change view
+const ProfilePasswordView = new View(viewName='ProfileChangePassword', viewTemplate=ProfilePage ,viewContext={profile: user, mode: 'change-password'});
 
-// error page view
-const Error404View = () => {
-    const template = Error404Page;
-    const context = {}
-    return renderTemplate(template, context);
-}
+// error 4** page view
+const Error404View = new View(viewName='Error404View', viewTemplate=Error404Page);
 
-// error page view
-const Error500View = () => {
-    const template = Error500Page;
-    const context = {}
-    return renderTemplate(template, context);
-}
+// error 5** page view
+const Error500View = new View(viewName='Error500View', viewTemplate=Error500Page);
 
 // all possible routes
 const routes = [
     { path: '/', view: IndexView, },
     { path: '/auth', view: AuthView, },
     { path: '/logout', view: LogoutView, },
-    { path: '/signup', view: SignupView, },
+    { path: '/signup', view: SignUpView, },
     { path: '/profile', view: ProfileView, },
     { path: '/profile-edit', view: ProfileEditView, },
     { path: '/profile-change-password', view: ProfilePasswordView, },
@@ -108,27 +105,30 @@ const routes = [
 const unauthorizedRoutes = [
     { path: '/', view: AuthView, },
     { path: '/auth', view: AuthView, },
-    { path: '/signup', view: SignupView, },
+    { path: '/signup', view: SignUpView, },
 
 ]
+
 const parseLocation = () => {
     return location.hash.slice(1).toLowerCase() || '/';
 }
-const findViewByPath = (path, routes) => {
+
+const findViewByPath = (path:string, routes:object[]) => {
     return routes.find(route => route.path.match(new RegExp(`^\\${path}$`, 'gm'))) || undefined;
 }
 
 const router = () => {
-    const isAuthorized = window.localStorage.getItem('isAuthorized');   
+    const isAuthorized = window.localStorage.getItem('isAuthorized'); 
     const path = parseLocation();
     const page = isAuthorized ? findViewByPath(path, routes) || { view: Error404View } : findViewByPath(path, unauthorizedRoutes) || { view: Error404View };
+    // render the page &&
     // inject compiled HTML to DOM
-    // "render" the page
-    document.getElementById('root').innerHTML = page.view();
+    document.getElementById('root').innerHTML = page.view.renderView();
     
     // aside conversations list item click event handler
     [...document.querySelectorAll('.b-conversation')].forEach((conversation) => {
-        conversation.addEventListener('click', () => {
+        conversation.addEventListener('click', (e) => {
+            e.preventDefault();
             // set an active chat
             window.localStorage.setItem('active_chat_id', conversation.getAttribute('chat_id'));
             window.dispatchEvent(new HashChangeEvent("hashchange"));

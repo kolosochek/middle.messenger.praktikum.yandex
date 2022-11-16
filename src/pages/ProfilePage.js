@@ -23,7 +23,7 @@ const ProfilePage = `
         <section class="b-profile-page-wrapper">
             <div class="b-profile-page">
                 <div class="b-profile-goback-wrapper">
-                    <a href="/" class="b-profile-goback b-link">Back</a>
+                    <a href="/#/" class="b-profile-goback b-link">Back</a>
                 </div>
                 <div class="b-profile-wrapper">
                     <div class="b-profile">

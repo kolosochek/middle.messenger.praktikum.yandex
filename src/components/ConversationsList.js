@@ -3,13 +3,7 @@ import AvatarComponent from "./AvatarComponent";
 
 Handlebars.registerPartial('AvatarComponent', AvatarComponent);
 Handlebars.registerHelper('log', value => console.log(value));
-Handlebars.registerHelper('if_eq', function(a, b, opts) {
-    if (a == b) {
-        return opts.fn(this);
-    } else {
-        return opts.inverse(this);
-    }
-});
+Handlebars.registerHelper('if_eq', (a, b, opts) => a == b ? opts.fn(this) : opts.inverse(this));
 
 const ConversationsList = `
 <section class="b-conversations-list-wrapper">

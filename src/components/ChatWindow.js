@@ -42,7 +42,7 @@ const ChatWindow = `
                     {{/each}}
                 </section>
                 <section class="b-chat-reply-wrapper">
-                    <form class="b-chat-reply">
+                    <form class="b-chat-reply" action="/">
                         <figure class="b-attach-file">
                             <a class='b-attach-file-link'>
                                 {{> ImageComponent image_url='attach_file_icon.png' width='20' height='20'}}

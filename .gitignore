@@ -3,3 +3,6 @@ dist/
 .parcel-cache/
 temp.html
 .vscode/
+.eslintrc.json
+.eslintignore
+

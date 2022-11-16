@@ -1,6 +1,6 @@
 const data = [{
     'name': 'Alex', 
-    'avatar_url': 'https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png',
+    'avatar_url': 'https://i.pravatar.cc/47?img=60',
     'messages': [
         {'message': {
             'author': 'Alex',
@@ -52,7 +52,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
     'chat_id': 0,
 }, {
     'name': 'Marina Skvortsova', 
-    'avatar_url': 'https://scontent.fpwq4-1.fna.fbcdn.net/v/t1.6435-1/89028497_10207162704383142_965393895204585472_n.jpg?stp=dst-jpg_s240x240&_nc_cat=111&ccb=1-7&_nc_sid=7206a8&_nc_ohc=8ORG0x5PpVQAX-vbS6N&_nc_ht=scontent.fpwq4-1.fna&oh=00_AfBdWbMFM5-W0P2dtXK7lifyKrBT5gIzqYhiwANQd9FC1g&oe=638DC0C4',
+    'avatar_url': 'https://i.pravatar.cc/150?img=25',
     'messages': [{   
         'message': {
             'author': 'Marina Skvortsova',
@@ -65,7 +65,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
     'chat_id': 1,
 }, {
     'name': 'Nomad72', 
-    'avatar_url': '',
+    'avatar_url': 'https://i.pravatar.cc/150?img=69',
     'messages': [{   
         'message': {
             'author': 'Nomad72',
@@ -78,7 +78,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
     'chat_id': '2',
 }, {
     'name': 'mr. Maloy', 
-    'avatar_url': 'https://pbs.twimg.com/profile_images/415563444675284992/AENueua8_400x400.jpeg',
+    'avatar_url': 'https://i.pravatar.cc/150?img=66',
     'messages': [
         {'message': {
             'author': 'mr. Maloy',

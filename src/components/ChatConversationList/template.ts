@@ -1,14 +1,17 @@
 import Handlebars from "handlebars";
-import AvatarComponent from "./AvatarComponent";
+import AvatarComponent from "../AvatarComponent";
 
 Handlebars.registerPartial('AvatarComponent', AvatarComponent);
 Handlebars.registerHelper('log', value => console.log(value));
-Handlebars.registerHelper('if_eq', (a, b, opts) => a == b ? opts.fn(this) : opts.inverse(this));
+Handlebars.registerHelper('if_eq', function(a, b, opts){
+    a == b ? opts.fn(this) : opts.inverse(this)
+});
+Handlebars.registerHelper('log', (value) => { console.log(value)})
 
-const ConversationsList = `
+const ConversationListTemplate = `
 <section class="b-conversations-list-wrapper">
     <div class="b-conversations-list">
-            {{#each conversationsList}}
+            {{#each conversationList}}
             <div class="b-conversation-wrapper{{#if_eq ../activeChatId this.chat_id}} state__active{{/if_eq}}">
                 <div class="b-conversation" chat_id="{{this.chat_id}}">
                     {{> AvatarComponent image_url="this.avatar_url"}}
@@ -43,4 +46,4 @@ const ConversationsList = `
 </script>
 `
 
-export default ConversationsList;
+export default ConversationListTemplate;

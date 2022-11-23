@@ -11,18 +11,20 @@ import data from '../data.js';
 import user from '../user.js';
 
 
+function decorator(target: Object, propertyName: string, descriptor: PropertyDescriptor){ 
+
+}
+
 // base view class
 class View {
     constructor(public viewName: string, public viewTemplate: string, public viewContext: object = {}, protected readonly id: number = Math.floor(Math.random() * 10000)) { }
     renderView(template = this.viewTemplate): string {
-        // debug
-        //console.log(this.isAuthorised)
-        //
         const compiled = Handlebars.compile(template);
         return compiled(this.viewContext);
     }
 }
 
+// index page view class
 class IndexViewClass extends View {
     public activeChatId: string = window.localStorage.getItem('active_chat_id');
     public getActiveChatId = (): void => { this.activeChatId = window.localStorage.getItem('active_chat_id') }
@@ -63,8 +65,8 @@ class LogoutViewClass extends View {
 
 // main Router class
 class Router {
-    // all possible views
-    public views: object = {
+    // page views
+    public views: any = {
         'IndexView': new IndexViewClass("IndexPage", IndexPage),
         'AuthView': new View('AuthPage', AuthPage),
         'LogoutView': new LogoutViewClass('AuthPage', AuthPage),
@@ -153,7 +155,6 @@ class Router {
 }
 
 const router = new Router();
-
 
 // router event listeners
 window.addEventListener('load', router.route);

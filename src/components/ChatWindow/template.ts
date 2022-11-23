@@ -1,6 +1,6 @@
 import Handlebars from "handlebars";
-import AvatarComponent from "./AvatarComponent";
-import ImageComponent from "./ImageComponent";
+import AvatarComponent from "../../components/AvatarComponent.js";
+import ImageComponent from "../../components/ImageComponent.js";
 
 Handlebars.registerPartial('AvatarComponent', AvatarComponent);
 Handlebars.registerPartial('ImageComponent', ImageComponent);
@@ -10,9 +10,9 @@ const addUserTemplate = `<form action=# class=b-modal-window-content><h3 class=b
 const removeUserTemplate = `<form action=# class=b-modal-window-content><h3 class=b-modal-window-title>Remove user</h3><input class=b-input type=text /><button class=b-submit>Remove</button></form>`
 
 
-const ChatWindow = `
+const ChatWindowTemplate = `
 <section class="b-chat-window-wrapper">
-        {{#if this.active_chat_id}}
+        {{#if this.activeChat}}
             {{#with this.activeChat}}
             <div class="b-chat-window">
                 <div class="b-chat-info-wrapper">
@@ -79,4 +79,4 @@ const ChatWindow = `
 </section>
 `
 
-export default ChatWindow;
+export default ChatWindowTemplate;

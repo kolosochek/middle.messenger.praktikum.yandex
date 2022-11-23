@@ -5,7 +5,7 @@
     "scripts": {
         "dev": "npm run copy-images & parcel index.html & node server.js",
         "build": "npm run copy-images & parcel build index.html",
-        "copy-images": "mkdir ./dist && cp ./static/*.png ./dist",
+        "copy-images": "mkdir ./dist || cp ./static/*.png ./dist",
         "start": "parcel index.html & node server.js"
     },
     "keywords": [],

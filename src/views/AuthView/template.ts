@@ -1,5 +1,5 @@
 import Handlebars from "handlebars";
-import InputComponent from "../components/InputComponent";
+import InputComponent from "../../components/InputComponent";
 
 // let's register components that we'll use on that page
 Handlebars.registerPartial('InputComponent', InputComponent);
@@ -8,7 +8,6 @@ Handlebars.registerPartial('InputComponent', InputComponent);
 const AuthPage = `
 <main id="viewport" class="b-page-wrapper">
     <div class="b-page">
-        <!-- if (user.isAuthorized) -->
         <section class="b-auth-page-wrapper">
             <div class="b-auth-page">
                 <form class="b-form">
@@ -24,9 +23,6 @@ const AuthPage = `
                 </form>
             </div>
         </section>
-        <!-- else -->
-        
-        <!-- -->
     </div>
 </main>
 `

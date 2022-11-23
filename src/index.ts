@@ -1,7 +1,6 @@
 import Block from './utils/Block';
 import { IndexView } from './views/IndexView';
 import { AuthView } from './views/AuthView';
-import { SignUpView } from './views/SignUpView';
 import { ProfileView } from './views/ProfileView';
 import { Error404View } from './views/Error404View';
 import { Error500View } from './views/Error500View';
@@ -27,7 +26,7 @@ class Router {
                     break;
                 }
                 case '/signup': {
-                    page = new SignUpView({ mode: 'signup' });
+                    page = new AuthView({ mode: 'signup' });
                     break;
                 }
                 case '/logout': {
@@ -36,6 +35,14 @@ class Router {
                 }
                 case '/profile': {
                     page = new ProfileView({ mode: 'view' });
+                    break;
+                }
+                case '/profile-edit': {
+                    page = new ProfileView({ mode: 'edit' });
+                    break;
+                }
+                case '/profile-change-password': {
+                    page = new ProfileView({ mode: 'change-password' });
                     break;
                 }
                 case '/error404': {
@@ -62,7 +69,7 @@ class Router {
                     break;
                 }
                 case '/signup': {
-                    page = new SignUpView({ mode: 'signup'});
+                    page = new AuthView({ mode: 'signup'});
                     break;
                 }
                 default: {

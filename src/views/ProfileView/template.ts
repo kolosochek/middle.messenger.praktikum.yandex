@@ -14,8 +14,12 @@ Handlebars.registerHelper('if_eq', function(a, b, opts) {
 });
 
 
+// debug
+Handlebars.registerHelper('log', (value) => { console.log(value)})
+
 const ProfilePageTemplate = `
 <main id="viewport" class="b-page-wrapper">
+{{log this.mode}}
     <div class="b-page">
     <!-- if mode == 'view' -->
     {{#if_eq this.mode "view"}}

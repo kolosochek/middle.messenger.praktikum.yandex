@@ -2,6 +2,7 @@ import Block from '../../utils/Block';
 import { InputComponent } from '../../components/InputComponent';
 import template from './template';
 import styles from './style.module.less';
+import user from '../../model/user'
 
 
 interface ProfileViewProps {
@@ -18,8 +19,10 @@ export class ProfileView extends Block<ProfileViewProps> {
   init() {
     const mode = this.props.mode;
     // debug
-    console.log("mode");
-    console.log(mode);
+    //console.log("mode");
+    //console.log(mode);
+
+    this.props.profile = user;
 
     // loginInputComponent
     this.children.loginInputComponent = new InputComponent({

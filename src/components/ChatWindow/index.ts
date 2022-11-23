@@ -5,6 +5,7 @@ import { ChatSettings } from '../ChatSettings';
 
 interface ChatWindowProps {
   activeChat?: object;
+  props?: any;
 }
 
 export class ChatWindow extends Block<ChatWindowProps> {
@@ -12,11 +13,6 @@ export class ChatWindow extends Block<ChatWindowProps> {
     super({ ...props });
   }
 
-  init() {
-    // chatSettings
-    this.children.chatSettings = new ChatSettings({});
-  }
-  
   render() {
     return this.compile(template, { ...this.props, styles });
   }

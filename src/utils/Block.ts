@@ -29,6 +29,10 @@ class Block<P extends Record<string, any> = any> {
     }
 
     _getChildrenAndProps(childrenAndProps: P): { props: P, children: Record<string, Block | Block[]> } {
+        // debug
+        //console.log(childrenAndProps);
+        //
+        
         const props: Record<string, unknown> = {};
         const children: Record<string, Block | Block[]> = {};
 

@@ -3,6 +3,7 @@ import { ChatAsideProfile } from '../../components/ChatAsideProfile';
 import { ChatAsideSearch } from '../../components/ChatAsideSearch';
 import { ChatConversationList } from '../../components/ChatConversationList';
 import { ChatWindow } from '../../components/ChatWindow';
+import { ChatSettings } from '../../components/ChatSettings';
 import template from './template';
 import styles from './style.module.less';
 import data from '../../model/data.js'
@@ -43,10 +44,6 @@ export class IndexView extends Block<IndexViewProps> {
     }
   }
 
-  private _logoutUser():void {
-    window.localStorage.removeItem('isAuthorized');
-  }
-
   public static getData = (): object[] => {
     return data;
   }
@@ -80,7 +77,11 @@ export class IndexView extends Block<IndexViewProps> {
     // chatWindow
     this.children.chatWindow = new ChatWindow({
       activeChat: IndexView.getActiveChat(),
+      props: {
+        children: new ChatSettings({})
+      } 
     });
+    
     
   }
 

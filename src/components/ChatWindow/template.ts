@@ -11,7 +11,6 @@ Handlebars.registerHelper('log', (value) => { console.log(value)});
 
 const ChatWindowTemplate = `
 <section class="b-chat-window-wrapper">
-{{log this}}
         {{#if this.activeChat}}
             {{#with this.activeChat}}
             <div class="b-chat-window">

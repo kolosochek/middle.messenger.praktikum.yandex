@@ -137,6 +137,7 @@ export class AuthView extends Block<AuthViewProps> {
       case 'logout': {
         this._logoutUser();
         window.location.hash = '/';
+        break;
       }
       default: {
         throw new Error(`AuthView: no action for this mode: ${mode}!`);

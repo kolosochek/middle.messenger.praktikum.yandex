@@ -19,7 +19,7 @@ export class EventBus<E extends Record<string, string> = Record<string, string>,
 
   off<Event extends MapInterface<E>>(event: Event, callback: Handler<Args[Event]>) {
     if (!this.listeners[event]) {
-      throw new Error(`Нет события: ${event}`);
+      throw new Error(`There is no spoon, Neo: ${event}`);
     }
 
     this.listeners[event] = this.listeners[event]!.filter(

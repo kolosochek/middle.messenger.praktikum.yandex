@@ -1,9 +1,10 @@
 import Handlebars from "handlebars";
 // debug
-Handlebars.registerHelper('log', (value) => { console.log(value)})
+Handlebars.registerHelper('log', (value) => { console.log(value)});
 
 const IndexPageTemplate = `
 <main id="viewport" class="b-page-wrapper">
+{{log this}}
     <div class="b-page">
         <section class="b-chat-viewport-wrapper">
             <div class="b-chat-viewport">

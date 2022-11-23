@@ -11,7 +11,6 @@ interface AuthViewProps {
   };
 }
 
-
 export class AuthView extends Block<AuthViewProps> {
   constructor(context: any) {
     super(context);
@@ -35,19 +34,6 @@ export class AuthView extends Block<AuthViewProps> {
     switch (mode) {
       // auth
       case 'auth': {
-        this.setProps({
-          events: {
-            // on auth form submit
-            submit: (e) => {
-              //e.preventDefault();
-              this._loginUser();
-              // TODO
-              // console.log() all form fields
-              console.log('TODO: console.log() all form fields!')
-            }
-          }
-        });
-
         // loginInputComponent
         this.children.loginInputComponent = new InputComponent({
           title: 'Login',
@@ -70,19 +56,6 @@ export class AuthView extends Block<AuthViewProps> {
       }
       // signup
       case 'signup': {
-        this.setProps({
-          events: {            
-            // on signup form submit
-            submit: (e) => {
-              //e.preventDefault();
-              this._loginUser();
-              // TODO
-              // console.log() all form fields
-              console.log('TODO: console.log() all form fields!')
-            }
-          }
-        });
-
         // emailInputComponent
         this.children.emailInputComponent = new InputComponent({
           title: 'Email',
@@ -169,6 +142,21 @@ export class AuthView extends Block<AuthViewProps> {
         throw new Error(`AuthView: no action for this mode: ${mode}!`);
       }
     }
+
+    // auth page form submit
+    this.setProps({
+      events: {            
+        submit: (e) => {
+          e.preventDefault();
+          this._loginUser();
+          // TODO
+          // console.log() all form fields
+          console.log('TODO: console.log() all form fields!');
+          window.location.hash = '/';
+          window.dispatchEvent(new HashChangeEvent("hashchange"));
+        }
+      }
+    });
   }
 
 

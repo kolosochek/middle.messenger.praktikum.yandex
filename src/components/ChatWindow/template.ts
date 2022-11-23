@@ -1,35 +1,22 @@
 import Handlebars from "handlebars";
-import AvatarComponent from "../../components/AvatarComponent.js";
+import ChatSettingsTemplate from "../ChatSettings/template.ts";
 import ImageComponent from "../../components/ImageComponent.js";
 
-Handlebars.registerPartial('AvatarComponent', AvatarComponent);
+
 Handlebars.registerPartial('ImageComponent', ImageComponent);
+Handlebars.registerPartial('ChatSettingsTemplate', ChatSettingsTemplate);
 Handlebars.registerHelper('if_eq', (a, b, opts) => a == b ? opts.fn(this) : opts.inverse(this) );
-
-const addUserTemplate = `<form action=# class=b-modal-window-content><h3 class=b-modal-window-title>Add user</h3><input class=b-input type=text /><button class=b-submit>Add</button></form>`
-const removeUserTemplate = `<form action=# class=b-modal-window-content><h3 class=b-modal-window-title>Remove user</h3><input class=b-input type=text /><button class=b-submit>Remove</button></form>`
-
+// debug
+Handlebars.registerHelper('log', (value) => { console.log(value)});
 
 const ChatWindowTemplate = `
 <section class="b-chat-window-wrapper">
+{{log this}}
         {{#if this.activeChat}}
             {{#with this.activeChat}}
             <div class="b-chat-window">
-                <div class="b-chat-info-wrapper">
-                    <div class="b-chat-info">
-                        {{> AvatarComponent image_url=this.avatar_url}}
-                        <span class="b-profile-title b-link">{{this.name}}</span>
-                        <div class="b-chat-settings">
-                            <a class="b-link b-chat-settings-link">Settings</a>
-                        </div>
-                    </div>
-                    <div class="b-chat-settings-wrapper">
-                        <div class="b-chat-settings">
-                            <a class="b-link b-user-add" onclick="showModal('${addUserTemplate}', 'b-chat-page')"> + Add user</a>
-                            <a class="b-link b-user-remove" onclick="showModal('${removeUserTemplate}', 'b-chat-page')"> &#215; Remove user</a>
-                        </div>
-                    </div>
-                </div>
+                {{{chatSettings}}}
+                {{> ChatSettingsTemplate}}
                 <section class="b-chat-wrapper">
                 <div class="b-chat">
                     {{#each this.messages}}

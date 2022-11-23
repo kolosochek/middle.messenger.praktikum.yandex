@@ -49,7 +49,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
         },
     }],
     'unreadMessages': 0,
-    'chat_id': 0,
+    'chat_id': '0',
 }, {
     'name': 'Marina Skvortsova', 
     'avatar_url': 'https://i.pravatar.cc/150?img=25',
@@ -61,8 +61,8 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': 'Hi! I am still waiting for your reply. We need to send this code to our client right in time, so I ll wait for your response ASAP!',
         },
     }],
-    'unreadMessages': 1,
-    'chat_id': 1,
+    'unreadMessages': "1",
+    'chat_id': '1',
 }, {
     'name': 'Nomad72', 
     'avatar_url': 'https://i.pravatar.cc/150?img=69',
@@ -74,7 +74,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "yeah ;D",
         },
     }],  
-    'unreadMessages': 5,      
+    'unreadMessages': "5",      
     'chat_id': '2',
 }, {
     'name': 'mr. Maloy', 
@@ -99,7 +99,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': 'Aint agree with that',
         },
     }],
-    'unreadMessages': 0,
+    'unreadMessages': "0",
     'chat_id': '3',
 }, {
     'name': 'SomeUser', 
@@ -112,7 +112,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '4',
 }, {
     'name': 'SomeUser', 
@@ -125,7 +125,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '5',
 }, {
     'name': 'SomeUser', 
@@ -138,7 +138,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '6',
 }, {
     'name': 'SomeUser', 
@@ -151,7 +151,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '7',
 }, {
     'name': 'SomeUser', 
@@ -164,7 +164,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '8',
 }, {
     'name': 'SomeUser', 
@@ -177,7 +177,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '9',
 }, {
     'name': 'SomeUser', 
@@ -190,7 +190,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '10',
 }, {
     'name': 'SomeUser', 
@@ -203,7 +203,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '11',
 }, {
     'name': 'SomeUser', 
@@ -216,7 +216,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '12',
 }, {
     'name': 'SomeUser', 
@@ -229,7 +229,7 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '13',
 }, {
     'name': 'SomeUser', 
@@ -242,48 +242,9 @@ Praesent placerat velit erat, ultricies venenatis odio tincidunt vel. Donec aliq
             'text': "IDDQD",
         },
     }],  
-    'unreadMessages': 1,      
+    'unreadMessages': "1",      
     'chat_id': '14',
-}, {
-    'name': 'SomeUser', 
-    'avatar_url': '',
-    'messages': [{   
-        'message': {
-            'author': 'SomeUser',
-            'time': '07:41',
-            'date': '12.10.2020',
-            'text': "IDDQD",
-        },
-    }],  
-    'unreadMessages': 1,      
-    'chat_id': '15',
-}, {
-    'name': 'SomeUser', 
-    'avatar_url': '',
-    'messages': [{   
-        'message': {
-            'author': 'SomeUser',
-            'time': '07:41',
-            'date': '12.10.2020',
-            'text': "IDDQD",
-        },
-    }],  
-    'unreadMessages': 1,      
-    'chat_id': '16',
-}, {
-    'name': 'SomeUser', 
-    'avatar_url': '',
-    'messages': [{   
-        'message': {
-            'author': 'SomeUser',
-            'time': '07:41',
-            'date': '12.10.2020',
-            'text': "IDDQD",
-        },
-    }],  
-    'unreadMessages': 1,      
-    'chat_id': '17',
-}, 
+}
 ]
 
 export default data;

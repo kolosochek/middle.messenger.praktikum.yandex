@@ -10,7 +10,7 @@ class Block<P extends Record<string, any> = any> {
         FLOW_RENDER: 'flow:render'
     } as const;
 
-    public id = Math.floor(Math.random() * 10000);
+    public id = Math.floor(Math.random() * 100000);
     public context: object;
     protected props: P;
     public children: Record<string, Block | Block[]>;
@@ -100,7 +100,6 @@ class Block<P extends Record<string, any> = any> {
         if (!nextProps) {
             return;
         }
-
         Object.assign(this.props, nextProps);
     };
 
@@ -110,7 +109,6 @@ class Block<P extends Record<string, any> = any> {
 
     private _render() {
         const fragment = this.render();
-
         const newElement = fragment.firstElementChild as HTMLElement;
 
         if (this._element && newElement) {
@@ -118,12 +116,10 @@ class Block<P extends Record<string, any> = any> {
         }
 
         this._element = newElement;
-
         this._addEvents();
     }
 
     protected compile(template: any, context: any) {
-        //template = typeof(template) !== 'function' ? Handlebars.compile(template) : template;
         template = Handlebars.compile(template);
         const contextAndStubs = { ...context };
         // debug
@@ -158,7 +154,7 @@ class Block<P extends Record<string, any> = any> {
             }
             component.getContent()?.append(...Array.from(stub.childNodes));
             // set props
-            component.setProps(context)
+            component.setProps(context);
             stub.replaceWith(component.getContent()!);
         }
 
@@ -201,7 +197,7 @@ class Block<P extends Record<string, any> = any> {
                 return true;
             },
             deleteProperty() {
-                throw new Error('Нет доступа');
+                throw new Error("Access denied! Can't delete a property.");
             }
         });
     }

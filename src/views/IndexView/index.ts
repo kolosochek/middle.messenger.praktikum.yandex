@@ -12,10 +12,6 @@ interface IndexViewProps {
   conversationList?: object[];
   activeChatId?: string | boolean;
   activeChat?: object;
-
-  events?: {
-    click: () => void;
-  };
 }
 
 
@@ -47,6 +43,10 @@ export class IndexView extends Block<IndexViewProps> {
     }
   }
 
+  private _logoutUser():void {
+    window.localStorage.removeItem('isAuthorized');
+  }
+
   public static getData = (): object[] => {
     return data;
   }
@@ -73,9 +73,6 @@ export class IndexView extends Block<IndexViewProps> {
             activeChat: IndexView.getActiveChat(),
             conversationList: IndexView.getData(),
           });
-          // debug
-          console.log(this.props);
-          //this.render();
         }
       },
     });
@@ -90,9 +87,6 @@ export class IndexView extends Block<IndexViewProps> {
 
 
   render() {
-    // debug
-    //console.log(this.props);
-    //
     return this.compile(template, { ...this.props, styles });
   }
 

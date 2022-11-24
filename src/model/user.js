@@ -4,7 +4,7 @@ const user = {
     "first_name": "Sebastian",
     "last_name": "Pereiro",
     "email": "sebast1an@gmaiz.com",
-    "phone": "+7 133 708 1488",
+    "phone": "+71337081488",
     // password hash
     "password": "FGDSA^#RFSGQ@#^&TFH12",
 }

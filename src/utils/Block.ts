@@ -29,23 +29,21 @@ class Block<P extends Record<string, any> = any> {
     }
 
     _getChildrenAndProps(childrenAndProps: P): { props: P, children: Record<string, Block | Block[]> } {
-        // debug
-        //console.log(childrenAndProps);
-        //
-        
         const props: Record<string, unknown> = {};
         const children: Record<string, Block | Block[]> = {};
 
         Object.entries(childrenAndProps).forEach(([key, value]) => {
-            if (Array.isArray(value) && value.length > 0 && value.every(v => v instanceof Block)) {
+            if (Array.isArray(value) && value.every(v => v instanceof Block)) {
                 children[key as string] = value;
-            } else if (value instanceof Block) {
+              } else if (value instanceof Block) {
                 children[key as string] = value;
-            } else {
+              } else {
                 props[key] = value;
-            }
+              }
         });
 
+        // debug
+        //console.log(props)
         return { props: props as P, children };
     }
 
@@ -138,6 +136,10 @@ class Block<P extends Record<string, any> = any> {
             }
         });
 
+        // debug
+        //console.log("contextAndStubs")
+        //console.log(contextAndStubs);
+
         const html = template(contextAndStubs);
         // debug
         //console.log('html+stubs');
@@ -145,16 +147,20 @@ class Block<P extends Record<string, any> = any> {
         //
 
         const temp = document.createElement('template');
-
         temp.innerHTML = html;
-
+        //console.log('html');
+        //console.log(html);
         const replaceStub = (component: Block) => {
             const stub = temp.content.querySelector(`[data-id="${component.id}"]`);
             // debug
-            //console.log('stub!');
-            //console.log(stub)
+            //console.log('this');
+            //console.log(this);
+            //console.log('component');
+            //console.log(component);
+            //console.log('component.id');
+            //console.log(component.id);
             if (!stub) {
-                return;
+                return ;
             }
             component.getContent()?.append(...Array.from(stub.childNodes));
             // set props

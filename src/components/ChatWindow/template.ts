@@ -1,5 +1,5 @@
 import Handlebars from "handlebars";
-import ChatSettingsTemplate from "../ChatSettings/template.ts";
+import ChatSettingsTemplate from "../ChatSettings/template";
 import ImageComponent from "../../components/ImageComponent.js";
 
 

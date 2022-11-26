@@ -25,21 +25,20 @@ export class IndexView extends Block<IndexViewProps> {
   public conversationList: object[];
 
   public static setActiveChatId = (id: string | number): void => {
-    window.localStorage.setItem('activeChatId', id.toString());
+    this.activeChatId = window.localStorage.setItem('activeChatId', id.toString());
   }
 
-  public static getActiveChatId = (): string => {
-    this.activeChatId = window.localStorage.getItem('activeChatId');
-    return this.activeChatId;
+  public static getActiveChatId = (): string | number => {
+    return this.activeChatId ? this.activeChatId : window.localStorage.getItem('activeChatId');
   }
 
   public static getActiveChat = (): object | undefined => {
     // let's update activeChatId to make a proper ID of chat that we wanna get
-    this.getActiveChatId();
-    for (const conversation of data) {
-      if (conversation.chat_id == this.activeChatId) {
+    const activeChatId = this.getActiveChatId();
+    for (const conversation of IndexView.getData()) {
+      if (conversation.chat_id == activeChatId) {
         return conversation;
-      }
+      } 
     }
   }
 
@@ -51,6 +50,11 @@ export class IndexView extends Block<IndexViewProps> {
   init() {
     // chatAsideProfile
     this.children.chatAsideProfile = new ChatAsideProfile({});
+
+    // chatWindow
+    this.children.chatWindow = new ChatWindow({
+      activeChat: IndexView.getActiveChat(),
+    });      
 
     // chatAsideSearch
     this.children.chatAsideSearch = new ChatAsideSearch({});
@@ -64,27 +68,21 @@ export class IndexView extends Block<IndexViewProps> {
           // get chatId from click
           const activeChatId = e.target.closest(".b-conversation").getAttribute('chat_id');
           IndexView.setActiveChatId(activeChatId);
-          this.setProps({
-            activeChatId: IndexView.getActiveChatId(),
+
+          this.children.chatConversationList.setProps({
+            activeChatId: activeChatId,
+          });
+
+          this.children.chatWindow.setProps({
             activeChat: IndexView.getActiveChat(),
-            conversationList: IndexView.getData(),
           });
         }
       },
     });
-
-    // chatWindow
-    this.children.chatWindow = new ChatWindow({
-      activeChat: IndexView.getActiveChat(),
-    });    
   }
 
-
-
   render() {
-    //console.log('this Block instance');
-    console.log(this);
-    return this.compile(template, { ...this.props, styles });
+    return this.compile(template, { ...this.props, ...this.children, styles });
   }
 
 }

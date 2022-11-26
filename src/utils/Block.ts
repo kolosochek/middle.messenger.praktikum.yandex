@@ -1,8 +1,9 @@
-import { EventBus } from './EventBus';
 import Handlebars from 'handlebars';
+import { EventBus } from './EventBus';
 
 
 class Block<P extends Record<string, any> = any> {
+    // component lifecycle-events
     static EVENTS = {
         INIT: 'init',
         FLOW_CDM: 'flow:component-did-mount',
@@ -10,16 +11,16 @@ class Block<P extends Record<string, any> = any> {
         FLOW_RENDER: 'flow:render'
     } as const;
 
-    public id = Math.floor(Math.random() * 100000);
+    private eventBus: () => EventBus;
+    public id = (Math.random() + 1).toString(36).substring(3);
     public context: object;
     protected props: P;
-    public children: Record<string, Block | Block[]>;
-    private eventBus: () => EventBus;
+    public children: Block | Block[];
     private _element: HTMLElement | null = null;
     public template: any;
 
     constructor(propsWithChildren: P) {
-        const eventBus = new EventBus();
+        const eventBus = new EventBus();        
         const { props, children } = this._getChildrenAndProps(propsWithChildren);
         this.children = children;
         this.props = this._makePropsProxy(props);
@@ -33,7 +34,7 @@ class Block<P extends Record<string, any> = any> {
         const children: Record<string, Block | Block[]> = {};
 
         Object.entries(childrenAndProps).forEach(([key, value]) => {
-            if (Array.isArray(value) && value.every(v => v instanceof Block)) {
+            if (Array.isArray(value) && value.length > 0 && value.every((v) => v instanceof Block)) {
                 children[key as string] = value;
               } else if (value instanceof Block) {
                 children[key as string] = value;
@@ -42,8 +43,6 @@ class Block<P extends Record<string, any> = any> {
               }
         });
 
-        // debug
-        //console.log(props)
         return { props: props as P, children };
     }
 
@@ -95,7 +94,9 @@ class Block<P extends Record<string, any> = any> {
     }
 
     protected componentDidUpdate(oldProps: P, newProps: P) {
-        return true;
+        if(oldProps !== newProps){
+            return true;
+        }
     }
 
     setProps = (nextProps: Partial<P>) => {
@@ -122,64 +123,51 @@ class Block<P extends Record<string, any> = any> {
     }
 
     protected compile(template: any, context: any) {
-        template = Handlebars.compile(template);
         const contextAndStubs = { ...context };
-        // debug
-        //console.log('context');
-        //console.log(contextAndStubs);
 
         Object.entries(this.children).forEach(([name, component]) => {
-            if (Array.isArray(component)) {
-                contextAndStubs[name] = component.map(child => `<div data-id="${child.id}"></div>`)
-            } else {
-                contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
-            }
+                if(Object.keys(component.children).length){
+                    contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
+
+                    Object.entries(component.children).forEach(([key, value]) => {
+                        //console.log(`key: ${key}, value: ${value}`)
+                        contextAndStubs[key] = `<div data-id="${value.id}"></div>`;
+                    });
+                    
+                } else {
+                    contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
+                }  
         });
 
-        // debug
-        //console.log("contextAndStubs")
-        //console.log(contextAndStubs);
-
+        template = Handlebars.compile(template);
         const html = template(contextAndStubs);
-        // debug
-        //console.log('html+stubs');
-        //console.log(html);
-        //
+
+        console.log(`this`);
+        console.log(this);
 
         const temp = document.createElement('template');
         temp.innerHTML = html;
-        //console.log('html');
-        //console.log(html);
+
         const replaceStub = (component: Block) => {
             const stub = temp.content.querySelector(`[data-id="${component.id}"]`);
-            // debug
-            //console.log('this');
-            //console.log(this);
-            //console.log('component');
-            //console.log(component);
-            //console.log('component.id');
-            //console.log(component.id);
             if (!stub) {
                 return ;
             }
             component.getContent()?.append(...Array.from(stub.childNodes));
-            // set props
-            component.setProps(context);
             stub.replaceWith(component.getContent()!);
         }
 
+
+
         Object.entries(this.children).forEach(([_, component]) => {
-            if (Array.isArray(component)) {
-                component.forEach(replaceStub);
+            if (Object.keys(component.children).length) {
+                // we got a nested component
+                replaceStub(component);
             } else {
                 replaceStub(component);
             }
         });
 
-        // debug
-        //console.log("result html");
-        //console.log(temp);
-        //
         return temp.content;
     }
 

@@ -85,7 +85,7 @@ class Router {
             root.innerHTML = '';
             // render the page && inject compiled HTML to DOM
             root.appendChild(page.getContent());
-            page.componentDidMount();
+            page.dispatchComponentDidMount();
 
         }
 

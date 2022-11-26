@@ -19,9 +19,6 @@ export class ChatConversationList extends Block<ChatConversationListProps> {
 
   
   render() {
-    // debug
-    //console.log(this.compile(template, { ...this.props, styles }))
-    //
     return this.compile(template, { ...this.props, styles });
   }
 }

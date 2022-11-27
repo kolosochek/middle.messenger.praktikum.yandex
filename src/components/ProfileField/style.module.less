@@ -1,0 +1,30 @@
+@import "../../../static/css/variables.less";
+
+
+.b-profile-field-wrapper {
+    color: @plaintext-color;
+    border-bottom: 1px solid @plaintext-color;
+    padding: 20px 0 2px 0;
+
+    .b-profile-field {
+        display: flex;
+
+        .b-profile-field-label {}
+
+        .b-profile-field-value {
+            margin-left: auto;
+            color: @light-gray;
+
+            &.b-input {
+                color: @plaintext-color;
+                font-family: 'classic-console', Arial, Helvetica, sans-serif;
+                font-size: 1em;
+                background: none;
+                border: none;
+                text-align: right;
+                outline: none;
+                padding: 0 0 2px 0;
+            }
+        }
+    }
+}

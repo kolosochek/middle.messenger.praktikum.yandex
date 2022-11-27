@@ -1,5 +1,5 @@
 import Handlebars from "handlebars";
-import AvatarComponent from "../AvatarComponent";
+import AvatarComponent from "../../partials/AvatarComponent";
 
 Handlebars.registerPartial('AvatarComponent', AvatarComponent);
 Handlebars.registerHelper('log', value => console.log(value));

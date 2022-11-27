@@ -5,7 +5,7 @@ import { ChatConversationList } from '../../components/ChatConversationList';
 import { ChatWindow } from '../../components/ChatWindow';
 import template from './template';
 import styles from './style.module.less';
-import data from '../../model/data.js'
+import { APIData } from '../../model/data';
 
 
 interface IndexViewProps {
@@ -34,16 +34,13 @@ export class IndexView extends Block<IndexViewProps> {
 
   public static getActiveChat = (): object | undefined => {
     const activeChatId = this.getActiveChatId();
-    for (const conversation of IndexView.getData()) {
+    for (const conversation of APIData.getData()) {
       if (conversation.chat_id == activeChatId) {
         return conversation;
       } 
     }
   }
 
-  public static getData = (): object[] => {
-    return data;
-  }
 
 
   init() {
@@ -56,7 +53,7 @@ export class IndexView extends Block<IndexViewProps> {
     // chatConversationList
     this.children.chatConversationList = new ChatConversationList({
       activeChatId: IndexView.getActiveChatId(),
-      conversationList: IndexView.getData(),
+      conversationList: APIData.getData(),
       events: {
         click: (e) => {
           // get chatId from click
@@ -82,7 +79,7 @@ export class IndexView extends Block<IndexViewProps> {
   }
 
   render() {
-    return this.compile(template, { ...this.props, ...this.children, styles });
+    return this.compile(template, { ...this.props, styles });
   }
 
 }

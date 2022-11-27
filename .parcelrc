@@ -1,6 +1,0 @@
-{
-  "extends": "@parcel/config-default",
-  "transformers": {
-    "template1.ts": ["@anikin/parcel-transformer-handlebars"]
-  }
-}

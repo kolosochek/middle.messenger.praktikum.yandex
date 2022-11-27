@@ -2,6 +2,7 @@ import Block from '../../utils/Block';
 import template from './template';
 import styles from './style.module.less';
 import { ChatSettings } from '../ChatSettings';
+import { ChatReply } from '../ChatReply';
 
 interface ChatWindowProps {
   activeChat?: object;
@@ -13,9 +14,13 @@ export class ChatWindow extends Block<ChatWindowProps> {
   }
 
   init(){
+    // chatSettings
     this.children.chatSettings = new ChatSettings({
       activeChat: this.props.activeChat
     });
+
+    // chatReply
+    this.children.chatReply = new ChatReply({});
   }
 
   protected componentDidUpdate(oldProps: ChatWindowProps, newProps: ChatWindowProps): boolean {

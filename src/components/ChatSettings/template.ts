@@ -12,8 +12,10 @@ const removeUserTemplate = `<form action=# class=b-modal-window-content><h3 clas
 const ChatSettingsTemplate = `
 <div class="b-chat-info-wrapper">
     <div class="b-chat-info">
-        {{> AvatarComponent image_url=this.avatar_url}}
-        <span class="b-profile-title b-link">{{this.name}}</span>
+        {{#with this.activeChat}}
+            {{> AvatarComponent image_url=this.avatar_url}}
+        {{/with}}
+        <span class="b-profile-title b-link">{{this.activeChat.name}}</span>
         <div class="b-chat-settings">
             <a class="b-link b-chat-settings-link">Settings</a>
         </div>

@@ -1,7 +1,3 @@
-import Handlebars from "handlebars";
-// debug
-Handlebars.registerHelper('log', (value) => { console.log(value)});
-
 const IndexPageTemplate = `
 <main id="viewport" class="b-page-wrapper">
     <div class="b-page">

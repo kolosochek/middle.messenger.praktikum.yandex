@@ -1,3 +1,8 @@
+import Handlebars from 'handlebars'
+
+
+Handlebars.registerHelper('log', (value) => { console.log(value)});
+
 const AvatarComponent = `
 <figure class="b-avatar-wrapper">
     {{#if this.avatar_url }}

@@ -33,7 +33,6 @@ export class IndexView extends Block<IndexViewProps> {
   }
 
   public static getActiveChat = (): object | undefined => {
-    // let's update activeChatId to make a proper ID of chat that we wanna get
     const activeChatId = this.getActiveChatId();
     for (const conversation of IndexView.getData()) {
       if (conversation.chat_id == activeChatId) {
@@ -49,12 +48,7 @@ export class IndexView extends Block<IndexViewProps> {
 
   init() {
     // chatAsideProfile
-    this.children.chatAsideProfile = new ChatAsideProfile({});
-
-    // chatWindow
-    this.children.chatWindow = new ChatWindow({
-      activeChat: IndexView.getActiveChat(),
-    });      
+    this.children.chatAsideProfile = new ChatAsideProfile({});    
 
     // chatAsideSearch
     this.children.chatAsideSearch = new ChatAsideSearch({});
@@ -79,6 +73,12 @@ export class IndexView extends Block<IndexViewProps> {
         }
       },
     });
+
+
+    // chatWindow
+    this.children.chatWindow = new ChatWindow({
+      activeChat: IndexView.getActiveChat(),
+    });  
   }
 
   render() {

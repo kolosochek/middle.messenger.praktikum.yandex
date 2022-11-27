@@ -139,12 +139,21 @@ class Block<P extends Record<string, any> = any> {
                 }  
         });
 
+        //debug
+        //console.log(`contextAndStubs`);
+        //console.log(contextAndStubs)
+        //
+
         template = Handlebars.compile(template);
         const html = template(contextAndStubs);
 
-        console.log(`this`);
-        console.log(this);
-
+        // debug
+        //console.log(`this`);
+        //console.log(this);
+        //console.log(`html`);
+        //console.log(html);
+        //
+        
         const temp = document.createElement('template');
         temp.innerHTML = html;
 
@@ -161,7 +170,7 @@ class Block<P extends Record<string, any> = any> {
 
         Object.entries(this.children).forEach(([_, component]) => {
             if (Object.keys(component.children).length) {
-                // we got a nested component
+                // we got a nested component, TODO: do something
                 replaceStub(component);
             } else {
                 replaceStub(component);

@@ -1,10 +1,8 @@
 import Handlebars from "handlebars";
-import ChatSettingsTemplate from "../ChatSettings/template";
 import ImageComponent from "../../components/ImageComponent.js";
 
 
 Handlebars.registerPartial('ImageComponent', ImageComponent);
-Handlebars.registerPartial('ChatSettingsTemplate', ChatSettingsTemplate);
 Handlebars.registerHelper('if_eq', (a, b, opts) => a == b ? opts.fn(this) : opts.inverse(this) );
 // debug
 Handlebars.registerHelper('log', (value) => { console.log(value) });
@@ -14,7 +12,7 @@ const ChatWindowTemplate = `
         {{#if this.activeChat}}
             {{#with this.activeChat}}
             <div class="b-chat-window">
-                {{{chatSettings}}}
+                {{{../chatSettings}}}
                 <section class="b-chat-wrapper">
                 <div class="b-chat">
                     {{#each this.messages}}

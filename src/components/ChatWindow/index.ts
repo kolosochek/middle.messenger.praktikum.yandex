@@ -13,11 +13,18 @@ export class ChatWindow extends Block<ChatWindowProps> {
   }
 
   init(){
-    this.children.chatSettings = new ChatSettings({});
+    this.children.chatSettings = new ChatSettings({
+      activeChat: this.props.activeChat
+    });
   }
 
+  protected componentDidUpdate(oldProps: ChatWindowProps, newProps: ChatWindowProps): boolean {
+    this.children.chatSettings.setProps(this.props);
+    return true
+  }
 
   render() {
+    
     return this.compile(template, { ...this.props, styles });
   }
 }

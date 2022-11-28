@@ -7,7 +7,7 @@ const showModal = (template:string, context = ''):void => {
     }
     const htmlTemplate = 
     `<div id='modal_window' class='b-modal-window-wrapper'>
-        <div class='b-modal-window ${context}'>${template}</div>
+        <div id='modal_content' class='b-modal-window ${context}'>${template}</div>
     </div>`
 
     const modalWindow = document.querySelector('#modal_window');
@@ -18,7 +18,7 @@ const showModal = (template:string, context = ''):void => {
     // append template to <body />
     document.body.insertAdjacentHTML('afterBegin', htmlTemplate);
     const modalWindowNode = document.querySelector('#modal_window');
-    const modalWindowContent = document.querySelector('#modal_window .b-modal-window-content');
+    const modalWindowContent = document.querySelector('#modal_window #modal_content');
     modalWindowNode.classList.toggle('state__visible');
 
 
@@ -34,8 +34,8 @@ const showModal = (template:string, context = ''):void => {
     });
 
 
-    const uploadFileLink = document.querySelector('#modal_window .b-link');
-    const fileInput = document.querySelector('#modal_window .b-input');
+    const uploadFileLink = document.querySelector('#modal_window a');
+    const fileInput = document.querySelector('#modal_window input[type=file]');
 
     if (uploadFileLink && fileInput) {
         uploadFileLink.addEventListener('click', (e) => {

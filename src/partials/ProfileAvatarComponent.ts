@@ -1,10 +1,10 @@
 import Handlebars from "handlebars";
-import ImageComponent from "../partials/ImageComponent";
+import ImageComponent from "./ImageComponent";
 Handlebars.registerPartial('ImageComponent', ImageComponent);
 // debug
 Handlebars.registerHelper('log', (value) => console.log(value));
 
-const profileModalTemplate = `<form class=b-modal-window-content><h3 class=b-modal-window-title>Upload avatar</h3><a class=b-link href=#>choose file</a><input class=b-input type=file name=avatar /><button class=b-submit type=submit>Change file</button></form>`
+const profileModalTemplate = `<form class={{styles.b-modal-window-content}}><h3 class={{styles.b-modal-window-title}}>Upload avatar</h3><a class={{styles.b-link}} href=#>choose file</a><input class={{styles.b-input}} type=file name=avatar /><button class={{styles.b-submit}} type=submit>Change file</button></form>`
 
 const ProfileAvatarComponent = `
 <figure class="{{styles.b-profile-avatar-wrapper}}">

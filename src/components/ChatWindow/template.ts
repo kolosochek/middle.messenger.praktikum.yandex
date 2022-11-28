@@ -8,18 +8,18 @@ Handlebars.registerHelper('if_eq', (a, b, opts) => a == b ? opts.fn(this) : opts
 Handlebars.registerHelper('log', (value) => { console.log(value) });
 
 const ChatWindowTemplate = `
-<section class="b-chat-window-wrapper">
+<section class="{{styles.b-chat-window-wrapper}}">
         {{#if this.activeChat}}
             {{#with this.activeChat}}
-            <div class="b-chat-window">
+            <div class="{{../styles.b-chat-window}}">
                 {{{../chatSettings}}}
-                <section class="b-chat-wrapper">
-                <div class="b-chat">
+                <section class="{{../styles.b-chat-wrapper}}">
+                <div class="{{../styles.b-chat}}">
                     {{#each this.messages}}
-                    <div class="b-chat-message-wrapper{{#if_eq this.message.author 'Me'}} state__mine{{/if_eq}}">
-                        <p class="b-chat-message">
-                        <span class="b-message-time">{{this.message.time}}</span><span class="b-message-author">{{this.message.author}}: </span>
-                            <span class="b-message-text">{{this.message.text}}</span>
+                    <div class="{{../../styles.b-chat-message-wrapper}}{{#if_eq this.message.author 'Me'}} {{../../styles.state__mine}}{{/if_eq}}">
+                        <p class="{{../../styles.b-chat-message}}">
+                        <span class="{{../../styles.b-message-time}}">{{this.message.time}}</span><span class="{{../../styles.b-message-author}}">{{this.message.author}}: </span>
+                            <span class="{{../../styles.b-message-text}}">{{this.message.text}}</span>
                         </p>
                     </div>                        
                     {{/each}}
@@ -29,8 +29,8 @@ const ChatWindowTemplate = `
             </div>
             {{/with}}
         {{else}}
-        <div class="b-chat-window-empty-wrapper">
-            <p class="b-chat-window-empty"><= Choose a conversation to send a message.</p>
+        <div class="{{styles.b-chat-window-empty-wrapper}}">
+            <p class="{{styles.b-chat-window-empty}}"><= Choose a conversation to send a message.</p>
         </div>
         {{/if}}
 </section>

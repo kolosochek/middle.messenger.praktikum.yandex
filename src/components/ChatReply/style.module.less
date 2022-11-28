@@ -1,1 +1,69 @@
+@import '../../../static/css/variables.less';
 
+
+.b-chat-reply-wrapper {
+    min-height: 50px;
+    position: relative;
+    border-top: 1px solid @link-color;
+
+    .b-chat-reply {
+        display: flex;
+        padding: 10px;
+
+        .b-attach-file {
+            margin-right: 10px;
+            align-self: center;
+            cursor: pointer;
+
+            .b-image {
+                display: flex;
+            }
+
+            .b-attach-file-link {
+                display: inherit;
+            }
+        }
+
+        &>.b-input,
+        &>.b-submit {
+            border-color: @link-color;
+            outline-color: @link-color;
+            color: @plaintext-color;
+            background: @shadow-color;
+            font-family: 'classic-console', Arial, Helvetica, sans-serif;
+            font-size: 1.2em;
+
+            &:hover {
+                outline: none;
+            }
+        }
+
+        .b-input {
+            padding-left: 5px;
+            flex-grow: 1;
+        }
+
+        .b-submit {
+            margin-left: 10px;
+            padding-top: 5px;
+        }
+    }
+
+    .b-chat-reply-attachment-wrapper {
+        z-index: 10;
+        background: #333;
+        border: 1px solid #6f6;
+        border-radius: 10px;
+        padding: 10px;
+        transition: all .5s ease-in-out;
+        display: none;
+        position: absolute;
+        bottom: 57px;
+        left: 10px;
+
+        .b-chat-reply-attachment {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+}

@@ -1,3 +1,56 @@
-.button {
+@import '../../../static/css/variables.less';
+
+.b-page {
+    min-height: 100vh;
+    background: #333;
+    outline-color: #fff;
+    align-items: stretch;
+    display: flex;
+
+    .b-auth-page-wrapper {
+        display: flex;
+        flex-grow: 1;
     
+        .b-auth-page {
+            display: flex;
+            justify-content: center;
+            flex-grow: 1;
+            align-self: center;
+    
+            .b-page-title {
+                font-size: 2em;
+                color: @link-color;
+                padding: 50px 0 40px;
+                text-align: center;
+            }
+    
+            .b-submit {
+                border-color: @link-color;
+                outline-color: @link-color;
+                color: @plaintext-color;
+                background: @shadow-color;
+                font-size: 1.1em;
+                padding: 5px;
+    
+                &:hover {
+                    outline: none;
+                }
+            }
+    
+            .b-submit-wrapper {
+                display: flex;
+                justify-content: center;
+                margin: 80px 0 10px;
+    
+                .b-submit {
+                    text-align: center;
+                }
+            }
+    
+            .b-sign-in-wrapper {
+                text-align: center;
+            }
+        }
+    }
 }
+

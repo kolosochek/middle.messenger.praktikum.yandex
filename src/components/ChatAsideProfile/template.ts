@@ -1,8 +1,8 @@
 const ChatAsideProfileTemplate = `
-<section class="b-profile-navigation-wrapper">
-    <div class="b-profile-navigation">
-        <a class="b-link b-logout" href="/#/logout">Logout</a>
-        <a class="b-link b-profile" href="/#/profile">My Profile</a>
+<section class="{{styles.b-profile-navigation-wrapper}}">
+    <div class="{{styles.b-profile-navigation}}">
+        <a class="{{styles.b-link}} {{styles.b-logout}}" href="/#/logout">Logout</a>
+        <a class="{{styles.b-link}} {{styles.b-profile}}" href="/#/profile">My Profile</a>
     </div>
 </section>
 `

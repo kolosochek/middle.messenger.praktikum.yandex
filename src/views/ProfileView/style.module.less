@@ -11,53 +11,53 @@
         background: @shadow-color;
         outline-color: @plaintext-color;
         flex-grow: 1;
-    
-    
+
+
         .b-profile-page {
             display: flex;
             flex-grow: 1;
-    
+
             .b-profile-goback-wrapper {
                 display: flex;
                 border-right: 1px solid @link-color;
-    
+
                 .b-profile-goback {
                     align-self: center;
                     padding: 0 15px;
                 }
             }
-    
+
             .b-profile-wrapper {
                 display: flex;
                 flex-grow: 1;
                 justify-content: center;
-    
+
                 .b-profile {
                     width: 600px;
                     text-align: center;
-    
+
                     .b-profile-avatar-wrapper {
                         margin: 60px 0 20px;
                         height: 130px;
                         position: relative;
                         z-index: 100;
                         overflow: hidden;
-    
+
                         &:hover .b-profile-avatar-change-wrapper {
                             transition: 500ms ease-out top;
                             top: -136px;
                         }
-    
+
                         .b-profile-avatar {
                             border-radius: 50%;
                         }
-    
+
                         .b-profile-avatar-change-wrapper {
                             transition: 500ms ease-out top;
                             position: relative;
                             z-index: 10;
                             top: 135px;
-    
+
                             &>.b-link {
                                 line-height: 130px;
                                 background: @shadow-color;
@@ -65,32 +65,32 @@
                                 width: 132px;
                                 height: 132px;
                                 border-radius: 50%;
-    
+
                                 &:hover {}
                             }
                         }
                     }
-    
+
                     .b-profile-name-wrapper {
                         margin-bottom: 60px;
-    
+
                         .b-profile-name {
                             color: #6f6;
                             font-size: 2em;
                         }
                     }
-    
+
                     .b-profile-contol-wrapper {
                         text-align: left;
                         padding: 8px 0 1px 0;
-    
+
                         &.first {
                             margin-top: 50px;
                         }
-    
+
                         .b-profile-contol {}
                     }
-    
+
                 }
             }
         }
@@ -98,26 +98,26 @@
 
     .b-avatar-wrapper {
         margin-right: 10px;
-    
+
         .b-image {
             display: block;
             width: 47px;
             height: 47px;
             border-radius: 50%;
-    
+
             &.state__empty {}
         }
     }
-    
+
     .b-profile-title {
         font-size: 1.3em;
         color: @link-color;
         padding-bottom: 6px;
     }
-    
+
     .b-link {
         color: @link-color;
-    
+
         &:hover {
             color: @highlight-color;
             text-decoration: none;
@@ -125,50 +125,44 @@
         }
     }
 }
+
 /* profile page modal window */
-#modal_window {
-    display: flex;
-    flex-grow: 1;
-    justify-content: center;
+.b-modal-window-content {
+    width: 600px;
+    text-align: center;
+    background: #4c4c4c;
+    border-radius: 15px;
+    flex-direction: column;
     align-items: center;
+    display: flex;
+    position: relative;
+    position: relative;
+    left: 32px;
 
-    .b-modal-window-content {
-        width: 600px;
-        border-radius: 15px;
-        background: @background-color;
-        position: relative;
-        left: 32px;
+    .b-modal-window-title {
         text-align: center;
+        font-size: 2em;
+        color: @link-color;
+        padding: 30px 0;
+    }
 
-        .b-modal-window-title {
-            text-align: center;
-            font-size: 2em;
-            color: @link-color;
+    .b-link {
+        display: block;
+        margin: 0 0 20px 0;
+        color: @link-color;
+    }
 
-            margin: 30px 0;
-        }
+    .b-input {
+        display: none;
+    }
 
-        .b-link {
-            display: block;
-            margin: 0 0 20px 0;
-        }
-
-        .b-input {
-            display: none;
-        }
-
-        .b-submit {
-            margin: 0 0 30px;
-            border-color: @link-color;
-            outline-color: @link-color;
-            color: @plaintext-color;
-            background: @shadow-color;
-            font-size: 1.1em;
-            padding: 5px;
-        }
+    .b-submit {
+        margin: 0 0 30px;
+        border-color: @link-color;
+        outline-color: @link-color;
+        color: @plaintext-color;
+        background: @shadow-color;
+        font-size: 1.1em;
+        padding: 5px;
     }
 }
-
-
-
-

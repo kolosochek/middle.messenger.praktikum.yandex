@@ -57,7 +57,7 @@ export class IndexView extends Block<IndexViewProps> {
       events: {
         click: (e) => {
           // get chatId from click
-          const activeChatId = e.target.closest(".b-conversation").getAttribute('chat_id');
+          const activeChatId = e.target.closest("div[chat_id]").getAttribute('chat_id');
           IndexView.setActiveChatId(activeChatId);
 
           this.children.chatConversationList.setProps({

@@ -17,9 +17,13 @@ export class ChatReply extends Block<ChatReplyProps> {
     this.props.events = {
       click: (e) => {
         e.preventDefault();
-        const target = e.target.closest('.b-attach-file-link');
-        if (target !== null){
-          document.querySelector('.b-chat-reply-attachment-wrapper').classList.toggle('state__visible');
+        // debug
+        console.log(e.target);
+        //
+        const target = e.target.closest(`.${styles['b-attach-file-link']}`);
+        const element = document.querySelector(`.${styles['b-chat-reply-attachment-wrapper']}`);
+        if (target !== null && element){
+          element.classList.toggle('state__visible');
         }
       }
     }

@@ -9,16 +9,16 @@ Handlebars.registerHelper('if_eq', function(a, b, opts){
 Handlebars.registerHelper('log', (value) => { console.log(value)})
 
 const ConversationListTemplate = `
-<section class="b-conversations-list-wrapper">
-    <div class="b-conversations-list">
+<section class="{{styles.b-conversations-list-wrapper}}">
+    <div class="{{styles.b-conversations-list}}">
             {{#each conversationList}}
-            <div class="b-conversation-wrapper{{#if_eq ../activeChatId this.chat_id}} state__active{{/if_eq}}">
-                <div class="b-conversation" chat_id="{{this.chat_id}}">
-                    {{> AvatarComponent image_url="this.avatar_url"}}
-                    <div class="b-message-wrapper">
-                        <div class="b-message">
-                            <p class="b-profile-title">{{this.name}}</p>
-                            <p class="b-conversation-last-message">
+            <div class="{{../styles.b-conversation-wrapper}}{{#if_eq ../activeChatId this.chat_id}} {{../styles.state__active}}{{/if_eq}}">
+                <div class="{{../styles.b-conversation}}" chat_id="{{this.chat_id}}">
+                    {{> AvatarComponent image_url=this.avatar_url styles=../styles}}
+                    <div class="{{../styles.b-message-wrapper}}">
+                        <div class="{{../styles.b-message}}">
+                            <p class="{{../styles.b-profile-title}}">{{this.name}}</p>
+                            <p class="{{../styles.b-conversation-last-message}}">
                             {{#each this.messages}}
                                 {{#if @last}}
                                     {{this.message.text}}
@@ -27,14 +27,14 @@ const ConversationListTemplate = `
                             </p>
                         </div>
                     </div>
-                    <div class="b-message-info">
+                    <div class="{{../styles.b-message-info}}">
                         {{#each this.messages}}
                             {{#if @last}}
-                                <p class="b-time">{{this.message.time}}</p>
+                                <p class="{{../styles.b-time}}">{{this.message.time}}</p>
                             {{/if}}
                         {{/each}}
                         {{#if this.unreadMessages}}
-                            <p class="b-link b-unread-messages">{{this.unreadMessages}}</p>
+                            <p class="{{../styles.b-link}} {{../styles.b-unread-messages}}">{{this.unreadMessages}}</p>
                         {{/if}}
                     </div>
                 </div>

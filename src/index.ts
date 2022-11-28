@@ -2,8 +2,7 @@ import Block from './utils/Block';
 import { IndexView } from './views/IndexView';
 import { AuthView } from './views/AuthView';
 import { ProfileView } from './views/ProfileView';
-import { Error404View } from './views/Error404View';
-import { Error500View } from './views/Error500View';
+import { ErrorView } from './views/ErrorView';
 
 // main Router class
 class Router {
@@ -47,15 +46,15 @@ class Router {
                     break;
                 }
                 case '/error404': {
-                    page = new Error404View({});
+                    page = new ErrorView({ mode: 'Error404'});
                     break;
                 }
                 case '/error500': {
-                    page = new Error500View({});
+                    page = new ErrorView({ mode: 'Error500'});
                     break;
                 }
                 default: {
-                    page = new Error404View({});
+                    page = new ErrorView({ mode: 'Error404'});;
                     break;
                 }
             }
@@ -73,8 +72,12 @@ class Router {
                     page = new AuthView({ mode: 'signup'});
                     break;
                 }
+                case '/error500': {
+                    page = new ErrorView({ mode: 'Error500'});
+                    break;
+                }
                 default: {
-                    page = new Error404View({});
+                    page = new ErrorView({ mode: 'Error404'});
                     break;
                 }
             }

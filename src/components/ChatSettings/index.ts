@@ -18,9 +18,10 @@ export class ChatSettings extends Block<ChatSettingsProps> {
     this.props.events = {
       click: (e) => {
         e.preventDefault();
-        const target = e.target.closest('.b-chat-settings-link');
-        if (target !== null){
-          document.querySelector('.b-chat-settings-wrapper').classList.toggle('state__visible');
+        const target = e.target.closest(`.${styles['b-chat-settings-link']}`);
+        const element = document.querySelector(`.${styles['b-chat-settings-wrapper']}`)
+        if (target !== null && element){
+          element.classList.toggle('state__visible');
         }
       }
     }

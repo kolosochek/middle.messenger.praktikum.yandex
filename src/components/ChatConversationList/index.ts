@@ -16,7 +16,6 @@ export class ChatConversationList extends Block<ChatConversationListProps> {
   constructor(props: ChatConversationListProps) {
     super({ ...props });
   }
-
   
   render() {
     return this.compile(template, { ...this.props, styles });

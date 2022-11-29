@@ -8,7 +8,7 @@ class Block<P extends Record<string, any> = any> {
         INIT: 'init',
         FLOW_CDM: 'flow:component-did-mount',
         FLOW_CDU: 'flow:component-did-update',
-        FLOW_RENDER: 'flow:render'
+        FLOW_RENDER: 'flow:render',
     } as const;
 
     private eventBus: () => EventBus;
@@ -49,7 +49,12 @@ class Block<P extends Record<string, any> = any> {
     _addEvents() {
         const { events = {} } = this.props as P & { events: Record<string, () => void> };
         Object.keys(events).forEach(eventName => {
-            this._element?.addEventListener(eventName, events[eventName]);
+            if(eventName === 'focus' || eventName === 'blur' || eventName === 'change') {
+                this._element?.addEventListener(eventName, events[eventName], true);
+            } else {
+                this._element?.addEventListener(eventName, events[eventName]);
+            }
+            
         });
     }
 
@@ -59,7 +64,7 @@ class Block<P extends Record<string, any> = any> {
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
     }
-
+    
     private _init() {
         this.init();
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);

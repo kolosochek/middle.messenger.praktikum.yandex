@@ -72,10 +72,6 @@ class Router {
                     page = new AuthView({ mode: 'signup'});
                     break;
                 }
-                case '/error500': {
-                    page = new ErrorView({ mode: 'Error500'});
-                    break;
-                }
                 default: {
                     page = new ErrorView({ mode: 'Error404'});
                     break;
@@ -91,28 +87,6 @@ class Router {
             page.dispatchComponentDidMount();
 
         }
-
-
-        // TODO: refactor all below
-
-        // chat page settings click event handler
-        /* 
-        const chatSettings = document.querySelector('.b-chat-settings-link');
-        if (chatSettings) {
-            chatSettings.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelector('.b-chat-settings-wrapper').classList.toggle('state__visible');
-            });
-        }
-        // chat page file attach click event handler
-        const chatFileAttach = document.querySelector('.b-attach-file-link');
-        if (chatFileAttach) {
-            chatFileAttach.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.querySelector('.b-chat-reply-attachment-wrapper').classList.toggle('state__visible');
-            });
-        }
-        */
     };
 }
 

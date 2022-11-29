@@ -2,8 +2,8 @@
 
 .b-page {
     min-height: 100vh;
-    background: #333;
-    outline-color: #fff;
+    background: @shadow-color;
+    outline-color: @plaintext-color;
     align-items: stretch;
     display: flex;
 
@@ -16,6 +16,15 @@
             justify-content: center;
             flex-grow: 1;
             align-self: center;
+
+            &>form {
+                padding: 20px;
+                min-width: 600px;
+
+                &>form.isInvalid {
+                    border:1px solid @highlight-color;
+                }
+            }
     
             .b-page-title {
                 font-size: 2em;
@@ -49,6 +58,15 @@
     
             .b-sign-in-wrapper {
                 text-align: center;
+            }
+
+            .state__invalid {
+                &>input {
+                    border-color: @highlight-color;
+                }
+                &>p {
+                    display: block;
+                }
             }
         }
     }

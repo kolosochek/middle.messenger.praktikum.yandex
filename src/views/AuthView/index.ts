@@ -1,5 +1,6 @@
 import Block from '../../utils/Block';
 import { InputComponent } from '../../components/InputComponent';
+import { Validation } from '../../utils/Validation';
 import template from './template';
 import styles from './style.module.less';
 
@@ -24,8 +25,21 @@ export class AuthView extends Block<AuthViewProps> {
     window.localStorage.setItem('isAuthorized', 'true');
   }
 
-  protected static getIsAuthorized(): string | null {
+  public static getIsAuthorized(): string | null {
     return window.localStorage.getItem('isAuthorized');
+  }
+
+  private static _removeFieldIsValid(node: HTMLElement | null): void {
+    if (node !== null) {
+      node.removeAttribute('isInvalid');
+      node.parentNode?.classList.remove(`${styles['state__invalid']}`);
+    }
+  }
+  private static _setFieldIsValid(node: HTMLElement | null): void {
+    if (node !== null) {
+      node.setAttribute('isInvalid', 'true');
+      node.parentNode?.classList.add(`${styles['state__invalid']}`);
+    }
   }
 
   init() {
@@ -39,21 +53,46 @@ export class AuthView extends Block<AuthViewProps> {
           title: 'Login',
           name: 'login',
           type: 'text',
-          required: 'true',
-          isValid: 'true',
-          errorMessage: '',
+          errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
+
 
         // passwordInputComponent
         this.children.passwordInputComponent = new InputComponent({
           title: 'Password',
           name: 'password',
           type: 'password',
-          required: 'true',
-          isValid: 'true'
+          errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
         break;
       }
+
       // signup
       case 'signup': {
         // emailInputComponent
@@ -62,9 +101,20 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'email',
           type: 'email',
           placeholder: 'sebastian1337@gmail.com',
-          required: 'true',
-          isValid: 'true',
-          errorMessage: '',
+          errorMessage: 'Email is invalid!',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         // firstNameInputComponent
@@ -73,9 +123,20 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'first_name',
           type: 'text',
           placeholder: 'Sebastian',
-          required: 'true',
-          isValid: 'true',
-          errorMessage: '',
+          errorMessage: 'First name is invalid',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         // lastNameInputComponent
@@ -84,9 +145,20 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'second_name',
           type: 'text',
           placeholder: 'Pereiro',
-          required: 'true',
-          isValid: 'true',
-          errorMessage: '',
+          errorMessage: 'Last name is invalid',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         // loginInputComponent
@@ -95,21 +167,43 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'login',
           type: 'text',
           placeholder: 'sebastian1337',
-          required: 'true',
-          isValid: 'true',
-          errorMessage: '',
+          errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
-        
+
         // phoneInputComponent
         this.children.phoneInputComponent = new InputComponent({
           title: 'Phone',
           name: 'phone',
           type: 'tel',
-          pattern: '[+]{1}[0-9]{6,14}',
+          //pattern: '[+]{1}[0-9]{6,14}',
           placeholder: '+7 904 889 1488',
-          required: 'true',
-          isValid: 'true',
-          errorMessage: '',
+          errorMessage: 'Phone is invalid',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         // passwordInputComponent
@@ -117,9 +211,21 @@ export class AuthView extends Block<AuthViewProps> {
           title: 'Password',
           name: 'password',
           type: 'password',
-          placeholder: '123123',
-          required: 'true',
-          isValid: 'true'
+          placeholder: '123A123',
+          errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         // confirmPasswordInputComponent
@@ -128,11 +234,24 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'confirm_password',
           type: 'password',
           placeholder: '123123',
-          required: 'true',
-          isValid: 'true'
+          errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? AuthView._removeFieldIsValid(e.target)
+                : AuthView._setFieldIsValid(e.target)
+            },
+          }
         });
         break;
       }
+
       // logout
       case 'logout': {
         this._logoutUser();
@@ -146,15 +265,34 @@ export class AuthView extends Block<AuthViewProps> {
 
     // auth page form submit
     this.setProps({
-      events: {            
+      events: {
         submit: (e) => {
           e.preventDefault();
-          this._loginUser();
+          const form = e.target;
+          const formAllFields = form.querySelectorAll('input');
+          // debug
+          console.log(formAllFields);
+          //
+          if (formAllFields.length){
+            formAllFields.forEach((element) => {
+              Validation.validateFieldByType(element?.getAttribute('name'), element.value)
+                ? AuthView._removeFieldIsValid(element)
+                : AuthView._setFieldIsValid(element)
+            });
+          }
+          const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');
+          if (formInvalidFields.length) {
+
+          } else {
+            this._loginUser();
+            window.location.hash = '/';
+            window.dispatchEvent(new HashChangeEvent("hashchange"));
+          }
+
           // TODO
           // console.log() all form fields
-          console.log('TODO: console.log() all form fields!');
-          window.location.hash = '/';
-          window.dispatchEvent(new HashChangeEvent("hashchange"));
+          //console.log('TODO: console.log() all form fields!');
+
         }
       }
     });

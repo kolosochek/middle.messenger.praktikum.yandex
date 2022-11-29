@@ -7,20 +7,23 @@ interface InputComponentProps {
     name?: string;
     type?: string;
     placeholder?: string;
+    value?: string;
     pattern?: string;
     required?: string;
     isValid?: string;
     errorMessage?: string;
   
     events?: {
-      click: () => void;
+      focus?: (e:FocusEvent) => void;
+      blur?: (e:FocusEvent) => void;
     };
 }
 
 export class InputComponent extends Block<InputComponentProps> {
   constructor(props: InputComponentProps) {
-    super({ ...props });
+    super({ ...props, });
   }
+
   
   render() {
     return this.compile(template, { ...this.props, styles });

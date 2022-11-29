@@ -5,9 +5,11 @@
     color: @plaintext-color;
     border-bottom: 1px solid @plaintext-color;
     padding: 20px 0 2px 0;
+    margin-top: 5px;
 
     .b-profile-field {
         display: flex;
+        position: relative;
 
         .b-profile-field-label {}
 
@@ -25,6 +27,14 @@
                 outline: none;
                 padding: 0 0 2px 0;
             }
+        }
+
+        .b-input-error {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 20px;
+            color: @highlight-color;
         }
     }
 }

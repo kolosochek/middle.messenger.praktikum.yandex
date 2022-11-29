@@ -11,6 +11,9 @@ const ProfileFieldTemplate = `
         <span class="{{styles.b-profile-field-label}}">{{#if this.label}}{{this.label}}{{/if}}</span>
         {{#if mode}}
             <input class="{{styles.b-profile-field-value}} {{styles.b-input}}" {{#if this.name}}name="{{this.name}}"{{/if}} type='{{#if this.type}}{{this.type}}{{else}}text{{/if}}' placeholder='{{this.value}}' />
+            {{#if errorMessage}}
+                <p class="{{styles.b-input-error}}">*{{errorMessage}}</p>
+            {{/if}}
         {{else}}
             <p class="{{styles.b-profile-field-value}}">{{#if this.value}}{{this.value}}{{/if}}</p>
         {{/if}}

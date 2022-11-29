@@ -115,7 +115,7 @@ export class APIData {
                         'text': 'Aint agree with that',
                     },
                 }],
-            'unreadMessages': "0",
+            'unreadMessages': 0,
             'chat_id': '3',
         }, {
             'name': 'SomeUser',

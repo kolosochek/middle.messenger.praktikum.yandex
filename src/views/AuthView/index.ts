@@ -8,7 +8,7 @@ import styles from './style.module.less';
 interface AuthViewProps {
   mode: string;
   events?: {
-    submit: (e: any) => void;
+    submit: (e: SubmitEvent) => void;
   };
 }
 
@@ -264,38 +264,36 @@ export class AuthView extends Block<AuthViewProps> {
     }
 
     // auth page form submit
-    this.setProps({
-      events: {
-        submit: (e) => {
-          e.preventDefault();
-          const form = e.target;
-          const formAllFields = form.querySelectorAll('input');
-          // debug
-          console.log(formAllFields);
+    this.props.events = {
+      submit: (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const formAllFields = form.querySelectorAll('input');
+        if (formAllFields.length) {
+          formAllFields.forEach((element) => {
+            Validation.validateFieldByType(element?.getAttribute('name'), element.value)
+              ? AuthView._removeFieldIsValid(element)
+              : AuthView._setFieldIsValid(element)
+          });
+        }
+        const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');
+        if (formInvalidFields.length) {
+          form.classList.add(`${styles['state__invalid']}`);
+        } else {
+          form.classList.remove(`${styles['state__invalid']}`);
+          // TODO: remove me
+          // sprint_2_task
+          console.log(Object.fromEntries(new FormData(form)));
           //
-          if (formAllFields.length){
-            formAllFields.forEach((element) => {
-              Validation.validateFieldByType(element?.getAttribute('name'), element.value)
-                ? AuthView._removeFieldIsValid(element)
-                : AuthView._setFieldIsValid(element)
-            });
-          }
-          const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');
-          if (formInvalidFields.length) {
-
-          } else {
-            this._loginUser();
+          this._loginUser();
+          const result = prompt('Change page?', `yeah`)
+          if (result !== null) {
             window.location.hash = '/';
             window.dispatchEvent(new HashChangeEvent("hashchange"));
-          }
-
-          // TODO
-          // console.log() all form fields
-          //console.log('TODO: console.log() all form fields!');
-
+          }          
         }
       }
-    });
+    }
   }
 
 

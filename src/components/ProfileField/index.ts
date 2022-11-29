@@ -10,9 +10,11 @@ interface ProfileFieldProps {
   placeholder?: string;
   type?: string;
   pattern?: string;
+  errorMessage?: string;
 
   events?: {
-    click: (e:any) => void;
+    focus?: (e:FocusEvent) => void;
+    blur?: (e:FocusEvent) => void;
   }
 }
 
@@ -20,19 +22,6 @@ export class ProfileField extends Block<ProfileFieldProps> {
   constructor(props: ProfileFieldProps) {
     super({ ...props });
   }
-
-  protected init(): void {
-    this.props.events = {
-      click: (e) => {
-        e.preventDefault();
-        const target = e.target.closest('.b-chat-settings-link');
-        if (target !== null){
-          document.querySelector('.b-chat-settings-wrapper').classList.toggle('state__visible');
-        }
-      }
-    }
-  }
-
   
   render() {
     return this.compile(template, { ...this.props, styles });

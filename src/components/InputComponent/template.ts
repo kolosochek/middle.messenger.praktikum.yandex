@@ -2,8 +2,8 @@ import Handlebars from 'handlebars';
 Handlebars.registerHelper('log', (value) => { console.log(value)});
 
 
-const InputComponentTemplate = `
-    <div class="{{styles.b-input-wrapper}}">
+const InputComponentTemplate = `    
+    <div {{#if nowrap}}{{else}}class="{{styles.b-input-wrapper}}"{{/if}}>
         {{#if title}}<label class="{{styles.b-label}}" for="{{name}}">{{title}}</label>{{/if}}  
         <input class="{{styles.b-input}}" name="{{name}}" type="{{type}}" 
         {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}  

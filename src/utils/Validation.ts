@@ -7,6 +7,7 @@ const Rules = {
     "second_name": /^[А-ЯЁA-Z][А-ЯЁA-Zа-яёa-z-]+$/,
     "phone": /^[+-d]?\d{10,15}$/,
     "message": /(.|\s)*\S(.|\s)*/,
+    "any": /(.*?)/,
 }
 
 
@@ -19,9 +20,9 @@ export class Validation {
     
     public static validateFieldByType(fieldType: string, fieldValue: string): boolean {
         // debug
-        console.log(`fieldType: ${fieldType}, fieldValue: ${fieldValue}`)
+        //console.log(`fieldType: ${fieldType}, fieldValue: ${fieldValue}`)
         //
-        let validationResult = false;
+        let validationResult = true;
         Object.entries(Rules).forEach(([key, value]) => {
             if(key === fieldType){
                 this.fieldRegExp = new RegExp(value);

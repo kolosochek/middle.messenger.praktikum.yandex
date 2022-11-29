@@ -36,6 +36,18 @@
                     width: 600px;
                     text-align: center;
 
+                    .b-profile-form {
+                        min-width: 600px;
+                        border: 1px solid transparent;   
+                    }
+
+                    &>form {              
+                    }
+        
+                    &>form.state__invalid {
+                        display: inherit;
+                    }
+
                     .b-profile-avatar-wrapper {
                         margin: 60px 0 20px;
                         height: 130px;
@@ -88,9 +100,32 @@
                             margin-top: 50px;
                         }
 
-                        .b-profile-contol {}
+                        .b-profile-control {
+                            display: inherit;
+
+                            .b-submit {
+                                border-color: @link-color;
+                                outline-color: @link-color;
+                                color: @plaintext-color;
+                                background: @shadow-color;
+                                font-size: 1.1em;
+                                padding: 5px;
+                    
+                                &:hover {
+                                    outline: none;
+                                }
+                            }
+                        }
                     }
 
+                }
+            }
+
+            div.state__invalid {
+                border-color: @highlight-color;
+
+                p {
+                    display: block;
                 }
             }
         }

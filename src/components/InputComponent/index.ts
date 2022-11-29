@@ -11,6 +11,7 @@ interface InputComponentProps {
     pattern?: string;
     required?: string;
     isValid?: string;
+    nowrap?: string;
     errorMessage?: string;
   
     events?: {
@@ -23,6 +24,7 @@ export class InputComponent extends Block<InputComponentProps> {
   constructor(props: InputComponentProps) {
     super({ ...props, });
   }
+
 
   
   render() {

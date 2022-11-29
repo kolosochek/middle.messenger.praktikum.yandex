@@ -1,19 +1,37 @@
 import Block from '../../utils/Block';
-import template from './template';
-import styles from './style.module.less';
 import { User } from '../../model/user';
 import { ProfileField } from '../../components/ProfileField';
+import { Validation } from '../../utils/Validation';
+import template from './template';
+import styles from './style.module.less';
 
 
 interface ProfileViewProps {
   mode: string;
   profile?: object;
+
+  events?: {
+    submit: (e: SubmitEvent) => void;
+  };
 }
 
 
 export class ProfileView extends Block<ProfileViewProps> {
   constructor(context: any) {
     super(context);
+  }
+
+  private static _removeFieldIsValid(node: HTMLElement | null): void {
+    if (node !== null) {
+      node.removeAttribute('isInvalid');
+      node.parentNode?.parentNode?.classList.remove(`${styles['state__invalid']}`);
+    }
+  }
+  private static _setFieldIsValid(node: HTMLElement | null): void {
+    if (node !== null) {
+      node.setAttribute('isInvalid', 'true');
+      node.parentNode?.parentNode?.classList.add(`${styles['state__invalid']}`);
+    }
   }
 
 
@@ -66,7 +84,7 @@ export class ProfileView extends Block<ProfileViewProps> {
           label: 'Phone:',
           value: this.props.profile.phone,
         });
-        
+
         break;
       }
       case 'edit': {
@@ -78,6 +96,20 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'email',
           label: 'Email:',
           value: this.props.profile.email,
+          errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         //ProfileFieldFirstName
@@ -86,6 +118,20 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'first_name',
           label: 'First name:',
           value: this.props.profile.first_name,
+          errorMessage: 'First name is invalid!',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         //ProfileFieldSecondName
@@ -94,6 +140,20 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'second_name',
           label: 'Last name:',
           value: this.props.profile.last_name,
+          errorMessage: 'Last name is invalid!',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         //ProfileFieldLogin
@@ -102,6 +162,20 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'login',
           label: 'Login:',
           value: this.props.profile.login,
+          errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         //ProfileFieldDisplayName
@@ -118,6 +192,20 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'phone',
           label: 'Phone:',
           value: this.props.profile.phone,
+          errorMessage: 'Phone is invalid',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         break;
@@ -137,67 +225,48 @@ export class ProfileView extends Block<ProfileViewProps> {
         //ProfileFieldNewPassword
         this.children.profileFieldNewPassword = new ProfileField({
           mode: viewMode,
-          name: 'newPassword',
+          name: 'password',
           label: 'New password:',
           type: 'password',
           value: '**********',
+          errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         //ProfileFieldNewPassword
         this.children.profileFieldConfirmPassword = new ProfileField({
           mode: viewMode,
-          name: 'confirmPassword',
+          name: 'confirm_password',
           label: 'Confirm new password:',
           type: 'password',
           value: '**********',
-        });
-        break;
-      }
-      case 'get-by-id': {
-        this.props.profile = User.getUserProfileById();
+          errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
 
-        //ProfileFieldEmail
-        this.children.profileFieldEmail = new ProfileField({
-          name: 'email',
-          label: 'Email:',
-          value: this.props.profile.email,
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
-
-        //ProfileFieldFirstName
-        this.children.profileFieldFirstName = new ProfileField({
-          name: 'first_name',
-          label: 'First name:',
-          value: this.props.profile.first_name,
-        });
-
-        //ProfileFieldSecondName
-        this.children.profileFieldSecondName = new ProfileField({
-          name: 'second_name',
-          label: 'Last name:',
-          value: this.props.profile.last_name,
-        });
-
-        //ProfileFieldLogin
-        this.children.profileFieldLogin = new ProfileField({
-          name: 'login',
-          label: 'Login:',
-          value: this.props.profile.login,
-        });
-
-        //ProfileFieldDisplayName
-        this.children.profileFieldDisplayName = new ProfileField({
-          name: 'display_name',
-          label: 'Display name:',
-          value: this.props.profile.login,
-        });
-
-        //ProfileFieldPhone
-        this.children.profileFieldPhone = new ProfileField({
-          name: 'phone',
-          label: 'Phone:',
-          value: this.props.profile.phone,
-        });
-        
         break;
       }
       default: {
@@ -206,6 +275,38 @@ export class ProfileView extends Block<ProfileViewProps> {
       }
     }
 
+    this.props.events = {
+      submit: (e) => {
+        e.preventDefault();
+        const form = e.target;
+        const formAllFields = form.querySelectorAll('input');
+        // debug
+        //console.log(formAllFields);
+        //
+        if (formAllFields.length) {
+          formAllFields.forEach((element) => {
+            Validation.validateFieldByType(element?.getAttribute('name'), element.value)
+              ? ProfileView._removeFieldIsValid(element)
+              : ProfileView._setFieldIsValid(element)
+          });
+        }
+        const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');
+        if (formInvalidFields.length) {
+          form.classList.add(`${styles['state__invalid']}`);
+        } else {
+          form.classList.remove(`${styles['state__invalid']}`);
+          // TODO: remove me
+          // sprint_2_task
+          console.log(Object.fromEntries(new FormData(form)));
+          //
+          const result = prompt('Change page?', `yeah`)
+          if (result !== null) {
+            window.location.hash = '/profile';
+            window.dispatchEvent(new HashChangeEvent("hashchange"));
+          }  
+        }
+      }
+    }
   }
 
 

@@ -20,10 +20,11 @@
             &>form {
                 padding: 20px;
                 min-width: 600px;
+                border: 1px solid transparent;               
+            }
 
-                &>form.isInvalid {
-                    border:1px solid @highlight-color;
-                }
+            &>form.state__invalid {
+                border: 1px solid @highlight-color;
             }
     
             .b-page-title {

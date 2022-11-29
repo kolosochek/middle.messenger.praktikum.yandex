@@ -51,6 +51,7 @@ const ProfilePageTemplate = `
                             </div>
                         {{/if_eq}}
                         {{#if_eq this.mode "edit"}}
+                            <form class="{{styles.b-profile-form}}">
                             {{{profileFieldEmail}}}
                             {{{profileFieldFirstName}}}
                             {{{profileFieldSecondName}}}
@@ -59,9 +60,10 @@ const ProfilePageTemplate = `
                             {{{profileFieldPhone}}}
                             <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                 <div class='{{styles.b-profile-control}}'>
-                                    <a class='{{styles.b-link}}' href="/#/profile">Save changes</a>
+                                    <button type='submit' class='{{styles.b-submit}}'>Save changes</button>
                                 </div>
                             </div>
+                            </form>
                         {{/if_eq}} 
                         {{#if_eq this.mode "change-password"}}
                             {{{profileFieldOldPassword}}}
@@ -69,7 +71,7 @@ const ProfilePageTemplate = `
                             {{{profileFieldConfirmPassword}}}
                             <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                 <div class='{{styles.b-profile-control}}'>
-                                    <a class='{{styles.b-link}}' href="/#/profile">Save changes</a>
+                                    <button type='submit' class='{{styles.b-submit}}'>Save changes</button>
                                 </div>
                             </div>
                         {{/if_eq}} 

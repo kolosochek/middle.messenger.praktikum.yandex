@@ -14,7 +14,7 @@ const ChatSettingsTemplate = `
                 {{> ImageComponent image_url='attach_file_icon.png' width='20' height='20'}}
             </a>
         </figure>
-        <input type="text" name="message" class="{{styles.b-input}}" />
+        {{{messageInputComponent}}}
         <button type="submit" class="{{styles.b-submit}}">></button>
     </form>
     <div class="{{styles.b-chat-reply-attachment-wrapper}}">

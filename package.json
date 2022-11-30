@@ -1,6 +1,6 @@
 {
-    "name": "sprint_1",
-    "version": "1.0",
+    "name": "sprint_2",
+    "version": "1.1",
     "description": "ModemWebchat App. Slowest thing you've ever saw!",
     "scripts": {
         "dev": "npm run eslint && npm run csslint && npm run copy-images && parcel --no-cache index.html & node server.js",

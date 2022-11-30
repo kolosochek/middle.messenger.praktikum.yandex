@@ -9,12 +9,15 @@ Simple demostration below:
 ![I mean theeese times, you know.](/github/modemwebchat.gif)
 
 Key features:
-- Vanilla JS. No JS or CSS frameworks has been used. Some transitions also included. I can do some HTML5+JS+CSS3+LESS karate, bruh :vulcan_salute:. 
+- TypeScript. No JS or CSS frameworks has been used. Some transitions also included. I can do some HTML5+TS+CSS3+LESS karate, bruh :vulcan_salute:. 
 - Used BEM(block-element-modificator) methodology in HTML\CSS namespaces. 
+- ESLint, Stylelint passage. Hate it but have to. 
 - Custom routing system, simple but powerful. Works like a charm.
-- Simple user authorisation check, one list of views for authorised users, another one for unathorised users.
-- Own MVC(Model-View-Controller) realisation.
-- All views are composed from components. All valuable entities are insdie the components.  
+- Simple user auth system, you can't reach some routes if you are unauthorized, bruh.
+- Own MVC(Model-View-Controller) realisation. All entities are Classes, so there is OOP power.
+- All views are composed from components. Views are composed from components or partials. Any props, events can be passed trough. 
+- You can still use Handlebars partials for 'dumb' components, which don't so any logic inside. 
+- Nested components feature. Components can include another components, even inside the other components. 
 - Parcel bundler. Handlebars template processor. Aint like dat but used to.
 
 All possible routes:

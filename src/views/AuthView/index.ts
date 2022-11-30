@@ -189,7 +189,7 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'phone',
           type: 'tel',
           //pattern: '[+]{1}[0-9]{6,14}',
-          placeholder: '+7 904 889 1488',
+          placeholder: '+79048891488',
           errorMessage: 'Phone is invalid',
 
           events: {

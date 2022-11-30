@@ -216,10 +216,24 @@ export class ProfileView extends Block<ProfileViewProps> {
         //ProfileFieldOldPassword
         this.children.profileFieldOldPassword = new ProfileField({
           mode: viewMode,
-          name: 'oldPassword',
+          name: 'old_password',
           label: 'Old password:',
           type: 'password',
           value: '**********',
+          errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
+
+          events: {
+            focus: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+            blur: (e) => {
+              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
+                ? ProfileView._removeFieldIsValid(e.target)
+                : ProfileView._setFieldIsValid(e.target)
+            },
+          }
         });
 
         //ProfileFieldNewPassword
@@ -229,7 +243,7 @@ export class ProfileView extends Block<ProfileViewProps> {
           label: 'New password:',
           type: 'password',
           value: '**********',
-          errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
+          errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
             focus: (e) => {
@@ -252,7 +266,7 @@ export class ProfileView extends Block<ProfileViewProps> {
           label: 'Confirm new password:',
           type: 'password',
           value: '**********',
-          errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
+          errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
             focus: (e) => {
@@ -281,7 +295,7 @@ export class ProfileView extends Block<ProfileViewProps> {
         const form = e.target;
         const formAllFields = form.querySelectorAll('input');
         // debug
-        //console.log(formAllFields);
+        //console.log(form);
         //
         if (formAllFields.length) {
           formAllFields.forEach((element) => {

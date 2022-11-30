@@ -66,6 +66,7 @@ const ProfilePageTemplate = `
                             </form>
                         {{/if_eq}} 
                         {{#if_eq this.mode "change-password"}}
+                        <form class="{{styles.b-profile-form}}">
                             {{{profileFieldOldPassword}}}
                             {{{profileFieldNewPassword}}}
                             {{{profileFieldConfirmPassword}}}
@@ -74,6 +75,7 @@ const ProfilePageTemplate = `
                                     <button type='submit' class='{{styles.b-submit}}'>Save changes</button>
                                 </div>
                             </div>
+                        </form>
                         {{/if_eq}} 
                     </div>
                 </div>

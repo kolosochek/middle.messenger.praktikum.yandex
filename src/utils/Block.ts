@@ -71,6 +71,7 @@ class Block<P extends Record<string, any> = any> {
     }
 
     protected init() {
+        return ;
     }
 
     _componentDidMount() {
@@ -78,6 +79,7 @@ class Block<P extends Record<string, any> = any> {
     }
 
     componentDidMount() {
+        return ;
     }
 
     public dispatchComponentDidMount() {
@@ -193,26 +195,35 @@ class Block<P extends Record<string, any> = any> {
         return this.element;
     }
 
-    _makePropsProxy(props: P) {
-        const self = this;
-
-        return new Proxy(props, {
-            get(target, prop: string) {
-                const value = target[prop];
-                return typeof value === 'function' ? value.bind(target) : value;
-            },
-            set(target, prop: string, value) {
-                const oldTarget = { ...target }
-
-                target[prop as keyof P] = value;
-                self.eventBus().emit(Block.EVENTS.FLOW_CDU, oldTarget, target);
-                return true;
-            },
-            deleteProperty() {
-                throw new Error("Access denied! Can't delete a property.");
-            }
-        });
-    }
+    private _makePropsProxy(props: Record<string, any>): Record<string, any> {
+        const proxySetting = {
+          get: (target: Record<string, any>, prop: string): unknown => {
+            return target[prop];
+          },
+    
+          set: (
+            target: Record<string, any>,
+            prop: string,
+            value: unknown,
+          ): boolean => {
+            const oldProps = target[prop];
+            target[prop] = value;
+    
+            this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target[prop]);
+            return true;
+          },
+    
+          deleteProperty: (target: Record<string, any>, prop: string): boolean => {
+            const oldProps = target[prop];
+            delete target[prop];
+    
+            this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target[prop]);
+            return true;
+          },
+        };
+    
+        return new Proxy(props, proxySetting);
+      }
 }
 
 export default Block;

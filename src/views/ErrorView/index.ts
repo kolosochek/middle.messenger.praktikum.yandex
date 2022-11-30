@@ -9,13 +9,9 @@ interface ErrorViewProps {
 
 
 export class ErrorView extends Block<ErrorViewProps> {
-  constructor(context: any) {
-    super(context);
-  }
-
   init() {
     const mode = this.props.mode;
-    /* Maybe we'll want to pass custom props by given mode 
+    //Maybe we'll want to pass custom props by given mode 
     switch (mode) {
       case 'Error500': {
         break;
@@ -29,7 +25,6 @@ export class ErrorView extends Block<ErrorViewProps> {
       }
 
     }
-    */
   }
 
 

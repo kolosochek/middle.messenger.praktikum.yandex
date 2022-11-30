@@ -23,7 +23,7 @@ export class ChatWindow extends Block<ChatWindowProps> {
     this.children.chatReply = new ChatReply({});
   }
 
-  protected componentDidUpdate(oldProps: ChatWindowProps, newProps: ChatWindowProps): boolean {
+  protected componentDidUpdate(): boolean {
     this.children.chatSettings.setProps(this.props);
     return true
   }

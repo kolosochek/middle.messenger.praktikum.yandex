@@ -1,49 +1,49 @@
-@import '../../../static/css/variables.less';
+@import url("../../../static/css/variables.less");
 
 .b-page-wrapper {
-	display: flex;
-	align-items: stretch;
-	min-height: 100vh;
-	background: @shadow-color;
-	outline-color: @plaintext-color;
+  display: flex;
+  align-items: stretch;
+  min-height: 100vh;
+  background: @shadow-color;
+  outline-color: @plaintext-color;
 
-	.b-page {
-		display: flex;
-		flex-grow: 1;
+  .b-page {
+    display: flex;
+    flex-grow: 1;
 
-		.b-chat-viewport-wrapper {
-			display: flex;
-			flex-grow: 1;
+    .b-chat-viewport-wrapper {
+      display: flex;
+      flex-grow: 1;
 
-			.b-chat-viewport {
-				display: flex;
-				flex-grow: 1;
-				flex-direction: row;
-				color: @plaintext-color;
+      .b-chat-viewport {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: row;
+        color: @plaintext-color;
 
-				/* Aside */
-				.b-conversations-wrapper {
-					display: flex;
-					overflow: hidden;
-					height: 100vh;
-					min-width: 360px;
-					margin-right: auto;
-					border-right: 1px solid @link-color;
-					background-color: @shadow-color;
-					color: @plaintext-color;
+        /* Aside */
+        .b-conversations-wrapper {
+          display: flex;
+          overflow: hidden;
+          height: 100vh;
+          min-width: 360px;
+          margin-right: auto;
+          border-right: 1px solid @link-color;
+          background-color: @shadow-color;
+          color: @plaintext-color;
 
-					.b-conversations {
-						display: flex;
-						flex-direction: column;
-						padding: 10px;
-						overflow-x: hidden;
-						
-						&::-webkit-scrollbar {
-							display: none;
-						} 
-					}
-				}
-			}
-		}
-	}
+          .b-conversations {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            overflow-x: hidden;
+
+            &::-webkit-scrollbar {
+              display: none;
+            }
+          }
+        }
+      }
+    }
+  }
 }

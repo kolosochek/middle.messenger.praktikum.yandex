@@ -1,82 +1,81 @@
-@import '../../../static/css/variables.less';
-
+@import url("../../../static/css/variables.less");
 
 .b-chat-window-wrapper {
+  display: flex;
+  flex-grow: 1;
+
+  .b-chat-window-empty-wrapper {
     display: flex;
-    flex-grow: 1;
+    width: 100%;
 
-    .b-chat-window-empty-wrapper {
-        display: flex;
-        width: 100%;
-
-        .b-chat-window-empty {
-            align-self: center;
-            width: 100%;
-            font-size: 2em;
-            text-align: center;
-        }
+    .b-chat-window-empty {
+      align-self: center;
+      width: 100%;
+      font-size: 2em;
+      text-align: center;
     }
+  }
 
-    .b-chat-window {
-        display: flex;
-        flex-direction: column;
-        width: 100%;
-        height: 100vh;
+  .b-chat-window {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: 100vh;
 
-        .b-chat-wrapper {
-            margin-top: auto;
-            padding: 0 20px;
-            font-size: 1.3em;
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column-reverse;
+    .b-chat-wrapper {
+      margin-top: auto;
+      padding: 0 20px;
+      font-size: 1.3em;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column-reverse;
 
-            &::-webkit-scrollbar {
-                width: 20px;
-                border-left: 1px solid @link-color;
-                border-right: 1px solid @link-color;
+      &::-webkit-scrollbar {
+        width: 20px;
+        border-left: 1px solid @link-color;
+        border-right: 1px solid @link-color;
+      }
+
+      &::-webkit-scrollbar-track {
+        background-color: inherit;
+      }
+
+      &::-webkit-scrollbar-thumb {
+        border-left: 1px solid @link-color;
+        border-right: 1px solid @link-color;
+        background: @background-color;
+      }
+
+      .b-chat {
+        .b-chat-message-wrapper {
+          padding: 7px 0;
+
+          .b-chat-message {
+            .b-message-author {
+              color: @link-color;
+              padding-left: 5px;
+              font-size: 0.9em;
             }
 
-            &::-webkit-scrollbar-track {}
-
-            &::-webkit-scrollbar-thumb {
-                border-left: 1px solid @link-color;
-                border-right: 1px solid @link-color;
-                background: @background-color;
-            }							  
-
-            .b-chat {
-
-                .b-chat-message-wrapper {
-                    padding: 7px 0;
-
-                    .b-chat-message {
-
-                        .b-message-author {
-                            color: @link-color;
-                            padding-left: 5px;
-                            font-size: 0.9em;
-                        }
-
-                        .b-message-time {
-                            color: @background-color;
-                            background-color: @link-color;
-                            border-radius: 15px;
-                            margin-top: auto;
-                            padding: 2px 5px 1px;
-                            font-size: 0.9em;
-                        }
-
-                        .b-message-text {
-                            line-height: 1.2em;
-                        }
-                    }
-                }
-
-                .state__mine {
-                    text-align: right;
-                }
+            .b-message-time {
+              color: @background-color;
+              background-color: @link-color;
+              border-radius: 15px;
+              margin-top: auto;
+              padding: 2px 5px 1px;
+              font-size: 0.9em;
             }
+
+            .b-message-text {
+              line-height: 1.2em;
+            }
+          }
         }
+
+        .state__mine {
+          text-align: right;
+        }
+      }
     }
+  }
 }

@@ -1,39 +1,38 @@
-@import '../../../static/css/variables.less';
-
-
-.b-input-wrapper {
-    display: flex;
-    flex-direction: column;
-    padding: 10px 0;
-
-    .b-label {
-        color: @plaintext-color;
-        font-size: 0.8em;
-        padding-bottom: 5px;
-    }
-
-    .b-input {
-        padding-left: 5px;
-    }
-
-    .b-input-error {
-        display: none;
-        padding-top: 5px;
-        color: @highlight-color;
-        font-size: 0.8em;
-    }
-}
+@import url("../../../static/css/variables.less");
 
 .b-input,
 .b-submit {
-    border-color: @link-color;
-    outline-color: @link-color;
-    color: @plaintext-color;
-    background: @shadow-color;
-    font-size: 1.1em;
-    padding: 5px;
+  border-color: @link-color;
+  outline-color: @link-color;
+  color: @plaintext-color;
+  background: @shadow-color;
+  font-size: 1.1em;
+  padding: 5px;
 
-    &:hover {
-        outline: none;
-    }
+  &:hover {
+    outline: none;
+  }
+}
+
+.b-input-wrapper {
+  display: flex;
+  flex-direction: column;
+  padding: 10px 0;
+
+  .b-label {
+    color: @plaintext-color;
+    font-size: 0.8em;
+    padding-bottom: 5px;
+  }
+
+  .b-input {
+    padding-left: 5px;
+  }
+
+  .b-input-error {
+    display: none;
+    padding-top: 5px;
+    color: @highlight-color;
+    font-size: 0.8em;
+  }
 }

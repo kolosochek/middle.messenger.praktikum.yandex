@@ -1,11 +1,12 @@
 import Block from '../../utils/Block';
+import { ShowModal } from '../../utils/ShowModal';
 import template from './template';
 import styles from './style.module.less';
 
 interface ChatSettingsProps {
   activeChat?: object;
   events?: {
-    click: (e:any) => void;
+    click: (e:MouseEvent) => void;
   }
 }
 
@@ -14,7 +15,8 @@ export class ChatSettings extends Block<ChatSettingsProps> {
     super({ ...props });
   }
 
-  protected init(): void {
+  init() {
+    ShowModal.bindToWindow();
     this.props.events = {
       click: (e) => {
         e.preventDefault();

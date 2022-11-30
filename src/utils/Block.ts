@@ -1,7 +1,7 @@
 import Handlebars from 'handlebars';
 import { EventBus } from './EventBus';
 
-
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Block<P extends Record<string, any> = any> {
     // component lifecycle-events
     static EVENTS = {
@@ -17,10 +17,11 @@ class Block<P extends Record<string, any> = any> {
     protected props: P;
     public children: Block | Block[];
     private _element: HTMLElement | null = null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public template: any;
 
     constructor(propsWithChildren: P) {
-        const eventBus = new EventBus();        
+        const eventBus = new EventBus();
         const { props, children } = this._getChildrenAndProps(propsWithChildren);
         this.children = children;
         this.props = this._makePropsProxy(props);
@@ -36,11 +37,11 @@ class Block<P extends Record<string, any> = any> {
         Object.entries(childrenAndProps).forEach(([key, value]) => {
             if (Array.isArray(value) && value.length > 0 && value.every((v) => v instanceof Block)) {
                 children[key as string] = value;
-              } else if (value instanceof Block) {
+            } else if (value instanceof Block) {
                 children[key as string] = value;
-              } else {
+            } else {
                 props[key] = value;
-              }
+            }
         });
 
         return { props: props as P, children };
@@ -49,12 +50,12 @@ class Block<P extends Record<string, any> = any> {
     _addEvents() {
         const { events = {} } = this.props as P & { events: Record<string, () => void> };
         Object.keys(events).forEach(eventName => {
-            if(eventName === 'focus' || eventName === 'blur' || eventName === 'change') {
+            if (eventName === 'focus' || eventName === 'blur' || eventName === 'change') {
                 this._element?.addEventListener(eventName, events[eventName], true);
             } else {
                 this._element?.addEventListener(eventName, events[eventName]);
             }
-            
+
         });
     }
 
@@ -64,14 +65,14 @@ class Block<P extends Record<string, any> = any> {
         eventBus.on(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
         eventBus.on(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
     }
-    
+
     private _init() {
         this.init();
         this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
     }
 
     protected init() {
-        return ;
+        return;
     }
 
     _componentDidMount() {
@@ -79,7 +80,7 @@ class Block<P extends Record<string, any> = any> {
     }
 
     componentDidMount() {
-        return ;
+        return;
     }
 
     public dispatchComponentDidMount() {
@@ -101,7 +102,7 @@ class Block<P extends Record<string, any> = any> {
     }
 
     protected componentDidUpdate(oldProps: P, newProps: P) {
-        if(oldProps !== newProps){
+        if (oldProps !== newProps) {
             return true;
         }
     }
@@ -129,21 +130,22 @@ class Block<P extends Record<string, any> = any> {
         this._addEvents();
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     protected compile(template: any, context: any) {
         const contextAndStubs = { ...context };
 
         Object.entries(this.children).forEach(([name, component]) => {
-                if(Object.keys(component.children).length){
-                    contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
+            if (Object.keys(component.children).length) {
+                contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
 
-                    Object.entries(component.children).forEach(([key, value]) => {
-                        //console.log(`key: ${key}, value: ${value}`)
-                        contextAndStubs[key] = `<div data-id="${value.id}"></div>`;
-                    });
-                    
-                } else {
-                    contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
-                }  
+                Object.entries(component.children).forEach(([key, value]) => {
+                    //console.log(`key: ${key}, value: ${value}`)
+                    contextAndStubs[key] = `<div data-id="${value.id}"></div>`;
+                });
+
+            } else {
+                contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
+            }
         });
 
         //debug
@@ -160,22 +162,21 @@ class Block<P extends Record<string, any> = any> {
         //console.log(`html`);
         //console.log(html);
         //
-        
+
         const temp = document.createElement('template');
         temp.innerHTML = html;
 
         const replaceStub = (component: Block) => {
             const stub = temp.content.querySelector(`[data-id="${component.id}"]`);
             if (!stub) {
-                return ;
+                return;
             }
             component.getContent()?.append(...Array.from(stub.childNodes));
-            stub.replaceWith(component.getContent()!);
+            stub.replaceWith(component.getContent());
         }
 
-
-
-        Object.entries(this.children).forEach(([_, component]) => {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        Object.entries(this.children).forEach(([index, component]) => {
             if (Object.keys(component.children).length) {
                 // we got a nested component, TODO: do something
                 replaceStub(component);
@@ -195,35 +196,37 @@ class Block<P extends Record<string, any> = any> {
         return this.element;
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     private _makePropsProxy(props: Record<string, any>): Record<string, any> {
         const proxySetting = {
-          get: (target: Record<string, any>, prop: string): unknown => {
-            return target[prop];
-          },
-    
-          set: (
-            target: Record<string, any>,
-            prop: string,
-            value: unknown,
-          ): boolean => {
-            const oldProps = target[prop];
-            target[prop] = value;
-    
-            this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target[prop]);
-            return true;
-          },
-    
-          deleteProperty: (target: Record<string, any>, prop: string): boolean => {
-            const oldProps = target[prop];
-            delete target[prop];
-    
-            this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target[prop]);
-            return true;
-          },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            get: (target: Record<string, any>, prop: string): unknown => {
+                return target[prop];
+            },
+            set: (
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                target: Record<string, any>,
+                prop: string,
+                value: unknown,
+            ): boolean => {
+                const oldProps = target[prop];
+                target[prop] = value;
+
+                this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target[prop]);
+                return true;
+            },
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            deleteProperty: (target: Record<string, any>, prop: string): boolean => {
+                const oldProps = target[prop];
+                delete target[prop];
+
+                this.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target[prop]);
+                return true;
+            },
         };
-    
+
         return new Proxy(props, proxySetting);
-      }
+    }
 }
 
 export default Block;

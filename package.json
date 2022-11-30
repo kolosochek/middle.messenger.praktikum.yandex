@@ -3,9 +3,11 @@
     "version": "1.0",
     "description": "ModemWebchat App. Slowest thing you've ever saw!",
     "scripts": {
-        "dev": "npm run copy-images & parcel --no-cache index.html & node server.js",
-        "build": "npm run copy-images & parcel build index.html",
+        "dev": "npm run eslint && npm run csslint && npm run copy-images && parcel --no-cache index.html & node server.js",
+        "build": "npm run copy-images && parcel build index.html",
         "copy-images": "mkdir ./dist || cp ./static/*.png ./dist",
+        "eslint": "eslint .",
+        "csslint": "npx stylelint '**/*.less'",
         "start": "parcel index.html & node server.js"
     },
     "keywords": [],
@@ -23,10 +25,13 @@
         "events": "^3.3.0",
         "parcel": "^2.7.0",
         "path-browserify": "^1.0.1",
+        "postcss-less": "^6.0.0",
         "process": "^0.11.10",
         "querystring-es3": "^0.2.1",
         "stream-browserify": "^3.0.0",
         "stream-http": "^3.2.0",
+        "stylelint": "^14.15.0",
+        "stylelint-config-standard": "^29.0.0",
         "url": "^0.11.0",
         "util": "^0.12.5"
     },

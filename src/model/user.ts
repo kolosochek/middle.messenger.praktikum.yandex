@@ -1,5 +1,5 @@
 export class User {
-    public static getUserProfile(userId?: string|number): object {
+    public static getUserProfile(): object {
         const user = {
             "avatar_url": "https://i.pravatar.cc/130?img=7",
             "login": "sebastian1337",
@@ -10,10 +10,6 @@ export class User {
             // password hash
             "password": "FGDSA^#RFSGQ@#^&TFH12",
         }
-        return user;
-    }
-    public static getUserProfileById(id:string|number): object {
-        const user = {}
         return user;
     }
 }

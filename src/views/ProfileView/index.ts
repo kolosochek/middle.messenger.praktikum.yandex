@@ -2,6 +2,7 @@ import Block from '../../utils/Block';
 import { User } from '../../model/user';
 import { ProfileField } from '../../components/ProfileField';
 import { Validation } from '../../utils/Validation';
+import { ShowModal } from '../../utils/ShowModal';
 import template from './template';
 import styles from './style.module.less';
 
@@ -17,9 +18,6 @@ interface ProfileViewProps {
 
 
 export class ProfileView extends Block<ProfileViewProps> {
-  constructor(context: any) {
-    super(context);
-  }
 
   private static _removeFieldIsValid(node: HTMLElement | null): void {
     if (node !== null) {
@@ -36,9 +34,8 @@ export class ProfileView extends Block<ProfileViewProps> {
 
 
   init() {
+    ShowModal.bindToWindow();
     const viewMode = this.props.mode;
-    // console.log('profile view mode');
-    // console.log(mode);
     switch (viewMode) {
       case 'view': {
         this.props.profile = User.getUserProfile();

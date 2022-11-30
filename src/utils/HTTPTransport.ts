@@ -8,12 +8,12 @@ enum Methods {
 type Options = {
     method: string;
     headers?: Record<string, string>;
-    data?: any;
+    data?: Record<string, string>;
     timeout?: number;
 };
 
 class HTTPTransport {
-    public queryStringify(data: Record<string, any>) {
+    public queryStringify(data: Record<string, string>) {
         if (typeof data !== 'object') {
             throw new Error('Props data is not object');
         }

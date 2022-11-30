@@ -8,7 +8,7 @@ interface ChatConversationListProps {
   activeChat?: object;
 
   events?: {
-    click: (e:any) => void;
+    click: (e:MouseEvent) => void;
   };
 }
 

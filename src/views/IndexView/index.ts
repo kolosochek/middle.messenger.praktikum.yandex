@@ -3,9 +3,9 @@ import { ChatAsideProfile } from '../../components/ChatAsideProfile';
 import { ChatAsideSearch } from '../../components/ChatAsideSearch';
 import { ChatConversationList } from '../../components/ChatConversationList';
 import { ChatWindow } from '../../components/ChatWindow';
+import { APIData } from '../../model/data';
 import template from './template';
 import styles from './style.module.less';
-import { APIData } from '../../model/data';
 
 
 interface IndexViewProps {
@@ -16,10 +16,6 @@ interface IndexViewProps {
 
 
 export class IndexView extends Block<IndexViewProps> {
-  constructor(context: any) {
-    super(context);
-  }
-
   public activeChatId: string | null;
   public activeChat: object;
   public conversationList: object[];

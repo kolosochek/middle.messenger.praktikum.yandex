@@ -1,58 +1,60 @@
-@import "css_reset.less";
-@import "variables.less";
-
+@import url("css_reset.less");
+@import url("variables.less");
 
 @font-face {
-	font-family: 'classic-console';
-	src: url('../fonts/clacon2.woff2') format('woff'),
-		url('../fonts/clacon2.woff2') format('truetype');
-	font-weight: normal;
-	font-style: normal;
+  font-family: classic-console;
+  src:
+    url("../fonts/clacon2.woff2") format("woff"),
+    url("../fonts/clacon2.woff2") format("truetype");
+  font-weight: normal;
+  font-style: normal;
 }
 
-body, body input, body button, body textarea {
-	font-family: 'classic-console', Arial, Helvetica, sans-serif;
-	background: @shadow-color;
+body,
+body input,
+body button,
+body textarea {
+  font-family: classic-console, Arial, Helvetica, sans-serif;
+  background: @shadow-color;
 }
 
-body input, body button {
-	outline: none;
+body input,
+body button {
+  outline: none;
 }
 
 a {
-	color: @link-color;
+  color: @link-color;
 
-	&:hover {
-		color: @highlight-color;
-		text-decoration: none;
-		cursor: pointer;
-	}
+  &:hover {
+    color: @highlight-color;
+    text-decoration: none;
+    cursor: pointer;
+  }
 }
 
 .state__visible {
-	display: flex !important;
+  display: flex !important;
 }
 
-#modal_window {
-    flex-grow: 1;
-    justify-content: center;
-    align-items: center;
+#modalwindow {
+  flex-grow: 1;
+  justify-content: center;
+  align-items: center;
 }
-
 
 .b-modal-window-wrapper {
-	display: none;
-	position: absolute;
-	width: 100%;
-	height: 100%;
-	z-index: 1000;
-	background: @shadow-color;
-	opacity: .99;
-	transition: 500ms ease-in-out all;
+  display: none;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background: @shadow-color;
+  opacity: 0.99;
+  transition: 500ms ease-in-out all;
 
-	.b-modal-window {
-		position: relative;
-		z-index: 10000;
-	}
+  .b-modal-window {
+    position: relative;
+    z-index: 10000;
+  }
 }
-

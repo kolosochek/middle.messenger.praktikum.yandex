@@ -13,10 +13,6 @@ interface AuthViewProps {
 }
 
 export class AuthView extends Block<AuthViewProps> {
-  constructor(context: any) {
-    super(context);
-  }
-
   private _logoutUser(): void {
     window.localStorage.removeItem('isAuthorized');
   }

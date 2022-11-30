@@ -1,29 +1,29 @@
-@import '../../../static/css/variables.less';
+@import url("../../../static/css/variables.less");
 
 .b-conversations-search-wrapper {
+  display: flex;
+  margin: 0 0 21px;
+
+  .b-conversations-search {
     display: flex;
-    margin: 0 0 21px 0;
+    flex-grow: 1;
 
-    .b-conversations-search {
-        display: flex;
-        flex-grow: 1;
+    & > * {
+      border-color: @link-color;
+      outline-color: @link-color;
+      color: @plaintext-color;
+      background: @shadow-color;
+      font-size: 1.2em;
 
-        &>* {
-            border-color: @link-color;
-            outline-color: @link-color;
-            color: @plaintext-color;
-            background: @shadow-color;
-            font-size: 1.2em;
-
-            &:hover {
-                outline: none;
-            }
-        }
-
-        .b-input {
-            height: 25px;
-            width: 100%;
-            padding-left: 5px;
-        }
+      &:hover {
+        outline: none;
+      }
     }
+
+    .b-input {
+      height: 25px;
+      width: 100%;
+      padding-left: 5px;
+    }
+  }
 }

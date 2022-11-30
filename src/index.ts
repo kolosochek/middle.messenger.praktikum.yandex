@@ -54,7 +54,7 @@ class Router {
                     break;
                 }
                 default: {
-                    page = new ErrorView({ mode: 'Error404'});;
+                    page = new ErrorView({ mode: 'Error404'});
                     break;
                 }
             }

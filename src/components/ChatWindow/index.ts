@@ -1,9 +1,9 @@
 import Block from '../../utils/Block';
-import template from './template';
-import styles from './style.module.less';
 import { ChatSettings } from '../ChatSettings';
 import { ChatReply } from '../ChatReply';
 import { Validation } from '../../utils/Validation';
+import template from './template';
+import styles from './style.module.less';
 
 interface ChatWindowProps {
   activeChat?: object;

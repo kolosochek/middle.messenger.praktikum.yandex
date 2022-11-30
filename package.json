@@ -4,7 +4,7 @@
     "description": "ModemWebchat App. Slowest thing you've ever saw!",
     "scripts": {
         "dev": "npm run eslint && npm run csslint && npm run copy-images && parcel --no-cache index.html & node server.js",
-        "build": "npm run copy-images && parcel build index.html",
+        "build": "npm run copy-images & parcel build index.html",
         "copy-images": "mkdir ./dist || cp ./static/*.png ./dist",
         "eslint": "eslint .",
         "csslint": "npx stylelint '**/*.less'",

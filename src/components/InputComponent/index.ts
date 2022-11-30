@@ -12,6 +12,7 @@ interface InputComponentProps {
     required?: string;
     isValid?: string;
     nowrap?: string;
+    defaultErrorMessage?: string;
     errorMessage?: string;
   
     events?: {

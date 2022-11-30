@@ -10,6 +10,7 @@ interface ProfileFieldProps {
   placeholder?: string;
   type?: string;
   pattern?: string;
+  defaultErrorMessage?: string;
   errorMessage?: string;
 
   events?: {

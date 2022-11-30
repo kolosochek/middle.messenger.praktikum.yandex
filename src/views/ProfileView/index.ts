@@ -18,21 +18,6 @@ interface ProfileViewProps {
 
 
 export class ProfileView extends Block<ProfileViewProps> {
-
-  private static _removeFieldIsValid(node: HTMLElement | null): void {
-    if (node !== null) {
-      node.removeAttribute('isInvalid');
-      node.parentNode?.parentNode?.classList.remove(`${styles['state__invalid']}`);
-    }
-  }
-  private static _setFieldIsValid(node: HTMLElement | null): void {
-    if (node !== null) {
-      node.setAttribute('isInvalid', 'true');
-      node.parentNode?.parentNode?.classList.add(`${styles['state__invalid']}`);
-    }
-  }
-
-
   init() {
     ShowModal.bindToWindow();
     const viewMode = this.props.mode;
@@ -98,13 +83,13 @@ export class ProfileView extends Block<ProfileViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -120,13 +105,13 @@ export class ProfileView extends Block<ProfileViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -142,13 +127,13 @@ export class ProfileView extends Block<ProfileViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -164,13 +149,13 @@ export class ProfileView extends Block<ProfileViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -194,13 +179,13 @@ export class ProfileView extends Block<ProfileViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -222,13 +207,13 @@ export class ProfileView extends Block<ProfileViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -240,18 +225,19 @@ export class ProfileView extends Block<ProfileViewProps> {
           label: 'New password:',
           type: 'password',
           value: '**********',
+          defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -263,18 +249,19 @@ export class ProfileView extends Block<ProfileViewProps> {
           label: 'Confirm new password:',
           type: 'password',
           value: '**********',
+          defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? ProfileView._removeFieldIsValid(e.target)
-                : ProfileView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
             },
           }
         });
@@ -291,17 +278,32 @@ export class ProfileView extends Block<ProfileViewProps> {
         e.preventDefault();
         const form = e.target;
         const formAllFields = form.querySelectorAll('input');
-        // debug
-        //console.log(form);
-        //
         if (formAllFields.length) {
           formAllFields.forEach((element) => {
             Validation.validateFieldByType(element?.getAttribute('name'), element.value)
-              ? ProfileView._removeFieldIsValid(element)
-              : ProfileView._setFieldIsValid(element)
+              ? Validation.removeFieldIsValid(element, element.parentNode.parentNode, styles)
+              : Validation.setFieldIsValid(element, element.parentNode.parentNode, styles)
           });
         }
-        const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');
+
+        if (this.props.mode === 'change-password') {
+          // check passwords for equality
+          const passwordFields = form.querySelectorAll('input[name="password"], input[name="confirm_password"]');
+          if (passwordFields.length == 2) {
+            passwordFields.forEach((element) => {
+              if (element.value && Validation.validateFieldByType(element.getAttribute('name'), element.value)) {
+                Validation.compareFields(passwordFields[0].value, passwordFields[1].value)
+                  ? Validation.removeFieldIsValid(element, element.parentNode.parentNode, styles, "Passwords didn't match")
+                  : Validation.setFieldIsValid(element, element.parentNode.parentNode, styles, "Passwords didn't match")
+              } else {
+                Validation.setFieldIsValid(element, element.parentNode.parentNode, styles);
+              }
+            })
+          }
+          //
+        }
+
+        const formInvalidFields = form.querySelectorAll('input[isinvalid="true"]');
         if (formInvalidFields.length) {
           form.classList.add(`${styles['state__invalid']}`);
         } else {
@@ -314,7 +316,7 @@ export class ProfileView extends Block<ProfileViewProps> {
           if (result !== null) {
             window.location.hash = '/profile';
             window.dispatchEvent(new HashChangeEvent("hashchange"));
-          }  
+          }
         }
       }
     }

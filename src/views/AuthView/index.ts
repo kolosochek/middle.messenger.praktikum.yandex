@@ -25,19 +25,6 @@ export class AuthView extends Block<AuthViewProps> {
     return window.localStorage.getItem('isAuthorized');
   }
 
-  private static _removeFieldIsValid(node: HTMLElement | null): void {
-    if (node !== null) {
-      node.removeAttribute('isInvalid');
-      node.parentNode?.classList.remove(`${styles['state__invalid']}`);
-    }
-  }
-  private static _setFieldIsValid(node: HTMLElement | null): void {
-    if (node !== null) {
-      node.setAttribute('isInvalid', 'true');
-      node.parentNode?.classList.add(`${styles['state__invalid']}`);
-    }
-  }
-
   init() {
     const mode = this.props.mode;
 
@@ -54,13 +41,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -76,13 +63,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -102,13 +89,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -124,13 +111,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -146,13 +133,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -168,13 +155,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -191,13 +178,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -207,19 +194,20 @@ export class AuthView extends Block<AuthViewProps> {
           title: 'Password',
           name: 'password',
           type: 'password',
-          placeholder: '123A123',
+          placeholder: 'ASDASDASD2',
+          defaultErrorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
 
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -229,19 +217,20 @@ export class AuthView extends Block<AuthViewProps> {
           title: 'Confirm password',
           name: 'confirm_password',
           type: 'password',
-          placeholder: '123123',
+          placeholder: 'ASDASDASD2',
+          defaultErrorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
 
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? AuthView._removeFieldIsValid(e.target)
-                : AuthView._setFieldIsValid(e.target)
+                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
+                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
             },
           }
         });
@@ -264,15 +253,32 @@ export class AuthView extends Block<AuthViewProps> {
       submit: (e) => {
         e.preventDefault();
         const form = e.target;
+
         const formAllFields = form.querySelectorAll('input');
         if (formAllFields.length) {
           formAllFields.forEach((element) => {
-            Validation.validateFieldByType(element?.getAttribute('name'), element.value)
-              ? AuthView._removeFieldIsValid(element)
-              : AuthView._setFieldIsValid(element)
+            Validation.validateFieldByType(element.getAttribute('name'), element.value)
+              ? Validation.removeFieldIsValid(element, element.parentNode, styles)
+              : Validation.setFieldIsValid(element, element.parentNode, styles)
           });
         }
-        const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');
+
+        // check passwords for equality
+        const passwordFields = form.querySelectorAll('input[name="password"], input[name="confirm_password"]');
+        if (passwordFields.length == 2) {
+          passwordFields.forEach((element) => {
+            if (element.value && Validation.validateFieldByType(element.getAttribute('name'), element.value)) {              
+                Validation.compareFields(passwordFields[0].value, passwordFields[1].value)
+                  ? Validation.removeFieldIsValid(element, element.parentNode, styles, "Passwords didn't match")
+                  : Validation.setFieldIsValid(element, element.parentNode, styles, "Passwords didn't match")
+            } else {
+              Validation.setFieldIsValid(element, element.parentNode, styles);
+            }
+          })
+        }
+        //
+
+        const formInvalidFields = form.querySelectorAll('input[isinvalid="true"]');
         if (formInvalidFields.length) {
           form.classList.add(`${styles['state__invalid']}`);
         } else {
@@ -286,7 +292,7 @@ export class AuthView extends Block<AuthViewProps> {
           if (result !== null) {
             window.location.hash = '/';
             window.dispatchEvent(new HashChangeEvent("hashchange"));
-          }          
+          }
         }
       }
     }

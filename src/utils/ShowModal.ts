@@ -1,7 +1,7 @@
 // this class can show modal view(window) by given raw html template string.
 // you can also specify the parent container class by passing @context param
 export class ShowModal{
-    public static showModal(template:string, context= ''):void {
+    public static showModal(template:string, context:string = ''):void {
         if (!template) {
             throw new Error('showModal function, no template is given!')
         }
@@ -10,25 +10,22 @@ export class ShowModal{
             <div id='modalcontent' class='b-modal-window ${context}'>${template}</div>
         </div>`
 
-        const modalWindow = document.querySelector<HTMLDivElement>('#modalwindow');
-        if (modalWindow !== null) {
+        const existingModalWindow = document.querySelector<HTMLDivElement>('#modalwindow');
+        if (existingModalWindow !== null) {
             // remove existing modal
-            modalWindow.remove();
-        } else {
-            // append template to <body />
-            document.body.insertAdjacentHTML('afterBegin', htmlTemplate);
+            existingModalWindow.remove();
+        }
+        // append template to <body />
+        document.body.insertAdjacentHTML('afterBegin', htmlTemplate);
+        const modalWindowNode = document.querySelector<HTMLDivElement>('#modalwindow');
+        const modalWindowContent = document.querySelector<HTMLDivElement>('#modalwindow #modalcontent');
 
-            const modalWindowNode = document.querySelector<HTMLDivElement>('#modalwindow');
-            const modalWindowContent = document.querySelector<HTMLDivElement>('#modalwindow #modalcontent');
-
-            if(modalWindowNode !== null && modalWindowContent !== null)
-            {
-                modalWindowNode.classList.toggle('state__visible');
-
-
+        if (modalWindowNode !== null && modalWindowContent !== null){
+            // show #modalwinr=dow
+            modalWindowNode.classList.toggle('state__visible');
             // prevent modal content click from closing whole modal
             // cancelling event bubbling
-            modalWindowContent.addEventListener('click', (e) => {
+            modalWindowContent.addEventListener('click', (e:MouseEvent) => {
                 e.stopPropagation();
             });
 
@@ -37,12 +34,11 @@ export class ShowModal{
                 modalWindowNode.classList.toggle('state__visible');
             });
 
-
             const uploadFileLink = document.querySelector<HTMLDivElement>('#modalwindow a');
-            const fileInput = document.querySelector<HTMLDivElement>('#modalwindow input[type=file]');
+            const fileInput = document.querySelector<HTMLInputElement>('#modalwindow input[type=file]');
 
             if (uploadFileLink !== null && fileInput !== null) {
-                uploadFileLink.addEventListener('click', (e) => {
+                uploadFileLink.addEventListener('click', (e:MouseEvent) => {
                     e.preventDefault();
                     fileInput.click();
                 });
@@ -51,9 +47,8 @@ export class ShowModal{
                     uploadFileLink.text = fileInput.value;
                 });
             }  
-            } 
         }
-        
+         
     }
 
     public static bindToWindow(){

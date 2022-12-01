@@ -6,7 +6,7 @@ import styles from './style.module.less';
 
 
 interface AuthViewProps {
-  mode: string;
+  mode: 'auth' | 'signup'| 'logout';
   events?: {
     submit: (e: SubmitEvent) => void;
   };

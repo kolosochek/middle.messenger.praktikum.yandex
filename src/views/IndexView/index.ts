@@ -24,7 +24,7 @@ export class IndexView extends Block<IndexViewProps> {
     this.activeChatId = window.localStorage.setItem('activeChatId', id.toString());
   }
 
-  public static getActiveChatId = (): string | number => {
+  public static getActiveChatId = (): string => {
     return this.activeChatId ? this.activeChatId : window.localStorage.getItem('activeChatId');
   }
 

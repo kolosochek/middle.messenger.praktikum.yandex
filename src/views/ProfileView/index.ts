@@ -8,7 +8,7 @@ import styles from './style.module.less';
 
 
 interface ProfileViewProps {
-  mode: string;
+  mode: "view" | "edit"| "change-password";
   profile?: object;
 
   events?: {
@@ -310,7 +310,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           form.classList.remove(`${styles['state__invalid']}`);
           // TODO: remove me
           // sprint_2_task
-          console.log(Object.fromEntries(new FormData(form)));
+          const formData = Object.fromEntries(new FormData(form));
+          console.log(formData);
           //
           const result = prompt('Change page?', `yeah`)
           if (result !== null) {
@@ -321,7 +322,6 @@ export class ProfileView extends Block<ProfileViewProps> {
       }
     }
   }
-
 
   render() {
     return this.compile(template, { ...this.props, styles });

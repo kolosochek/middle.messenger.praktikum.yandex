@@ -8,32 +8,23 @@ enum Methods {
 type Options = {
     method: string;
     headers?: Record<string, string>;
-    data?: Record<string, string>;
+    query?: unknown;
     timeout?: number;
 };
 
 class HTTPTransport {
     public queryStringify(data: Record<string, string>) {
-        if (typeof data !== 'object') {
-            throw new Error('Props data is not object');
+        return "?" + Object
+         .entries(data)
+         .map(([key, value]) => `${key}=${value}`)
+         .join("&")
         }
-
-        let result = '?';
-
-        Object.keys(data).forEach((key, i, arr) => {
-            result += `${key}=${data[key]}`;
-            if (arr.length > 1 && i !== arr.length - 1) {
-                result += `&`;
-            }
-        });
-
-        return result;
-    }
+        
     public get = (url: string, options: Options) => {
         let urlAddon = '';
 
-        if (options.data) {
-            urlAddon = this.queryStringify(options.data);
+        if (options.query) {
+            urlAddon = this.queryStringify(options.query);
         }
 
         return this.request(`${url}${urlAddon}`, {

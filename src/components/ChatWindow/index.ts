@@ -4,9 +4,10 @@ import { ChatReply } from '../ChatReply';
 import { Validation } from '../../utils/Validation';
 import template from './template';
 import styles from './style.module.less';
+import { ConversationType } from '../../model/data';
 
 interface ChatWindowProps {
-  activeChat?: object;
+  activeChat?: ConversationType;
 }
 
 export class ChatWindow extends Block<ChatWindowProps> {

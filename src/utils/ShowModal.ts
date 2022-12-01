@@ -1,8 +1,7 @@
+// this class can show modal view(window) by given raw html template string.
+// you can also specify the parent container class by passing @context param
 export class ShowModal{
-    // this function can show modal view(window) by given raw html template string.
-    // you can also specify the parent container class by passing @context param
-    // @return nothing
-    public static showModal(template:string, context = ''):void {
+    public static showModal(template:string, context:string = ''):void {
         if (!template) {
             throw new Error('showModal function, no template is given!')
         }
@@ -11,7 +10,7 @@ export class ShowModal{
             <div id='modalcontent' class='b-modal-window ${context}'>${template}</div>
         </div>`
 
-        const modalWindow = document.querySelector('#modalwindow');
+        const modalWindow = document.querySelector<HTMLDivElement>('#modalwindow');
         if (modalWindow) {
             // remove existing modal
             modalWindow.remove();

@@ -1,0 +1,38 @@
+@import url("../../../static/css/variables.less");
+
+.b-page-wrapper {
+  min-height: 100vh;
+  background: @shadow-color;
+  outline-color: @plaintext-color;
+  align-items: stretch;
+  display: flex;
+
+  .b-page {
+    display: flex;
+    flex-grow: 1;
+
+    .b-error-wrapper {
+      display: flex;
+      flex-grow: 1;
+
+      .b-error {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1;
+        align-self: center;
+        text-align: center;
+
+        .b-error-title {
+          font-size: 4em;
+          color: @link-color;
+        }
+
+        .b-error-message {
+          color: @plaintext-color;
+          font-size: 1.5em;
+          padding: 2em 0 1.3em;
+        }
+      }
+    }
+  }
+}

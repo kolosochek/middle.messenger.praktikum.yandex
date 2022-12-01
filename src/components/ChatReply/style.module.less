@@ -1,0 +1,93 @@
+@import url("../../../static/css/variables.less");
+
+.b-chat-reply-wrapper {
+  min-height: 50px;
+  position: relative;
+  border-top: 1px solid @link-color;
+
+  .b-chat-reply {
+    display: flex;
+    padding: 10px;
+
+    .b-attach-file {
+      margin-right: 10px;
+      align-self: center;
+      cursor: pointer;
+
+      .b-image {
+        display: flex;
+      }
+
+      .b-attach-file-link {
+        display: inherit;
+      }
+    }
+
+    & > div {
+      display: flex;
+      flex-grow: 1;
+      position: relative;
+
+      input {
+        flex-grow: 1;
+        padding-left: 5px;
+      }
+
+      p {
+        z-index: 100;
+        display: none;
+        top: -39px;
+        background: @shadow-color;
+        border: 1px solid @link-color;
+        border-radius: 10px;
+        padding: 10px;
+        transition: all 0.5s ease-in-out;
+        position: absolute;
+        color: @highlight-color;
+      }
+    }
+
+    & > div.state__invalid {
+      p {
+        display: block;
+      }
+    }
+
+    .b-submit {
+      margin-left: 10px;
+      padding-top: 5px;
+    }
+
+    & > div > input,
+    & > .b-submit {
+      border-color: @link-color;
+      outline-color: @link-color;
+      color: @plaintext-color;
+      background: @shadow-color;
+      font-family: classic-console, Arial, Helvetica, sans-serif;
+      font-size: 1.2em;
+
+      &:hover {
+        outline: none;
+      }
+    }
+  }
+
+  .b-chat-reply-attachment-wrapper {
+    z-index: 10;
+    background: @shadow-color;
+    border: 1px solid @link-color;
+    border-radius: 10px;
+    padding: 10px;
+    transition: all 0.5s ease-in-out;
+    display: none;
+    position: absolute;
+    bottom: 57px;
+    left: 10px;
+
+    .b-chat-reply-attachment {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

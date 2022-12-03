@@ -3,17 +3,19 @@ import template from './template';
 import styles from './style.module.less';
 
 interface InputComponentProps {
-    title?: string;
+    label?: string;
     name?: string;
     type?: "text" | "password" | "email" | "tel" |"number" | "file";
     placeholder?: string;
+    class?: string;
     value?: string;
     pattern?: string;
-    isRequired?: boolean;
     isValid?: string;
     nowrap?: string;
     defaultErrorMessage?: string;
     errorMessage?: string;
+    isRequired?: boolean;
+    isDisabled?: boolean;
   
     events?: {
       focus?: (e:FocusEvent) => void;

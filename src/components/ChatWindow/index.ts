@@ -4,6 +4,7 @@ import { ChatReply } from '../ChatReply';
 import { Validation } from '../../utils/Validation';
 import template from './template';
 import styles from './style.module.less';
+import chatReplyStyles from '../ChatReply/style.module.less'
 import { ConversationType } from '../../model/data';
 
 interface ChatWindowProps {
@@ -27,20 +28,20 @@ export class ChatWindow extends Block<ChatWindowProps> {
         submit: (e) => {
           e.preventDefault();
           const form = e.target;
-          const formAllFields = form.querySelectorAll('input');
-          const message = form.querySelector('input[name="message"]');
+          const formAllFields = form.querySelectorAll<HTMLInputElement>('input');
+          const message = form.querySelector<HTMLInputElement>('input[name="message"]');
           if (formAllFields.length) {
-            formAllFields.forEach((element) => {
+            formAllFields.forEach((element:HTMLInputElement) => {
               Validation.validateFieldByType(element.getAttribute('name'), element.value)
-                ? Validation.removeFieldIsValid(element, element.parentNode, styles)
-                : Validation.setFieldIsValid(element, element.parentNode, styles)
+                ? Validation.removeFieldIsValid(element, chatReplyStyles)
+                : Validation.setFieldIsValid(element, chatReplyStyles)
             });
           }
           const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');
           if (formInvalidFields.length) {
-            form.classList.add(`${styles['state__invalid']}`);
+            form.classList.add(`${chatReplyStyles['state__invalid']}`);
           } else {
-            form.classList.remove(`${styles['state__invalid']}`);
+            form.classList.remove(`${chatReplyStyles['state__invalid']}`);
             // TODO: remove me
             // sprint_2_task
             console.log(Object.fromEntries(new FormData(form)));

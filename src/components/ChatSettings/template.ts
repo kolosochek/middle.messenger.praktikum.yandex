@@ -4,8 +4,8 @@ import AvatarComponent from "../../partials/AvatarComponent";
 Handlebars.registerPartial('AvatarComponent', AvatarComponent);
 Handlebars.registerHelper('log', (value) => { console.log(value)});
 
-const addUserTemplate = `<form action=# class={{styles.b-modal-window-content}}><h3 class={{styles.b-modal-window-title}}>Add user</h3><input class={{styles.b-input}} type=text /><button class={{styles.b-submit}}>Add</button></form>`
-const removeUserTemplate = `<form action=# class={{styles.b-modal-window-content}}><h3 class={{styles.b-modal-window-title}}>Remove user</h3><input class={{styles.b-input}} type=text /><button class={{styles.b-submit}}>Remove</button></form>`
+const addUserTemplate = `<form class={{styles.b-modal-window-content}}><h3 class={{styles.b-modal-window-title}}>Add user</h3><input class={{styles.b-input}} type=text /><button class={{styles.b-submit}}>Add</button></form>`
+const removeUserTemplate = `<form class={{styles.b-modal-window-content}}><h3 class={{styles.b-modal-window-title}}>Remove user</h3><input class={{styles.b-input}} type=text /><button class={{styles.b-submit}}>Remove</button></form>`
 
 
 

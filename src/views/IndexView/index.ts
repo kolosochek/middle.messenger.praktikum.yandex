@@ -9,11 +9,8 @@ import styles from './style.module.less';
 
 
 interface IndexViewProps {
-  conversationList?: object[];
-  activeChatId?: string | boolean;
-  activeChat?: object;
+  events?: never;
 }
-
 
 export class IndexView extends Block<IndexViewProps> {
   public activeChatId: string | null;
@@ -36,8 +33,6 @@ export class IndexView extends Block<IndexViewProps> {
       } 
     }
   }
-
-
 
   init() {
     // chatAsideProfile
@@ -66,7 +61,6 @@ export class IndexView extends Block<IndexViewProps> {
         }
       },
     });
-
 
     // chatWindow
     this.children.chatWindow = new ChatWindow({

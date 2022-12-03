@@ -6,7 +6,7 @@ import styles from './style.module.less';
 
 
 interface AuthViewProps {
-  mode: 'auth' | 'signup'| 'logout';
+  mode: 'auth' | 'signup' | 'logout';
   events?: {
     submit: (e: SubmitEvent) => void;
   };
@@ -33,7 +33,7 @@ export class AuthView extends Block<AuthViewProps> {
       case 'auth': {
         // loginInputComponent
         this.children.loginInputComponent = new InputComponent({
-          title: 'Login',
+          label: 'Login',
           name: 'login',
           type: 'text',
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
@@ -41,13 +41,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
@@ -55,7 +55,7 @@ export class AuthView extends Block<AuthViewProps> {
 
         // passwordInputComponent
         this.children.passwordInputComponent = new InputComponent({
-          title: 'Password',
+          label: 'Password',
           name: 'password',
           type: 'password',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
@@ -63,13 +63,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
@@ -80,7 +80,7 @@ export class AuthView extends Block<AuthViewProps> {
       case 'signup': {
         // emailInputComponent
         this.children.emailInputComponent = new InputComponent({
-          title: 'Email',
+          label: 'Email',
           name: 'email',
           type: 'email',
           placeholder: 'sebastian1337@gmail.com',
@@ -89,20 +89,20 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
 
         // firstNameInputComponent
         this.children.firstNameInputComponent = new InputComponent({
-          title: 'First name',
+          label: 'First name',
           name: 'first_name',
           type: 'text',
           placeholder: 'Sebastian',
@@ -111,20 +111,20 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
 
         // lastNameInputComponent
         this.children.lastNameInputComponent = new InputComponent({
-          title: 'Last name',
+          label: 'Last name',
           name: 'second_name',
           type: 'text',
           placeholder: 'Pereiro',
@@ -133,20 +133,20 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
 
         // loginInputComponent
         this.children.loginInputComponent = new InputComponent({
-          title: 'Login',
+          label: 'Login',
           name: 'login',
           type: 'text',
           placeholder: 'sebastian1337',
@@ -155,20 +155,20 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
 
         // phoneInputComponent
         this.children.phoneInputComponent = new InputComponent({
-          title: 'Phone',
+          label: 'Phone',
           name: 'phone',
           type: 'tel',
           //pattern: '[+]{1}[0-9]{6,14}',
@@ -178,20 +178,20 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
 
         // passwordInputComponent
         this.children.passwordInputComponent = new InputComponent({
-          title: 'Password',
+          label: 'Password',
           name: 'password',
           type: 'password',
           placeholder: 'ASDASDASD2',
@@ -201,20 +201,20 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
 
         // confirmPasswordInputComponent
         this.children.confirmPasswordInputComponent = new InputComponent({
-          title: 'Confirm password',
+          label: 'Confirm password',
           name: 'confirm_password',
           type: 'password',
           placeholder: 'ASDASDASD2',
@@ -224,13 +224,13 @@ export class AuthView extends Block<AuthViewProps> {
           events: {
             focus: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
             blur: (e) => {
               Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+                ? Validation.removeFieldIsValid(e.target, styles)
+                : Validation.setFieldIsValid(e.target, styles)
             },
           }
         });
@@ -258,8 +258,8 @@ export class AuthView extends Block<AuthViewProps> {
         if (formAllFields.length) {
           formAllFields.forEach((element) => {
             Validation.validateFieldByType(element.getAttribute('name'), element.value)
-              ? Validation.removeFieldIsValid(element, element.parentNode, styles)
-              : Validation.setFieldIsValid(element, element.parentNode, styles)
+              ? Validation.removeFieldIsValid(element, styles)
+              : Validation.setFieldIsValid(element, styles)
           });
         }
 
@@ -267,12 +267,12 @@ export class AuthView extends Block<AuthViewProps> {
         const passwordFields = form.querySelectorAll('input[name="password"], input[name="confirm_password"]');
         if (passwordFields.length == 2) {
           passwordFields.forEach((element) => {
-            if (element.value && Validation.validateFieldByType(element.getAttribute('name'), element.value)) {              
-                Validation.compareFields(passwordFields[0].value, passwordFields[1].value)
-                  ? Validation.removeFieldIsValid(element, element.parentNode, styles, "Passwords didn't match")
-                  : Validation.setFieldIsValid(element, element.parentNode, styles, "Passwords didn't match")
+            if (element.value && Validation.validateFieldByType(element.getAttribute('name'), element.value)) {
+              Validation.compareFields(passwordFields[0].value, passwordFields[1].value)
+                ? Validation.removeFieldIsValid(element, styles, "Passwords didn't match")
+                : Validation.setFieldIsValid(element, styles, "Passwords didn't match")
             } else {
-              Validation.setFieldIsValid(element, element.parentNode, styles);
+              Validation.setFieldIsValid(element, styles);
             }
           })
         }

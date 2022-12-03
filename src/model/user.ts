@@ -1,5 +1,16 @@
+export interface ProfileInterface {
+    avatar_url: string,
+    login: string,
+    first_name: string,
+    last_name: string,
+    email: string,
+    phone: string,
+    // password hash
+    password: string, 
+}
+
 export class User {
-    public static getUserProfile(): object {
+    public static getUserProfile(): ProfileInterface {
         const user = {
             "avatar_url": "https://i.pravatar.cc/130?img=7",
             "login": "sebastian1337",

@@ -15,9 +15,9 @@ export class ChatReply extends Block<ChatReplyProps> {
   constructor(props: ChatReplyProps) {
     super({ ...props });
     this.props.events = Object.assign({
-      click: (e) => {
+      click: (e:MouseEvent) => {
         const target = e.target.closest(`.${styles['b-attach-file-link']}`);
-        const element = document.querySelector(`.${styles['b-chat-reply-attachment-wrapper']}`);
+        const element = document.querySelector<HTMLElement>(`.${styles['b-chat-reply-attachment-wrapper']}`);
         if (target !== null && element){
           element.classList.toggle('state__visible');
         }
@@ -35,13 +35,13 @@ export class ChatReply extends Block<ChatReplyProps> {
       events: {
         focus: (e) => {
           Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-            ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-            : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+            ? Validation.removeFieldIsValid(e.target, styles)
+            : Validation.setFieldIsValid(e.target, styles)
         },
         blur: (e) => {
           Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-            ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-            : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+            ? Validation.removeFieldIsValid(e.target, styles)
+            : Validation.setFieldIsValid(e.target, styles)
         },
       }
     });

@@ -35,7 +35,6 @@
 
           .b-profile-form {
             min-width: 600px;
-            border: 1px solid transparent;
           }
 
           & > form {
@@ -44,6 +43,14 @@
 
           & > form.state__invalid {
             display: inherit;
+
+            & > div.state__invalid {
+              border-color: @highlight-color;
+
+              & > p {
+                display: block;
+              }
+            }
           }
 
           .b-profile-avatar-wrapper {
@@ -113,14 +120,55 @@
               }
             }
           }
-        }
-      }
 
-      div.state__invalid {
-        border-color: @highlight-color;
+          .b-profile-field {
+            color: @plaintext-color;
+            border-bottom: 1px solid @plaintext-color;
+            padding: 20px 0 2px;
+            margin-top: 5px;
+            display: flex;
+            flex-direction: row;
+            position: relative;
 
-        p {
-          display: block;
+            & > .state__invalid {
+              border-color: @highlight-color;
+            }
+
+            & > label {
+              padding: 0;
+              font-size: 1em;
+            }
+
+            & > input {
+              color: @plaintext-color;
+              font-size: 1em;
+              background: none;
+              border: none;
+              text-align: right;
+              outline: none;
+              padding: 0 0 2px;
+              margin-left: auto;
+            }
+
+            & > input:disabled {
+              color: @plaintext-color;
+              font-size: 1em;
+              background: none;
+              border: none;
+              text-align: right;
+              outline: none;
+              padding: 0;
+            }
+
+            & > p {
+              display: none;
+              position: absolute;
+              right: 0;
+              top: 35px;
+              font-size: 1em;
+              color: @highlight-color;
+            }
+          }
         }
       }
     }

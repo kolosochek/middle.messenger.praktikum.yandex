@@ -33,8 +33,8 @@ export class ChatWindow extends Block<ChatWindowProps> {
           if (formAllFields.length) {
             formAllFields.forEach((element:HTMLInputElement) => {
               Validation.validateFieldByType(element.getAttribute('name'), element.value)
-                ? Validation.removeFieldIsValid(element, chatReplyStyles)
-                : Validation.setFieldIsValid(element, chatReplyStyles)
+                ? Validation.removeFieldIsInvalid(element, chatReplyStyles)
+                : Validation.setFieldIsInvalid(element, chatReplyStyles)
             });
           }
           const formInvalidFields = form.querySelectorAll('input[isInvalid=true]');

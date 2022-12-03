@@ -19,9 +19,6 @@ export class Validation {
   }
 
   public static validateFieldByType(fieldType: string, fieldValue: string): boolean {
-    // debug
-    //console.log(`fieldType: ${fieldType}, fieldValue: ${fieldValue}`)
-    //
     let validationResult = true;
     Object.entries(Rules).forEach(([key, value]) => {
       if (key === fieldType) {
@@ -29,15 +26,10 @@ export class Validation {
         validationResult = this.fieldRegExp.test(fieldValue);
       }
     });
-
     return validationResult;
   }
 
-  public static compareFields(value1: string, value2: string): boolean {
-    return value1 === value2;
-  }
-
-  public static removeFieldIsValid(node: HTMLElement | null, styles: object[], errorMessage?: string): void {
+  public static removeFieldIsInvalid(node: HTMLElement | null, styles: object[], errorMessage?: string): void {
     if (node !== null) {
       const parentNode: ParentNode | null = node.parentNode;
       if (parentNode !== null) {
@@ -45,25 +37,55 @@ export class Validation {
         parentNode.classList.remove(`${styles['state__invalid']}`);
         if (errorMessage) {
           const errorMessageNode = parentNode.querySelector<HTMLParagraphElement>('p');
-          const previousErrorMessage = node.getAttribute('defaulterrormessage');
-          node.getAttribute('defaulterrormessage') ? errorMessageNode.textContent = previousErrorMessage : errorMessageNode.textContent = errorMessage;
+          if (errorMessageNode !== null) {
+            errorMessageNode.textContent = errorMessage;
+          }
+        } else {
+          Validation.setDefaultErrorMessage(node);
         }
       }
-
     }
   }
 
-  public static setFieldIsValid(node: HTMLElement | null, styles: object[], errorMessage?: string): void {
+  public static setFieldIsInvalid(node: HTMLElement | null, styles: object[], errorMessage?: string): void {
     if (node !== null) {
       const parentNode: ParentNode | null = node.parentNode;
       if (parentNode !== null) {
-        node.setAttribute('isinvalid', 'true');
-        parentNode.classList.add(`${styles['state__invalid']}`);
         if (errorMessage) {
           const errorMessageNode = parentNode.querySelector<HTMLParagraphElement>('p');
-          errorMessageNode ? errorMessageNode.textContent = errorMessage : false;
+          if (errorMessageNode !== null) {
+            errorMessageNode.textContent = errorMessage;
+          }
+        } else {
+          Validation.setDefaultErrorMessage(node)
         }
+        node.setAttribute('isinvalid', 'true');
+        parentNode.classList.add(`${styles['state__invalid']}`);
       }
     }
   }
-}
+
+  public static setDefaultErrorMessage(node: HTMLElement): void {
+    if (node !== null && node.parentNode !== null) {
+    const errorMessageNode = node.parentNode.querySelector<HTMLParagraphElement>('p');
+    const previousErrorMessage = node.getAttribute('defaulterrormessage');
+    if (errorMessageNode !== null && previousErrorMessage){
+      errorMessageNode.textContent = previousErrorMessage;
+    }
+    }
+  }
+
+  public static comparePasswordFields(password:HTMLInputElement | null, confirm_password:HTMLInputElement | null, styles: object[]): boolean {
+    if (password !== null && confirm_password !== null){
+        if(password.value === confirm_password.value) {
+          Validation.removeFieldIsInvalid(password, styles)
+          Validation.removeFieldIsInvalid(confirm_password, styles) 
+          return true;
+        } else {
+          Validation.setFieldIsInvalid(password, styles, "Passwords didn't match");
+          Validation.setFieldIsInvalid(confirm_password, styles, "Passwords didn't match");
+        }
+      } 
+      return false;
+    }
+  }

@@ -34,13 +34,13 @@ export class ChatReply extends Block<ChatReplyProps> {
       events: {
         focus: (e) => {
           Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-            ? Validation.removeFieldIsValid(e.target, styles)
-            : Validation.setFieldIsValid(e.target, styles)
+            ? Validation.removeFieldIsInvalid(e.target, styles)
+            : Validation.setFieldIsInvalid(e.target, styles)
         },
         blur: (e) => {
           Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-            ? Validation.removeFieldIsValid(e.target, styles)
-            : Validation.setFieldIsValid(e.target, styles)
+            ? Validation.removeFieldIsInvalid(e.target, styles)
+            : Validation.setFieldIsInvalid(e.target, styles)
         },
       }
     });

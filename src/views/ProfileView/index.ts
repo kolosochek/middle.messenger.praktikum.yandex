@@ -9,7 +9,7 @@ import styles from './style.module.less';
 
 
 interface ProfileViewProps {
-  mode: "view" | "edit"| "change-password";
+  mode: "view" | "edit" | "change-password";
   profile?: ProfileInterface;
 
   events?: {
@@ -97,14 +97,14 @@ export class ProfileView extends Block<ProfileViewProps> {
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -113,20 +113,20 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldFirstName = new InputComponent({
           name: 'first_name',
           label: 'First name:',
-          placeholder:this.props.profile.first_name,
+          placeholder: this.props.profile.first_name,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'First name is invalid!',
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -135,20 +135,20 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldSecondName = new InputComponent({
           name: 'second_name',
           label: 'Last name:',
-          placeholder:this.props.profile.last_name,
+          placeholder: this.props.profile.last_name,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Last name is invalid!',
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -157,20 +157,20 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldLogin = new InputComponent({
           name: 'login',
           label: 'Login:',
-          placeholder:this.props.profile.login,
+          placeholder: this.props.profile.login,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -179,7 +179,7 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldDisplayName = new InputComponent({
           name: 'display_name',
           label: 'Display name:',
-          placeholder:this.props.profile.login,
+          placeholder: this.props.profile.login,
           class: `${styles['b-profile-field']}`,
         });
 
@@ -187,20 +187,20 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldPhone = new InputComponent({
           name: 'phone',
           label: 'Phone:',
-          placeholder:this.props.profile.phone,
+          placeholder: this.props.profile.phone,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Phone is invalid',
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -215,20 +215,20 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'old_password',
           label: 'Old password:',
           type: 'password',
-          placeholder:'**********',
+          placeholder: '**********',
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -238,21 +238,21 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'password',
           label: 'New password:',
           type: 'password',
-          placeholder:'**********',
+          placeholder: '**********',
           class: `${styles['b-profile-field']}`,
           defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -262,21 +262,21 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'confirm_password',
           label: 'Confirm new password:',
           type: 'password',
-          placeholder:'**********',
+          placeholder: '**********',
           class: `${styles['b-profile-field']}`,
           defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
             focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
             blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, styles)
-                : Validation.setFieldIsValid(e.target, styles)
+              Validation.validateFieldByType(e.target.name, e.target?.value)
+                ? Validation.removeFieldIsInvalid(e.target, styles)
+                : Validation.setFieldIsInvalid(e.target, styles)
             },
           }
         });
@@ -291,31 +291,14 @@ export class ProfileView extends Block<ProfileViewProps> {
     this.props.events = {
       submit: (e) => {
         e.preventDefault();
-        const form = e.target;
-        const formAllFields = form.querySelectorAll('input');
+        const form: HTMLFormElement = e.target;
+        const formAllFields = form.querySelectorAll<HTMLInputElement[]>('input');
         if (formAllFields.length) {
-          formAllFields.forEach((element) => {
-            Validation.validateFieldByType(element?.getAttribute('name'), element.value)
-              ? Validation.removeFieldIsValid(element, styles)
-              : Validation.setFieldIsValid(element, styles)
+          formAllFields.forEach((element: HTMLInputElement) => {
+            Validation.validateFieldByType(element.name, element.value)
+              ? Validation.removeFieldIsInvalid(element, styles)
+              : Validation.setFieldIsInvalid(element, styles)
           });
-        }
-
-        if (this.props.mode === 'change-password') {
-          // check passwords for equality
-          const passwordFields = form.querySelectorAll('input[name="password"], input[name="confirm_password"]');
-          if (passwordFields.length == 2) {
-            passwordFields.forEach((element) => {
-              if (element.value && Validation.validateFieldByType(element.getAttribute('name'), element.value)) {
-                Validation.compareFields(passwordFields[0].value, passwordFields[1].value)
-                  ? Validation.removeFieldIsValid(element, styles, "Passwords didn't match")
-                  : Validation.setFieldIsValid(element, styles, "Passwords didn't match")
-              } else {
-                Validation.setFieldIsValid(element, styles);
-              }
-            })
-          }
-          //
         }
 
         const formInvalidFields = form.querySelectorAll('input[isinvalid="true"]');
@@ -323,16 +306,37 @@ export class ProfileView extends Block<ProfileViewProps> {
           form.classList.add(`${styles['state__invalid']}`);
         } else {
           form.classList.remove(`${styles['state__invalid']}`);
-          // TODO: remove me
-          // sprint_2_task
-          const formData = Object.fromEntries(new FormData(form));
-          console.log(formData);
-          //
-          const result = prompt('Change page?', `yeah`)
-          if (result !== null) {
-            window.location.hash = '/profile';
-            window.dispatchEvent(new HashChangeEvent("hashchange"));
+          // check password for equality
+          if (this.props.mode === 'change-password') {
+            // check passwords for equality
+            const passwordField = form.querySelector<HTMLInputElement>('input[name="password"]');
+            const confirmPasswordField = form.querySelector<HTMLInputElement>('input[name="confirm_password"]');
+            if (Validation.comparePasswordFields(passwordField, confirmPasswordField, styles)) {
+              // TODO: remove me
+              // sprint_2_task
+              const formData = Object.fromEntries(new FormData(form));
+              console.log(formData);
+              //
+              const result = prompt('Change page?', `yeah`)
+              if (result !== null) {
+                window.location.hash = '/profile';
+                window.dispatchEvent(new HashChangeEvent("hashchange"));
+              }
+              }
+            //
+          } else {
+            // TODO: remove me
+            // sprint_2_task
+            const formData = Object.fromEntries(new FormData(form));
+            console.log(formData);
+            //
+            const result = prompt('Change page?', `yeah`)
+            if (result !== null) {
+              window.location.hash = '/profile';
+              window.dispatchEvent(new HashChangeEvent("hashchange"));
+            }
           }
+
         }
       }
     }

@@ -1,5 +1,5 @@
 const InputComponentTemplate = `    
-    <div {{#if nowrap}}{{else}}class="{{styles.b-input-wrapper}}{{#if class}} {{class}}{{/if}}"{{/if}}>
+    <div class="{{styles.b-input-wrapper}}{{#if class}} {{class}}{{/if}}">
         {{#if label}}<label class="{{styles.b-label}}" for="{{name}}">{{label}}</label>{{/if}}  
         <input 
         class="{{styles.b-input}}" 

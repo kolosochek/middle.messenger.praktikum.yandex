@@ -29,7 +29,6 @@ export class ChatReply extends Block<ChatReplyProps> {
     this.children.messageInputComponent = new InputComponent({
       name: 'message',
       type: 'text',
-      nowrap: 'true',
       errorMessage: "Can't be empty",
 
       events: {

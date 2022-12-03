@@ -1,5 +1,23 @@
+
+export type MessageType = {
+    message: [
+        author: string,
+        time: string,
+        date: string,
+        text: string,
+    ];
+}
+
+export type ConversationType = {
+    name: string,
+    avatar_url: string,
+    messages: MessageType[],
+    unreadMessages: string,
+    chat_id: string,
+}
+
 export class APIData {
-    public static getData(): object[] {
+    public static getData(): ConversationType[] {
         const data = [{
             'name': 'Alex',
             'avatar_url': 'https://i.pravatar.cc/47?img=60',
@@ -266,3 +284,4 @@ export class APIData {
     }
 
 }
+

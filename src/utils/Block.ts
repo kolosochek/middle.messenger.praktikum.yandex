@@ -148,20 +148,8 @@ class Block<P extends Record<string, any> = any> {
             }
         });
 
-        //debug
-        //console.log(`contextAndStubs`);
-        //console.log(contextAndStubs)
-        //
-
         template = Handlebars.compile(template);
         const html = template(contextAndStubs);
-
-        // debug
-        //console.log(`this`);
-        //console.log(this);
-        //console.log(`html`);
-        //console.log(html);
-        //
 
         const temp = document.createElement('template');
         temp.innerHTML = html;

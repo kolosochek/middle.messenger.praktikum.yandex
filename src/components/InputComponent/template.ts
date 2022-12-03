@@ -9,7 +9,8 @@ const InputComponentTemplate = `
         {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}  
         {{#if value}}value="{{value}}"{{/if}} 
         {{#if pattern}}pattern="{{pattern}}"{{/if}}
-        {{#if required}}required{{/if}}  />
+        {{#if defaultErrorMessage}}defaulterrormessage="{{defaultErrorMessage}}"{{/if}}
+        {{#if isRequired}}required{{/if}}  />
         {{#if errorMessage}}
             <p class="{{styles.b-input-error}}">*{{errorMessage}}</p>
         {{/if}}

@@ -3,7 +3,7 @@ import template from './template';
 import styles from './style.module.less';
 
 interface ChatAsideProfileProps {
-  events?: Record<string, never>
+  events?: never; 
 }
 
 export class ChatAsideProfile extends Block<ChatAsideProfileProps> {

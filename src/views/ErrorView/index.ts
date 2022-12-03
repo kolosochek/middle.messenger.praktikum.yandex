@@ -4,7 +4,7 @@ import styles from './style.module.less';
 
 
 interface ErrorViewProps {
-  mode?: string;
+  mode?: 'Error404' | 'Error500';
 }
 
 

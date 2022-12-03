@@ -5,13 +5,14 @@ import styles from './style.module.less';
 interface InputComponentProps {
     title?: string;
     name?: string;
-    type?: string;
+    type?: "text" | "password" | "email" | "tel" |"number" | "file";
     placeholder?: string;
     value?: string;
     pattern?: string;
-    required?: string;
+    isRequired?: boolean;
     isValid?: string;
     nowrap?: string;
+    defaultErrorMessage?: string;
     errorMessage?: string;
   
     events?: {

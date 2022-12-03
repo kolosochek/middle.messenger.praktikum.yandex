@@ -34,6 +34,7 @@ const ChatSettingsTemplate = `
         </div>
     </div>
 </div>
+</section>
 `
 
 export default ChatSettingsTemplate;

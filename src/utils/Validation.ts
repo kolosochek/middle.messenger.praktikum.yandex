@@ -15,7 +15,6 @@ const Rules = {
 export class Validation {
     constructor(public fieldType: string,
         public fieldValue: string,
-        public fieldMinLengthToValidate: number = 2,
         public fieldRegExp: RegExp) {
     }
     
@@ -33,4 +32,31 @@ export class Validation {
 
         return validationResult;
     }
+
+    public static compareFields(value1:string, value2:string):boolean{
+        return value1 === value2;
+    }
+
+    public static removeFieldIsValid(node: HTMLElement | null, parentNode: HTMLElement | null, styles: object[], errorMessage?: string): void {
+        if (node !== null && parentNode !== null) {
+          node.removeAttribute('isinvalid');
+          parentNode.classList.remove(`${styles['state__invalid']}`);
+          if (errorMessage) {
+            const errorMessageNode = parentNode.querySelector('p');
+            const previousErrorMessage = node.getAttribute('defaulterrormessage');
+            node.getAttribute('defaulterrormessage') ? errorMessageNode.textContent = previousErrorMessage : errorMessageNode.textContent = errorMessage;
+          }
+        }
+      }
+      
+    public static setFieldIsValid(node: HTMLElement | null, parentNode: HTMLElement | null, styles: object[], errorMessage?: string): void {
+        if (node !== null && parentNode !== null) {
+          node.setAttribute('isinvalid', 'true');
+          parentNode.classList.add(`${styles['state__invalid']}`);
+          if (errorMessage) {
+            const errorMessageNode = parentNode.querySelector('p');
+            errorMessageNode ? errorMessageNode.textContent = errorMessage : false;
+          }
+        }
+      }
 }

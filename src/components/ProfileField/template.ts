@@ -10,7 +10,12 @@ const ProfileFieldTemplate = `
     <div class="{{styles.b-profile-field}}">
         <span class="{{styles.b-profile-field-label}}">{{#if this.label}}{{this.label}}{{/if}}</span>
         {{#if mode}}
-            <input class="{{styles.b-profile-field-value}} {{styles.b-input}}" {{#if this.name}}name="{{this.name}}"{{/if}} type='{{#if this.type}}{{this.type}}{{else}}text{{/if}}' placeholder='{{this.value}}' />
+            <input class="{{styles.b-profile-field-value}} {{styles.b-input}}" 
+            {{#if this.name}}name="{{this.name}}"{{/if}} 
+            type='{{#if this.type}}{{this.type}}{{else}}text{{/if}}' 
+            placeholder='{{this.value}}' 
+            {{#if defaultErrorMessage}}defaulterrormessage='{{defaultErrorMessage}}'{{/if}}
+            />
             {{#if errorMessage}}
                 <p class="{{styles.b-input-error}}">*{{errorMessage}}</p>
             {{/if}}

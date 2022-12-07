@@ -88,4 +88,13 @@ export class Validation {
       } 
       return false;
     }
+
+  public static setFormError(form:HTMLFormElement | null, styles: object[], errorMessage:string = ''){
+    if (form !== null){
+      const errorMessageNode = form.querySelector<HTMLParagraphElement>(`p.${styles['b-form-error-text']}`)!;
+      errorMessageNode.textContent = errorMessage;
+      errorMessageNode.parentNode?.classList.add(`${styles['state__error']}`);
+    }
   }
+
+}

@@ -11,7 +11,6 @@ interface InputComponentProps {
     value?: string;
     pattern?: string;
     isValid?: string;
-    nowrap?: string;
     defaultErrorMessage?: string;
     errorMessage?: string;
     isRequired?: boolean;

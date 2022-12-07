@@ -19,7 +19,7 @@ const ProfilePageTemplate = `
         <section class="{{styles.b-profile-page-wrapper}}">
             <div class="{{styles.b-profile-page}}">
                 <div class="{{styles.b-profile-goback-wrapper}}">
-                    <a href="/#/" class="{{styles.b-profile-goback}} b-link">Back</a>
+                    <a href="/#/messenger" class="{{styles.b-profile-goback}} b-link">Back</a>
                 </div>
                 <div class="{{styles.b-profile-wrapper}}">
                     <div class="{{styles.b-profile}}">
@@ -36,12 +36,12 @@ const ProfilePageTemplate = `
                             {{{profileFieldPhone}}}                        
                             <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                 <div class='{{styles.b-profile-control}}'>
-                                    <a class='{{styles.b-link}}' href="/#/profile-edit">Edit profile info</a>
+                                    <a class='{{styles.b-link}}' href="/#/settings-edit">Edit profile info</a>
                                 </div>
                             </div>
                             <div class='{{styles.b-profile-contol-wrapper}}'>
                                 <div class='{{styles.b-profile-control}}'>
-                                    <a class='{{styles.b-link}}' href="/#/profile-change-password">Change password</a>
+                                    <a class='{{styles.b-link}}' href="/#/settings-change-password">Change password</a>
                                 </div>
                             </div>
                             <div class='{{styles.b-profile-contol-wrapper}}'>

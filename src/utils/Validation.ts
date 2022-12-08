@@ -97,4 +97,16 @@ export class Validation {
     }
   }
 
+  public static validateField(element: HTMLInputElement | Event, styles:object[]) {
+    if (element instanceof HTMLInputElement) {
+      Validation.validateFieldByType(element.name, element.value)
+        ? Validation.removeFieldIsInvalid(element, styles)
+        : Validation.setFieldIsInvalid(element, styles)
+    } else {
+      Validation.validateFieldByType(element.target.name, element.target.value)
+        ? Validation.removeFieldIsInvalid(element.target, styles)
+        : Validation.setFieldIsInvalid(element.target, styles)
+    }
+  }
+
 }

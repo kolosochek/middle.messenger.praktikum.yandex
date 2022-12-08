@@ -13,6 +13,7 @@ interface InputComponentProps {
     isValid?: string;
     defaultErrorMessage?: string;
     errorMessage?: string;
+    tabindex?: string;
     isRequired?: boolean;
     isDisabled?: boolean;
   

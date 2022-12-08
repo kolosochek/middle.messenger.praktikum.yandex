@@ -8,12 +8,16 @@ enum METHOD {
 
 type Options = {
     method: METHOD;
-    data?: any;
+    data?: unknown;
 };
 
-const baseUrl = 'https://ya-praktikum.tech/api/v2';
 
 export class HTTPTransport {
+    public baseUrl = 'https://ya-praktikum.tech/api/v2';
+    public static getCookiesObject():object {
+        return Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')));
+    }
+
     async get<TResponse>(url: string, data?: {}): Promise<TResponse> {
         return this.request(url, {method: METHOD.GET, data});
     }
@@ -49,7 +53,7 @@ export class HTTPTransport {
                 }
             }
 
-            xhr.open(method, baseUrl + url);
+            xhr.open(method, this.baseUrl ? this.baseUrl + url : url);
             xhr.withCredentials = true;
 
             xhr.onload = function () {

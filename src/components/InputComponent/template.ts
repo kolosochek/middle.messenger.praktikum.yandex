@@ -8,6 +8,7 @@ const InputComponentTemplate = `
         {{#if value}}value="{{value}}"{{/if}} 
         {{#if pattern}}pattern="{{pattern}}"{{/if}}
         {{#if defaultErrorMessage}}defaulterrormessage="{{defaultErrorMessage}}"{{/if}}
+        {{#if tabindex}}tabindex="{{tabindex}}"{{/if}}
         {{#if isRequired}}required{{/if}}
         {{#if isDisabled}}disabled{{/if}}  />
         {{#if errorMessage}}

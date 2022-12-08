@@ -5,6 +5,7 @@ import styles from './style.module.less';
 
 interface ChatSettingsProps {
   activeChat?: object;
+  chatUsers?: object;
   events?: {
     click: (e:MouseEvent) => void;
   }

@@ -82,10 +82,6 @@ export class Router {
                     view = new AuthView({ mode: 'auth' });
                     break;
                 }
-                case '/auth': {
-                    view = new AuthView({ mode: 'auth' });
-                    break;
-                }
                 case '/sign-up': {
                     view = new AuthView({ mode: 'signup' });
                     break;

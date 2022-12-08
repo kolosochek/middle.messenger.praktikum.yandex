@@ -15,24 +15,16 @@ interface AuthViewProps {
 }
 
 export class AuthView extends Block<AuthViewProps> {
-  private _validateField(e: FocusEvent | HTMLInputElement) {
-    if (e instanceof HTMLInputElement) {
-      Validation.validateFieldByType(e.name, e.value)
-        ? Validation.removeFieldIsInvalid(e, styles)
-        : Validation.setFieldIsInvalid(e, styles)
-    } else {
-      Validation.validateFieldByType(e.target.name, e.target.value)
-        ? Validation.removeFieldIsInvalid(e.target, styles)
-        : Validation.setFieldIsInvalid(e.target, styles)
-    }
-  }
+  public authAPI: AuthAPI;
 
   private _logoutUser(): void {
     window.localStorage.removeItem('isAuthorized');
+    window.localStorage.removeItem('userObject');
   }
 
   private _loginUser(): void {
     window.localStorage.setItem('isAuthorized', 'true');
+    this.authAPI.getUserId()
   }
 
   public static getIsAuthorized(): boolean {
@@ -40,7 +32,7 @@ export class AuthView extends Block<AuthViewProps> {
   }
 
   init() {
-    const authAPI = new AuthAPI();
+    this.authAPI = new AuthAPI();
     const viewMode = this.props.mode as AuthViewProps['mode'];
 
     switch (viewMode) {
@@ -53,8 +45,8 @@ export class AuthView extends Block<AuthViewProps> {
           type: 'text',
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         // passwordInputComponent
@@ -64,8 +56,8 @@ export class AuthView extends Block<AuthViewProps> {
           type: 'password',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         break;
@@ -80,8 +72,8 @@ export class AuthView extends Block<AuthViewProps> {
           placeholder: 'sebastian1337@gmail.com',
           errorMessage: 'Email is invalid!',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         // firstNameInputComponent
@@ -92,8 +84,8 @@ export class AuthView extends Block<AuthViewProps> {
           placeholder: 'Sebastian',
           errorMessage: 'First name is invalid',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         // lastNameInputComponent
@@ -104,8 +96,8 @@ export class AuthView extends Block<AuthViewProps> {
           placeholder: 'Pereiro',
           errorMessage: 'Last name is invalid',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         // loginInputComponent
@@ -116,8 +108,8 @@ export class AuthView extends Block<AuthViewProps> {
           placeholder: 'sebastian1337',
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         // phoneInputComponent
@@ -129,8 +121,8 @@ export class AuthView extends Block<AuthViewProps> {
           placeholder: '+79048891488',
           errorMessage: 'Phone is invalid',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         // passwordInputComponent
@@ -142,8 +134,8 @@ export class AuthView extends Block<AuthViewProps> {
           defaultErrorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         // confirmPasswordInputComponent
@@ -155,15 +147,15 @@ export class AuthView extends Block<AuthViewProps> {
           defaultErrorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         break;
       }
       // logout
       case 'logout': {
-        authAPI.logoutUser().then(() => {
+        this.authAPI.logoutUser().then(() => {
           this._logoutUser();
           Router.go('/');
         }).catch(() => {
@@ -179,13 +171,13 @@ export class AuthView extends Block<AuthViewProps> {
 
     // auth page form submit
     this.props.events = {
-      submit: (e) => {
+      submit: (e:SubmitEvent) => {
         e.preventDefault();
-        const form: HTMLFormElement = e.target;
+        const form: HTMLFormElement = e.target!;
         const formAllFields = form.querySelectorAll<HTMLInputElement>('input');
         if (formAllFields.length) {
           formAllFields.forEach((element: HTMLInputElement) => {
-            this._validateField(element);
+            Validation.validateField(element, styles);
           });
         }
         // check inputs for validation
@@ -197,11 +189,16 @@ export class AuthView extends Block<AuthViewProps> {
           if (viewMode === 'auth') {
             const formData = Object.fromEntries(new FormData(form));
             // auth user
-            authAPI.authorizeUser(formData as AuthFormInterface).then(() => {
+            this.authAPI.authorizeUser(formData as AuthFormInterface).then(() => {
               this._loginUser();
               Router.go('/messenger');
             }).catch((requestError) => {
+              if (requestError.reason !== 'User already in system') {
                 Validation.setFormError(form, styles, requestError.reason);
+              } else {
+                this._loginUser();
+                Router.go('/messenger');
+              }
             })
           } else if (viewMode === 'signup') {
             // passwords are equal?
@@ -210,7 +207,7 @@ export class AuthView extends Block<AuthViewProps> {
             if (Validation.comparePasswordFields(passwordField, confirmPasswordField, styles)) {
               const formData = Object.fromEntries(new FormData(form));
               // register user
-              authAPI.registerUser(formData as RegisterFormInterface).then(() => {
+              this.authAPI.registerUser(formData as RegisterFormInterface).then(() => {
                 this._loginUser();
                 Router.go('/messenger');
               }).catch((requestError) => {

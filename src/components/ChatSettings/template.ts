@@ -17,7 +17,7 @@ const ChatSettingsTemplate = `
         {{/with}}
         <span class="{{styles.b-profile-title}} {{styles.b-link}}">
         {{#each chatUsers}}
-        {{#if @last}}<a href="">{{this.login}}</a>{{else}}<a href="">{{this.login}},</a>{{/if}}
+        <a href="/#/users/{{this.id}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
         
         {{/each}}
         </span>

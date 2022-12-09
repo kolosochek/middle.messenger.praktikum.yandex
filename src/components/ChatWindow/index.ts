@@ -7,6 +7,7 @@ import template from './template';
 import styles from './style.module.less';
 
 interface ChatWindowProps {
+  activeChatId?: string|number|null;
   activeChat?: ConversationType;
   userId?: number | string,
 }
@@ -37,6 +38,9 @@ export class ChatWindow extends Block<ChatWindowProps> {
   }
 
   render() {
+    //
+    console.log(this)
+    //
     return this.compile(template, { ...this.props, styles });
   }
 }

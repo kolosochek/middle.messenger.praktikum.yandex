@@ -29,7 +29,7 @@ export class IndexView extends Block<IndexViewProps> {
   }
 
   public static getActiveChatId = (): string => {
-    return this.activeChatId ? this.activeChatId : window.localStorage.getItem('activeChatId');
+    return this.activeChatId ? this.activeChatId : JSON.parse(window.localStorage.getItem('activeChatId')!);
   }
 
   public static setChatUsers(chatUsersObject: object) {
@@ -55,7 +55,7 @@ export class IndexView extends Block<IndexViewProps> {
       events: {
         click: (e) => {
           // get chatId from click
-          const activeChatId = e.target.closest<HTMLDivElement>("div[chat_id]").getAttribute('chat_id');
+          const activeChatId = e.target!.closest<HTMLDivElement>("div[chat_id]").getAttribute('chat_id');
           this.activeChatId = activeChatId;
           IndexView.setActiveChatId(activeChatId);
 
@@ -84,6 +84,7 @@ export class IndexView extends Block<IndexViewProps> {
                 this.children.chatWindow.setProps({
                   activeChat: oldMessages.reverse(),
                   userId: this.authAPI.getUserId(),
+
                 })
                 //
               }).catch(() => {
@@ -104,7 +105,9 @@ export class IndexView extends Block<IndexViewProps> {
     // chatAsideSearch
     this.children.chatAsideSearch = new ChatAsideSearch({});
     // chatWindow
-    this.children.chatWindow = new ChatWindow({});
+    this.children.chatWindow = new ChatWindow({
+      activeChatId: IndexView.getActiveChatId()
+    });
     // chatReply submit event handler
     this.children.chatWindow.children.chatReply.props.events = {
       submit: (e: SubmitEvent) => {

@@ -1,7 +1,7 @@
 import Block from '../../utils/Block';
 import { Router } from '../../utils/Router';
-import { User } from '../../model/user';
-import { ProfileInterface } from '../../model/user';
+import { ProfileAPI } from '../../utils/ProfileAPI';
+import { User, ProfileInterface } from '../../model/user';
 import { InputComponent } from '../../components/InputComponent';
 import { Validation } from '../../utils/Validation';
 import { ShowModal } from '../../utils/ShowModal';
@@ -20,22 +20,20 @@ interface ProfileViewProps {
 
 
 export class ProfileView extends Block<ProfileViewProps> {
-  private _validateField(e:FocusEvent|HTMLInputElement){
-    if(e instanceof HTMLInputElement){
-      Validation.validateFieldByType(e.name, e.value)
-        ? Validation.removeFieldIsInvalid(e, styles)
-        : Validation.setFieldIsInvalid(e, styles)
-    } else {
-      Validation.validateFieldByType(e.target.name, e.target.value)
-        ? Validation.removeFieldIsInvalid(e.target, styles)
-        : Validation.setFieldIsInvalid(e.target, styles)
-    }
-    
+  public profileAPI:ProfileAPI;
+
+
+  public getUserProfile():ProfileInterface {
+    return JSON.parse(window.localStorage.getItem('userObject')!) as ProfileInterface;
   }
 
   init() {
+    this.profileAPI = new ProfileAPI();
+    // modal
     ShowModal.bindToWindow();
-    this.props.profile = User.getUserProfile();
+    // fetch user data by given ID
+    this.props.profile = this.getUserProfile();
+    // get View mode and switch it
     const viewMode = this.props.mode as ProfileViewProps['mode'];
     switch (viewMode) {
       case 'view': {
@@ -62,7 +60,7 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldSecondName = new InputComponent({
           name: 'second_name',
           label: 'Last name:',
-          value: this.props.profile.last_name,
+          value: this.props.profile.second_name,
           class: `${styles['b-profile-field']}`,
           isDisabled: true,
         });
@@ -107,8 +105,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'Email is invalid!',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
@@ -121,8 +119,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'First name is invalid!',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
@@ -135,8 +133,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'Last name is invalid!',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
@@ -149,8 +147,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
@@ -171,8 +169,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'Phone is invalid',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
@@ -189,8 +187,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
@@ -205,8 +203,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
@@ -221,8 +219,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
-            focus: (e) => this._validateField(e),
-            blur: (e) => this._validateField(e),
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         break;
@@ -235,11 +233,11 @@ export class ProfileView extends Block<ProfileViewProps> {
     this.props.events = {
       submit: (e) => {
         e.preventDefault();
-        const form: HTMLFormElement = e.target!;
+        const form = e.target! as HTMLFormElement;
         const formAllFields = form.querySelectorAll<HTMLInputElement>('input');
         if (formAllFields.length) {
           formAllFields.forEach((element: HTMLInputElement) => {
-            this._validateField(element);
+            Validation.validateField(element, styles)
           });
         }
 

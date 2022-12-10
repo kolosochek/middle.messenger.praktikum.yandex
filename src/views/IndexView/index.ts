@@ -5,8 +5,9 @@ import { ChatList } from '../../components/ChatList';
 import { ChatWindow } from '../../components/ChatWindow';
 import { Validation } from '../../utils/Validation';
 import { AuthAPI } from '../../utils/AuthAPI';
-import { ChatAPI, ChatListInterface } from '../../utils/ChatAPI'
+import { ChatAPI } from '../../utils/ChatAPI'
 import { WebSocketAPI } from '../../utils/WebSocketAPI'
+import { ChatListItemInterface, ChatMessageInterface, ChatUserInterface } from '../../model/data';
 import template from './template';
 import styles from './style.module.less';
 import chatReplyStyles from '../../components/ChatReply/style.module.less'
@@ -16,81 +17,119 @@ interface IndexViewProps {
 }
 
 export class IndexView extends Block<IndexViewProps> {
-  public chatAPI = new ChatAPI();
-  public chatList: ChatListInterface[];
-  public activeChatToken: string;
-  public webSocket: WebSocketAPI;
-  public userId: string | number;
+  public chatAPI: ChatAPI;
   public authAPI: AuthAPI;
+  public webSocket: WebSocketAPI;
+  public chatList: ChatListItemInterface[];
+  public chatUsers: ChatUserInterface[]
+  public activeChatToken: string;
+  public userId: string | number;
   public activeChatId: string | null;
 
   public static setActiveChatId = (id: string | number): void => {
-    this.activeChatId = window.localStorage.setItem('activeChatId', id.toString());
+    this.activeChatId = `${id}`;
+    window.localStorage.setItem('activeChatId', id.toString());
   }
 
   public static getActiveChatId = (): string => {
-    return this.activeChatId ? this.activeChatId : JSON.parse(window.localStorage.getItem('activeChatId')!);
+    return this.activeChatId ? this.activeChatId : window.localStorage.getItem('activeChatId');
   }
 
-  public static setChatUsers(chatUsersObject: object) {
-    window.localStorage.setItem('activeChatId', JSON.stringify(chatUsersObject));
+  public static getChatUsers = (): ChatUserInterface[] => {
+    return this.chatUsers ? this.chatUsers : JSON.parse(window.localStorage.getItem('chatUsers')!);
   }
 
+  public static setChatUsers(chatUsersObject: ChatUserInterface[]) {
+    window.localStorage.setItem('chatUsers', JSON.stringify(chatUsersObject));
+  }
 
+  public static cleanLocalStorage(): void {
+    window.localStorage.removeItem('activeChatId')
+    window.localStorage.removeItem('chatUsers')
+  }
+
+  constructor() {
+    super({});
+    IndexView.cleanLocalStorage();
+  }
 
   init() {
-    // get current user ID
     this.authAPI = new AuthAPI();
-    this.userId = this.authAPI.getUserId();
     this.chatAPI = new ChatAPI();
+    // get current user ID
+    this.userId = this.authAPI.getUserId();
     // get aside chatList items
     this.chatAPI.getChatList().then((chatList) => {
-      this.chatList = chatList as ChatListInterface[];
+      this.chatList = chatList;
     }).catch((responseError) => {
       throw new Error(`Can't get chat List, reason: ${responseError}`)
     })
     // chatList
     this.children.chatList = new ChatList({
-      activeChatId: IndexView.getActiveChatId(),
       events: {
         click: (e) => {
           // get chatId from click
           const activeChatId = e.target!.closest<HTMLDivElement>("div[chat_id]").getAttribute('chat_id');
-          this.activeChatId = activeChatId;
           IndexView.setActiveChatId(activeChatId);
 
           // toggle active class on proper ChatList item  and rerender that component
           this.children.chatList.setProps({
-            activeChatId: activeChatId,
+            activeChatId: IndexView.getActiveChatId(),
           });
 
           // get chatUsers
-          this.chatAPI.getChatUsers(this.activeChatId!).then((chatUsersObject) => {
+          this.chatAPI.getChatUsers(IndexView.getActiveChatId()!).then((chatUsersObject) => {
             IndexView.setChatUsers(chatUsersObject)
           })
-            .catch((responseError) => {
-              throw new Error(`Can't get chat users. Reason: ${responseError}`)
-            })
+          .catch((responseError) => {
+            throw new Error(`Can't get chat users. Reason: ${responseError}`)
+          })
 
           // get chat token
-          this.chatAPI.getChatToken(activeChatId as number).then((activeChatObject) => {
+          this.chatAPI.getChatToken(IndexView.getActiveChatId()! as number).then((activeChatObject) => {
             this.activeChatToken = activeChatObject['token'];
             // create new webSocket
-            this.webSocket = new WebSocketAPI(this.userId, this.activeChatId!, this.activeChatToken)
+            this.webSocket = new WebSocketAPI(this.userId, IndexView.getActiveChatId()!, this.activeChatToken)
             //this.webSocket.keepAlive();
             this.webSocket.socket.addEventListener('open', () => {
-              this.webSocket.getOldChatMessages().then((oldMessages) => {
-                // set children props
-                this.children.chatWindow.setProps({
-                  activeChat: oldMessages.reverse(),
-                  userId: this.authAPI.getUserId(),
-
-                })
-                //
-              }).catch(() => {
-                throw new Error(`Can't get old chat messages from WebSocket`)
-              })
+              this.webSocket.getOldChatMessages();
             })
+
+            // new message recieved
+            this.webSocket.socket.addEventListener('message', (event) => {
+              const dataObject = JSON.parse(event.data);
+              //
+              console.log(dataObject);
+              //
+              // if we got a new message(!Array)
+              if (!Array.isArray(dataObject)) {
+                if(dataObject.type == 'message'){
+                  // got new message
+                  this.chatAPI.getChatList().then((chatList) => {
+                    this.chatList = chatList;
+                    this.children.chatList.setProps({
+                      chatList: this.chatList,
+                    })
+                  }).catch((responseError) => {
+                    throw new Error(`Can't get chat List, reason: ${responseError}`)
+                  })
+                  // refresh messages in the chat
+                  this.webSocket.getOldChatMessages();
+                }
+                
+              } else if(Array.isArray(dataObject)) {
+                // old chat messages recieved
+                const oldMessages:ChatMessageInterface[] = dataObject as ChatMessageInterface[];
+                // let's update children components
+                this.children.chatWindow.setProps({
+                  chatMessages: oldMessages.reverse(),
+                  chatUsers: IndexView.getChatUsers(),
+                  userId: this.authAPI.getUserId(),
+                })
+              } else {
+                throw new Error(`Got new unexpected socket data, event is: ${event.toString()} `)
+              }
+            });
           })
             .catch((responseError) => {
               throw new Error(responseError)
@@ -99,15 +138,15 @@ export class IndexView extends Block<IndexViewProps> {
       },
     });
 
-
     // chatAsideProfile
     this.children.chatAsideProfile = new ChatAsideProfile({});
     // chatAsideSearch
     this.children.chatAsideSearch = new ChatAsideSearch({});
     // chatWindow
     this.children.chatWindow = new ChatWindow({
-      activeChatId: IndexView.getActiveChatId()
+      chatUsers: IndexView.getChatUsers(),
     });
+
     // chatReply submit event handler
     this.children.chatWindow.children.chatReply.props.events = {
       submit: (e: SubmitEvent) => {
@@ -133,35 +172,6 @@ export class IndexView extends Block<IndexViewProps> {
           }));
           message.value = '';
         }
-        // new message recieved
-        this.webSocket.socket.addEventListener('message', (event) => {
-          // if we got a new message(!Array)
-          if (!Array.isArray(JSON.parse(event.data))) {
-            // get new aside chat list
-            this.chatAPI.getChatList().then((chatList) => {
-              this.chatList = chatList as ChatListInterface[];
-
-              this.children.chatList.setProps({
-                chatList: this.chatList,
-              })
-
-            }).catch((responseError) => {
-              throw new Error(`Can't get chat List, reason: ${responseError}`)
-            })
-            // refresh messages in the chat
-            this.webSocket.getOldChatMessages().then((oldMessages) => {
-
-              // and set proper props for nested components
-              this.children.chatWindow.setProps({
-                activeChat: oldMessages.reverse(),
-                userId: this.authAPI.getUserId(),
-              })
-
-            }).catch(() => {
-              throw new Error(`Can't get old chat messages from WebSocket`)
-            })
-          }
-        });
       }
     }
   }

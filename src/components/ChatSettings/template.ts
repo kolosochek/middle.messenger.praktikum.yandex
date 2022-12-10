@@ -8,19 +8,17 @@ const addUserTemplate = `<form class={{styles.b-modal-window-content}}><h3 class
 const removeUserTemplate = `<form class={{styles.b-modal-window-content}}><h3 class={{styles.b-modal-window-title}}>Remove user</h3><input class={{styles.b-input}} type=text /><button class={{styles.b-submit}}>Remove</button></form>`
 
 
-
 const ChatSettingsTemplate = `
 <div class="{{styles.b-chat-info-wrapper}}">
     <div class="{{styles.b-chat-info}}">
-        {{#with this.activeChat}}
-            {{> AvatarComponent image_url=this.avatar_url styles=../styles}}
-        {{/with}}
-        <span class="{{styles.b-profile-title}} {{styles.b-link}}">
-        {{#each chatUsers}}
-        <a href="/#/users/{{this.id}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
-        
-        {{/each}}
-        </span>
+        <div class="{{styles.b-chat-users-wrapper}}">
+            {{#each this.chatUsers}}
+                <div class="{{../styles.b-chat-user}}">
+                    {{> AvatarComponent image_url=this.avatar_url styles=../styles}}        
+                    <a class="{{../styles.b-link}}" href="/#/users/{{this.id}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
+                </div>
+            {{/each}}
+        </div>
         <div class="{{styles.b-chat-settings}}">
             <a class="{{styles.b-link}} {{styles.b-chat-settings-link}}">Settings</a>
         </div>

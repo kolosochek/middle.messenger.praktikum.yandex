@@ -1,7 +1,7 @@
 import { HTTPTransport } from "./HTTPTransport";
 
 
-export interface ChatListInterface {
+export interface ChatListMessageInterface {
         id: number,
         title: string,
         avatar: any | null,

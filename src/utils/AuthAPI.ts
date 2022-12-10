@@ -1,4 +1,3 @@
-import { throws } from "assert";
 import { HTTPTransport } from "./HTTPTransport";
 
 export interface AuthFormInterface {
@@ -15,18 +14,13 @@ export interface RegisterFormInterface {
     phone: string,
 }
 
-/*
-{
-  "login": "a.morgan",
-  "password": "p@ssw0rd"
-} 
-*/
 
 export class AuthAPI extends HTTPTransport {
     public authUserUrl = "/auth/signin";
     public registerUserUrl = "/auth/signup";
     public logoutUserUrl = "/auth/logout";
     public userInfoUrl = "/auth/user";
+
 
     async authorizeUser(authFormData: AuthFormInterface): Promise<Response> {
         return this.post(this.authUserUrl, authFormData)        
@@ -47,9 +41,10 @@ export class AuthAPI extends HTTPTransport {
     public setUserInfo(userObject:object):void {
         window.localStorage.setItem('userObject', JSON.stringify(userObject));
     }
+    
     public getUserId() {
         if (window.localStorage.getItem('userObject')) {
-            const userObject = JSON.parse(window.localStorage.getItem('userObject'))
+            const userObject = JSON.parse(window.localStorage.getItem('userObject')!)
             return userObject.id;
         } else {
             this.getUserInfo()

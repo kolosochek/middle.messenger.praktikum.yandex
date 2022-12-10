@@ -4,8 +4,8 @@ import template from './template';
 import styles from './style.module.less';
 
 interface ChatSettingsProps {
-  activeChat?: object;
-  chatUsers?: object;
+  activeChat?: Record<string, string>;
+  chatUsers?: Record<string, string>;
   events?: {
     click: (e:MouseEvent) => void;
   }

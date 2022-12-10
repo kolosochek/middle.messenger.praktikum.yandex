@@ -2,13 +2,13 @@ import Block from '../../utils/Block';
 import { ChatSettings } from '../ChatSettings';
 import { ChatReply } from '../ChatReply';
 import { Validation } from '../../utils/Validation';
-import { ConversationType } from '../../model/data';
+import { ChatMessageInterface } from '../../model/data';
 import template from './template';
 import styles from './style.module.less';
 
 interface ChatWindowProps {
-  activeChatId?: string|number|null;
-  activeChat?: ConversationType;
+  chatUsers?: string|number|null;
+  chatMessages?: ChatMessageInterface[];
   userId?: number | string,
 }
 
@@ -25,7 +25,7 @@ export class ChatWindow extends Block<ChatWindowProps> {
     // chatSettings
     this.children.chatSettings = new ChatSettings({
       chatUsers: ChatWindow.getChatUsers(),
-      activeChat: this.props.activeChat
+      chatMessages: this.props.chatMessages
     });
 
     // chatReply
@@ -38,9 +38,6 @@ export class ChatWindow extends Block<ChatWindowProps> {
   }
 
   render() {
-    //
-    console.log(this)
-    //
     return this.compile(template, { ...this.props, styles });
   }
 }

@@ -23,12 +23,12 @@ Handlebars.registerHelper('log', (value) => { console.log(value) });
 
 const ChatWindowTemplate = `
 <section class="{{styles.b-chat-window-wrapper}}">
-        {{#if this.activeChat}}
+        {{#if this.chatUsers}}
             <div class="{{styles.b-chat-window}}">
                 {{{chatSettings}}}
                 <section class="{{styles.b-chat-wrapper}}">
                 <div class="{{styles.b-chat}}">
-                {{#each this.activeChatId}}
+                {{#each this.chatMessages}}
                     <div class="{{../styles.b-chat-message-wrapper}}{{#if_eq this.user_id ../this.userId}} {{../styles.state__mine}}{{/if_eq}}">
                         <p class="{{../styles.b-chat-message}}">
                         <span class="{{../styles.b-message-time}}">{{getHoursAndMinutes this.time}}</span><span class="{{../styles.b-message-author}}">{{#if_eq this.user_id ../this.userId}}Me{{else}}{{getLoginById this.user_id}}{{/if_eq}}: </span>

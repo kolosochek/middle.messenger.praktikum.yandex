@@ -31,7 +31,7 @@ export class ChatReply extends Block<ChatReplyProps> {
       type: 'text',
       errorMessage: "Can't be empty",
       tabindex: '0',
-
+      /*
       events: {
         focus: (e) => {
           Validation.validateField(e.target, styles)
@@ -40,6 +40,7 @@ export class ChatReply extends Block<ChatReplyProps> {
           Validation.validateField(e.target, styles)
         },
       }
+      */
     });
   }
 

@@ -33,38 +33,30 @@ export class WebSocketAPI {
             this.socket.addEventListener('open', () => {
                 this.socket.send(JSON.stringify({
                     content: '',
-                    type: 'message',
+                    type: 'ping',
                 }));
             });
         }, this.socketPingInterval);
     }
 
     async getOldChatMessages(skip: number | string = 0) {
-        return new Promise((resolve, reject) => {
-            const getOldMessages = () => {
-                this.socket.send(JSON.stringify({
-                    content: skip,
-                    type: 'get old',
-                }));
-            }
-            if (this.socket.readyState === 1) {
-                getOldMessages()
-            } else {
-                //
-                //console.log('Socket not in ready state')            
-                setTimeout(() => {
-                    if (this.socket.readyState === 1) {
-                        getOldMessages();
-                    }
-                }, this.socketWaitForReadyStateInterval);
-
-            }
-            // new incoming message 
-            this.socket.addEventListener('message', event => {
-                resolve(JSON.parse(event.data))
-            });
-
-        })
+        const getOldMessages = () => {
+            this.socket.send(JSON.stringify({
+                content: skip,
+                type: 'get old',
+            }));
+        }
+        if (this.socket.readyState === 1) {
+            getOldMessages()
+        } else {
+            //
+            //console.log('Socket not in ready state')            
+            setTimeout(() => {
+                if (this.socket.readyState === 1) {
+                    getOldMessages();
+                }
+            }, this.socketWaitForReadyStateInterval);
+        }
     }
 
     public close(): void {

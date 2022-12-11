@@ -37,24 +37,4 @@ export class AuthAPI extends HTTPTransport {
     async logoutUser(): Promise<Response> {
         return this.post(this.logoutUserUrl, {})
     }
-    
-    public setUserInfo(userObject:object):void {
-        window.localStorage.setItem('userObject', JSON.stringify(userObject));
-    }
-    
-    public getUserId() {
-        if (window.localStorage.getItem('userObject')) {
-            const userObject = JSON.parse(window.localStorage.getItem('userObject')!)
-            return userObject.id;
-        } else {
-            this.getUserInfo()
-            .then((user) => {
-                this.setUserInfo(user);
-                return user.id
-            })
-            .catch((requestError) => {
-                throw new Error(requestError)
-            })
-        }
-    }
 }

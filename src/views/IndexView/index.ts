@@ -5,21 +5,20 @@ import { ChatAsideSearch } from '../../components/ChatAsideSearch';
 import { ChatList } from '../../components/ChatList';
 import { ChatWindow } from '../../components/ChatWindow';
 import { Validation } from '../../utils/Validation';
-import { AuthAPI } from '../../utils/AuthAPI';
 import { ChatAPI } from '../../utils/ChatAPI'
 import { WebSocketAPI } from '../../utils/WebSocketAPI'
-import { ChatListItemInterface, ChatMessageInterface, ChatUserInterface } from '../../model/data';
+import { Store } from '../../model/Store'
+import { ChatListItemInterface, ChatMessageInterface, ChatUserInterface } from '../../model/Store';
 import template from './template';
 import styles from './style.module.less';
 import chatReplyStyles from '../../components/ChatReply/style.module.less'
 
 interface IndexViewProps {
-  router: Router;
+  router?: Router;
 }
 
 export class IndexView extends Block<IndexViewProps> {
   public chatAPI: ChatAPI;
-  public authAPI: AuthAPI;
   public webSocket: WebSocketAPI;
   public chatList: ChatListItemInterface[];
   public chatUsers: ChatUserInterface[]
@@ -44,21 +43,15 @@ export class IndexView extends Block<IndexViewProps> {
     window.localStorage.setItem('chatUsers', JSON.stringify(chatUsersObject));
   }
 
-  public static cleanLocalStorage(): void {
-    window.localStorage.removeItem('activeChatId')
-    window.localStorage.removeItem('chatUsers')
-  }
-
   constructor() {
     super({});
-    IndexView.cleanLocalStorage();
+    Store.clean();
   }
 
-  init() {
-    this.authAPI = new AuthAPI();
+  public init() {
     this.chatAPI = new ChatAPI();
     // get current user ID
-    this.userId = this.authAPI.getUserId();
+    this.userId = Store.getUserId();
     // get aside chatList items
     this.chatAPI.getChatList().then((chatList) => {
       this.chatList = chatList;
@@ -125,7 +118,7 @@ export class IndexView extends Block<IndexViewProps> {
                 this.children.chatWindow.setProps({
                   chatMessages: oldMessages.reverse(),
                   chatUsers: IndexView.getChatUsers(),
-                  userId: this.authAPI.getUserId(),
+                  userId: Store.getUserId(),
                 })
               } else {
                 throw new Error(`Got new unexpected socket data, event is: ${event.toString()} `)

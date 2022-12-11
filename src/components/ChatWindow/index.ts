@@ -1,9 +1,10 @@
 import Block from '../../utils/Block';
 import { ChatSettings } from '../ChatSettings';
 import { ChatReply } from '../ChatReply';
-import { ChatMessageInterface, ChatUserInterface } from '../../model/data';
+import { ChatMessageInterface, ChatUserInterface } from '../../model/Store';
 import template from './template';
 import styles from './style.module.less';
+import { Store } from '../../model/Store';
 
 interface ChatWindowProps {
   chatUsers?: string|number|null;
@@ -24,7 +25,7 @@ export class ChatWindow extends Block<ChatWindowProps> {
     // chatSettings
     this.children.chatSettings = new ChatSettings({
       chatUsers: ChatWindow.getChatUsers()! as ChatUserInterface[],
-      chatMessages: this.props.chatMessages,
+      userId: Store.getUserId(),
     });
 
     // chatReply

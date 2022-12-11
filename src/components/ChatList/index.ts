@@ -1,14 +1,14 @@
 import Block from '../../utils/Block';
-import { ChatAPI, ChatListInterface } from '../../utils/ChatAPI'
-import { ConversationType } from '../../model/data';
+import { ChatAPI } from '../../utils/ChatAPI'
+import { ChatListItemInterface } from '../../model/Store';
 import template from './template';
 import styles from './style.module.less';
 
 
 interface ChatListProps {
-  chatList?: ChatListInterface[];
+  chatList?: ChatListItemInterface[];
   activeChatId?: string;
-  activeChat?: ConversationType;
+  activeChat?: ChatListItemInterface;
 
   events?: {
     click: (e: MouseEvent) => void;
@@ -27,7 +27,7 @@ export class ChatList extends Block<ChatListProps> {
     this.chatAPI = new ChatAPI();
     this.chatAPI.getChatList()
     .then((chatList) => {
-      this.chatList = chatList as ChatListInterface[];
+      this.chatList = chatList as ChatListItemInterface[];
       this.setProps({
         chatList: this.chatList,
       })

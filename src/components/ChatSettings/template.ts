@@ -2,6 +2,7 @@ import Handlebars from "handlebars"
 import AvatarComponent from "../../partials/AvatarComponent";
 
 Handlebars.registerPartial('AvatarComponent', AvatarComponent);
+Handlebars.registerHelper('if_eq', (a, b, opts) => a == b ? opts.fn(this) : opts.inverse(this) );
 Handlebars.registerHelper('log', (value) => { console.log(value)});
 
 const addUserTemplate = `<form class={{styles.b-modal-window-content}}><h3 class={{styles.b-modal-window-title}}>Add user</h3><input class={{styles.b-input}} type=text /><button class={{styles.b-submit}}>Add</button></form>`
@@ -9,13 +10,14 @@ const removeUserTemplate = `<form class={{styles.b-modal-window-content}}><h3 cl
 
 
 const ChatSettingsTemplate = `
+{{log this}}
 <div class="{{styles.b-chat-info-wrapper}}">
     <div class="{{styles.b-chat-info}}">
         <div class="{{styles.b-chat-users-wrapper}}">
             {{#each this.chatUsers}}
                 <div class="{{../styles.b-chat-user}}">
-                    {{> AvatarComponent image_url=this.avatar_url styles=../styles}}        
-                    <a class="{{../styles.b-link}}" href="/users/{{this.id}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
+                    {{> AvatarComponent image_url=this.avatar_url styles=../styles}}     
+                    <a class="{{../styles.b-link}}" href="{{#if_eq this.id ../userId}}/settings{{else}}/users/{{this.id}}{{/if_eq}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
                 </div>
             {{/each}}
         </div>

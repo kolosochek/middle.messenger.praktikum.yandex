@@ -2,6 +2,7 @@ import Block from '../../utils/Block';
 import { Router } from '../../utils/Router';
 import { Validation } from '../../utils/Validation';
 import { AuthAPI, AuthFormInterface, RegisterFormInterface } from '../../utils/AuthAPI';
+import { Store } from '../../model/Store';
 import { InputComponent } from '../../components/InputComponent';
 import template from './template';
 import styles from './style.module.less';
@@ -19,17 +20,17 @@ export class AuthView extends Block<AuthViewProps> {
   public authAPI: AuthAPI;
 
   private _logoutUser(): void {
-    window.localStorage.removeItem('isAuthorized');
-    window.localStorage.removeItem('userObject');
+    Store.removeItem('isAuthorized');
+    Store.removeItem('profile');
   }
 
   private _loginUser(): void {
-    window.localStorage.setItem('isAuthorized', 'true');
-    this.authAPI.getUserId()
+    Store.setItem('isAuthorized', 'true');
+    Store.getUserId();
   }
 
   public static getIsAuthorized(): boolean {
-    return Boolean(window.localStorage.getItem('isAuthorized'));
+    return Boolean(Store.getItemByName('isAuthorized'));
   }
 
   init() {

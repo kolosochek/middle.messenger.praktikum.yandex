@@ -2,10 +2,11 @@ import Block from '../../utils/Block';
 import { ShowModal } from '../../utils/ShowModal';
 import template from './template';
 import styles from './style.module.less';
+import { ChatUserInterface } from '../../model/data';
 
 interface ChatSettingsProps {
   activeChat?: Record<string, string>;
-  chatUsers?: Record<string, string>;
+  chatUsers?: ChatUserInterface[];
   events?: {
     click: (e:MouseEvent) => void;
   }

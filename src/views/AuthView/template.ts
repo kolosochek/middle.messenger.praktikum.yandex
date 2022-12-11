@@ -29,7 +29,7 @@ const AuthViewTemplate = `
                         <button class="{{styles.b-submit}}" type="submit">Authorize</button>
                     </div>
                     <div class="{{styles.b-sign-in-wrapper}}">
-                        <a class="{{styles.b-link}}" href="/#/sign-up">Sign Up</a>
+                        <a class="{{styles.b-link}}" href="/sign-up">Sign Up</a>
                     </div>
                 {{/if_eq}}
                 {{#if_eq mode "signup"}}
@@ -48,7 +48,7 @@ const AuthViewTemplate = `
                         <button class="{{styles.b-submit}}" type="submit">SignUp</button>
                     </div>
                     <div class="{{styles.b-sign-in-wrapper}}">
-                        <a class="{{styles.b-link}}" href="/#/">Login</a>
+                        <a class="{{styles.b-link}}" href="/">Login</a>
                     </div>
                 {{/if_eq}}
                 </form>

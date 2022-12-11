@@ -9,6 +9,7 @@ import styles from './style.module.less';
 
 interface AuthViewProps {
   mode: 'auth' | 'signup' | 'logout';
+  router: Router;
   events?: {
     submit: (e: SubmitEvent) => void;
   };
@@ -35,7 +36,7 @@ export class AuthView extends Block<AuthViewProps> {
     this.authAPI = new AuthAPI();
     const viewMode = this.props.mode as AuthViewProps['mode'];
 
-    switch (viewMode) {
+    switch (viewMode as AuthViewProps['mode']) {
       // auth
       case 'auth': {
         // loginInputComponent
@@ -157,10 +158,10 @@ export class AuthView extends Block<AuthViewProps> {
       case 'logout': {
         this.authAPI.logoutUser().then(() => {
           this._logoutUser();
-          Router.go('/');
+          this.props.router.go('/');
         }).catch(() => {
           this._logoutUser();
-          Router.go('/');
+          this.props.router.go('/');
         });
         break;
       }
@@ -191,13 +192,13 @@ export class AuthView extends Block<AuthViewProps> {
             // auth user
             this.authAPI.authorizeUser(formData as AuthFormInterface).then(() => {
               this._loginUser();
-              Router.go('/messenger');
+              this.props.router.go('/messenger');
             }).catch((requestError) => {
               if (requestError.reason !== 'User already in system') {
                 Validation.setFormError(form, styles, requestError.reason);
               } else {
                 this._loginUser();
-                Router.go('/messenger');
+                this.props.router.go('/messenger');
               }
             })
           } else if (viewMode === 'signup') {
@@ -209,7 +210,7 @@ export class AuthView extends Block<AuthViewProps> {
               // register user
               this.authAPI.registerUser(formData as RegisterFormInterface).then(() => {
                 this._loginUser();
-                Router.go('/messenger');
+                this.props.router.go('/messenger');
               }).catch((requestError) => {
                 Validation.setFormError(form, styles, requestError.reason);
               })

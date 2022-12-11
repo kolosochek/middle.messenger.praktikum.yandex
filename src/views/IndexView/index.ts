@@ -1,4 +1,5 @@
 import Block from '../../utils/Block';
+import { Router } from '../../utils/Router';
 import { ChatAsideProfile } from '../../components/ChatAsideProfile';
 import { ChatAsideSearch } from '../../components/ChatAsideSearch';
 import { ChatList } from '../../components/ChatList';
@@ -13,7 +14,7 @@ import styles from './style.module.less';
 import chatReplyStyles from '../../components/ChatReply/style.module.less'
 
 interface IndexViewProps {
-  events?: unknown;
+  router: Router;
 }
 
 export class IndexView extends Block<IndexViewProps> {

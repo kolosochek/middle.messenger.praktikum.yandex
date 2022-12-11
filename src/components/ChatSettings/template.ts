@@ -15,7 +15,7 @@ const ChatSettingsTemplate = `
             {{#each this.chatUsers}}
                 <div class="{{../styles.b-chat-user}}">
                     {{> AvatarComponent image_url=this.avatar_url styles=../styles}}        
-                    <a class="{{../styles.b-link}}" href="/#/users/{{this.id}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
+                    <a class="{{../styles.b-link}}" href="/users/{{this.id}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
                 </div>
             {{/each}}
         </div>

@@ -1,12 +1,15 @@
 export interface ProfileInterface {
-    avatar_url: string,
-    login: string,
-    first_name: string,
-    second_name: string,
-    email: string,
-    phone: string,
-    // password hash
-    password: string, 
+    //
+    id?: string|number,
+    avatar?: string,
+    //
+    avatar_url?: string,
+    login?: string,
+    first_name?: string,
+    second_name?: string,
+    email?: string,
+    phone?: string,
+    password?: string, 
 }
 
 export class User {

@@ -1,8 +1,7 @@
 import Block from '../../utils/Block';
 import { ChatSettings } from '../ChatSettings';
 import { ChatReply } from '../ChatReply';
-import { Validation } from '../../utils/Validation';
-import { ChatMessageInterface } from '../../model/data';
+import { ChatMessageInterface, ChatUserInterface } from '../../model/data';
 import template from './template';
 import styles from './style.module.less';
 
@@ -24,8 +23,8 @@ export class ChatWindow extends Block<ChatWindowProps> {
   init() {
     // chatSettings
     this.children.chatSettings = new ChatSettings({
-      chatUsers: ChatWindow.getChatUsers(),
-      chatMessages: this.props.chatMessages
+      chatUsers: ChatWindow.getChatUsers()! as ChatUserInterface[],
+      chatMessages: this.props.chatMessages,
     });
 
     // chatReply

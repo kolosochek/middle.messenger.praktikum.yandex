@@ -5,7 +5,8 @@ import styles from './style.module.less';
 
 
 interface ErrorViewProps {
-  mode?: 'error404' | 'error500';
+  mode: 'error404' | 'error500';
+  router: Router;
 
   events?: {
     click?: (e: MouseEvent) => void;

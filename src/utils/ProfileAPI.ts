@@ -5,7 +5,7 @@ export class ProfileAPI extends HTTPTransport {
     public userProfileUrl = "/user";
 
 
-    async getUserProfile(userId:string|number) {
+    async getUserProfileById(userId:string|number) {
         const result = await this.get(`${this.userProfileUrl}/${userId}`) 
         return result
     }

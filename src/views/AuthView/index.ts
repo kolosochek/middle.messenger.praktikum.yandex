@@ -30,7 +30,7 @@ export class AuthView extends Block<AuthViewProps> {
   }
 
   public static getIsAuthorized(): boolean {
-    return Boolean(Store.getItemByName('isAuthorized'));
+    return Boolean(Store.getItem('isAuthorized'));
   }
 
   init() {

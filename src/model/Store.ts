@@ -63,14 +63,14 @@ export class Store {
 
 
     public static getUserId() {
-        if (Store.getItemByName('profile')) {
-            const userObject = Store.getItemByName('profile')!;
-            return userObject.id;
+        if (Store.getItem('profile')) {
+            const profile = Store.getItem('profile')!;
+            return profile.id;
         } else {
             Store.authAPI.getUserInfo()
-                .then((user) => {
-                    Store.setItem('profile', user);
-                    return user.id
+                .then((profile) => {
+                    Store.setItem('profile', profile);
+                    return profile.id
                 })
                 .catch((requestError) => {
                     throw new Error(requestError)
@@ -78,7 +78,7 @@ export class Store {
         }
     }
 
-    public static getItemByName(obj: string) {
+    public static getItem(obj: string) {
         if (window.localStorage.getItem(obj)) {
             try {
                 return JSON.parse(window.localStorage.getItem(obj)!)
@@ -125,5 +125,6 @@ export class Store {
     public static clean(): void {
         Store.removeItem('activeChatId');
         Store.removeItem('chatUsers');
+        //Store.removeItem('profile');
       }
 }

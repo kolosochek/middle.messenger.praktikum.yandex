@@ -13,6 +13,7 @@ export interface ChatListMessageInterface {
 export class ChatAPI extends HTTPTransport{
     public chatListUrl = '/chats'
     public chatTokenUrl = '/chats/token/'
+    public createChatUrl = '/chats'
     public userId:string;
 
     async getChatList():Promise<Response>{
@@ -25,5 +26,13 @@ export class ChatAPI extends HTTPTransport{
 
     async getChatUsers(chatId:number|string):Promise<Response>{
         return this.get(`/chats/${chatId}/users`)
+    }
+
+    async createChat(title:string){
+        return this.post(this.createChatUrl, { 'title': `${title}`})
+    }
+
+    async deleteChat(chatId:string){
+        return this.delete(this.createChatUrl, { 'chatId': `${chatId}`})
     }
 }

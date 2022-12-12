@@ -17,14 +17,10 @@ export class ChatWindow extends Block<ChatWindowProps> {
     super({ ...props });
   }
 
-  public static getChatUsers(): object {
-    return window.localStorage.getItem('chatUsers') ? JSON.parse(window.localStorage.getItem('chatUsers')!) : {};
-  }
-
   init() {
     // chatSettings
     this.children.chatSettings = new ChatSettings({
-      chatUsers: ChatWindow.getChatUsers()! as ChatUserInterface[],
+      chatUsers: Store.getItem('chatUsers') as ChatUserInterface[],
       userId: Store.getUserId(),
     });
 

@@ -1,5 +1,6 @@
 import Block from '../../utils/Block';
 import { Router } from '../../utils/Router';
+import { Store } from '../../model/Store'
 import { ChatAsideProfile } from '../../components/ChatAsideProfile';
 import { ChatAsideSearch } from '../../components/ChatAsideSearch';
 import { ChatList } from '../../components/ChatList';
@@ -7,11 +8,11 @@ import { ChatWindow } from '../../components/ChatWindow';
 import { Validation } from '../../utils/Validation';
 import { ChatAPI } from '../../utils/ChatAPI'
 import { WebSocketAPI } from '../../utils/WebSocketAPI'
-import { Store } from '../../model/Store'
 import { ChatListItemInterface, ChatMessageInterface, ChatUserInterface } from '../../model/Store';
 import template from './template';
 import styles from './style.module.less';
 import chatReplyStyles from '../../components/ChatReply/style.module.less'
+import chatSettingsStyles from '../../components/ChatSettings/style.module.less'
 
 interface IndexViewProps {
   router?: Router;
@@ -24,24 +25,7 @@ export class IndexView extends Block<IndexViewProps> {
   public chatUsers: ChatUserInterface[]
   public activeChatToken: string;
   public userId: string | number;
-  public activeChatId: string | null;
 
-  public static setActiveChatId = (id: string | number): void => {
-    this.activeChatId = `${id}`;
-    window.localStorage.setItem('activeChatId', id.toString());
-  }
-
-  public static getActiveChatId = (): string => {
-    return this.activeChatId ? this.activeChatId : window.localStorage.getItem('activeChatId');
-  }
-
-  public static getChatUsers = (): ChatUserInterface[] => {
-    return this.chatUsers ? this.chatUsers : JSON.parse(window.localStorage.getItem('chatUsers')!);
-  }
-
-  public static setChatUsers(chatUsersObject: ChatUserInterface[]) {
-    window.localStorage.setItem('chatUsers', JSON.stringify(chatUsersObject));
-  }
 
   constructor() {
     super({});
@@ -56,7 +40,7 @@ export class IndexView extends Block<IndexViewProps> {
     this.chatAPI.getChatList().then((chatList) => {
       this.chatList = chatList;
     }).catch((responseError) => {
-      throw new Error(`Can't get chat List, reason: ${responseError}`)
+      throw new Error(`Can't get chat List, reason: ${responseError.reason}`)
     })
     // chatList
     this.children.chatList = new ChatList({
@@ -64,26 +48,26 @@ export class IndexView extends Block<IndexViewProps> {
         click: (e) => {
           // get chatId from click
           const activeChatId = e.target!.closest<HTMLDivElement>("div[chat_id]").getAttribute('chat_id');
-          IndexView.setActiveChatId(activeChatId);
+          Store.setItem('activeChatId', activeChatId);
 
           // toggle active class on proper ChatList item  and rerender that component
           this.children.chatList.setProps({
-            activeChatId: IndexView.getActiveChatId(),
+            activeChatId: Store.getItem('activeChatId'),
           });
 
           // get chatUsers
-          this.chatAPI.getChatUsers(IndexView.getActiveChatId()!).then((chatUsersObject) => {
-            IndexView.setChatUsers(chatUsersObject)
+          this.chatAPI.getChatUsers(Store.getItem('activeChatId')!).then((chatUsersObject) => {
+            Store.setItem('chatUsers', chatUsersObject)
           })
           .catch((responseError) => {
             throw new Error(`Can't get chat users. Reason: ${responseError}`)
           })
 
           // get chat token
-          this.chatAPI.getChatToken(IndexView.getActiveChatId()! as number).then((activeChatObject) => {
+          this.chatAPI.getChatToken(Store.getItem('activeChatId')! as number).then((activeChatObject) => {
             this.activeChatToken = activeChatObject['token'];
             // create new webSocket
-            this.webSocket = new WebSocketAPI(this.userId, IndexView.getActiveChatId()!, this.activeChatToken)
+            this.webSocket = new WebSocketAPI(this.userId, Store.getItem('activeChatId')!, this.activeChatToken)
             //this.webSocket.keepAlive();
             this.webSocket.socket.addEventListener('open', () => {
               this.webSocket.getOldChatMessages();
@@ -117,7 +101,7 @@ export class IndexView extends Block<IndexViewProps> {
                 // let's update children components
                 this.children.chatWindow.setProps({
                   chatMessages: oldMessages.reverse(),
-                  chatUsers: IndexView.getChatUsers(),
+                  chatUsers: Store.getItem('chatUsers'),
                   userId: Store.getUserId(),
                 })
               } else {
@@ -134,12 +118,79 @@ export class IndexView extends Block<IndexViewProps> {
 
     // chatAsideProfile
     this.children.chatAsideProfile = new ChatAsideProfile({});
+    // create new chat
+    this.children.chatAsideProfile.props.events = {
+      click: (e:MouseEvent) => {
+        const target:HTMLLinkElement = e.target!.closest('#create_chat');
+        if (target !== null){
+          e.preventDefault();
+  
+          document.querySelector("form#create_chat_form")!.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const form:HTMLFormElement = e.target!.closest('form');
+            const input:HTMLInputElement = form.querySelector('input')!;
+            if (form !== null && input !== null && input.value.length){
+              this.chatAPI.createChat(input.value).then(() => {
+                const element:HTMLDivElement = document.querySelector(`div#modalwindow`)!;
+                if (element !== null){
+                  this.children.chatList.init()
+                  element.classList.toggle('state__visible');
+                }
+              })
+              .catch((requestError) => {
+                throw new Error(`Can't create new chat, reason: ${requestError.reason}`)
+              })
+            }
+          })
+        }
+      }
+    }
     // chatAsideSearch
     this.children.chatAsideSearch = new ChatAsideSearch({});
     // chatWindow
     this.children.chatWindow = new ChatWindow({
-      chatUsers: IndexView.getChatUsers(),
+      chatUsers: Store.getItem('chatUsers'),
     });
+
+    //chatSettings click
+    this.children.chatWindow.children.chatSettings.props.events = {
+      click: (e:MouseEvent) => {
+        const target = e.target!.closest<HTMLLinkElement>(`.${chatSettingsStyles['b-chat-settings-link']}`);
+        if (target !== null) {
+          e.preventDefault();
+          const element = document.querySelector<HTMLDivElement>(`.${chatSettingsStyles['b-chat-settings-wrapper']}`)
+          if (target !== null && element){
+            element.classList.toggle('state__visible');
+
+            const deleteChatLink = element.querySelector<HTMLLinkElement>('#delete_chat_link');
+            if (deleteChatLink !== null){
+              deleteChatLink.addEventListener('click', (e:MouseEvent) => {
+                // delete chat
+                const deleteChatForm:HTMLFormElement|null = document.querySelector('form#delete_chat');
+                if (deleteChatForm !== null) {
+                  deleteChatForm.addEventListener('submit', (e:SubmitEvent) => {
+                    e.preventDefault();
+                    this.chatAPI.deleteChat(Store.getItem('activeChatId')).then(() => {
+                      Store.clean();
+                      this.children.chatList.init();
+                      this.children.chatWindow.setProps({
+                        chatUsers: null,
+                      });
+                      const closeModal = e.target.querySelector<HTMLButtonElement>("#close_modal")!
+                      element.classList.toggle('state__visible');
+                      closeModal.click();
+                      //e.target.closest('#close_modal').trigger('click');
+                    }).catch((requestError) => {
+                      throw new Error(`Can't delete chat by id ${Store.getItem('activeChatId')}, reason: ${requestError}`)
+                    })
+                  })
+                }
+              })
+            }
+          }  
+        }
+      }
+    }
 
     // chatReply submit event handler
     this.children.chatWindow.children.chatReply.props.events = {

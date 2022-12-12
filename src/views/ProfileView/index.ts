@@ -1,5 +1,6 @@
 import Block from '../../utils/Block';
 import { Router } from '../../utils/Router';
+import { Store } from '../../model/Store';
 import { ProfileAPI } from '../../utils/ProfileAPI';
 import { ProfileInterface } from '../../model/user';
 import { InputComponent } from '../../components/InputComponent';
@@ -83,9 +84,6 @@ export class ProfileView extends Block<ProfileViewProps> {
     });
   }
 
-  public getUserProfile():ProfileInterface {
-    return JSON.parse(window.localStorage.getItem('userObject')!) as ProfileInterface;
-  }
 
   init() {
     this.profileAPI = new ProfileAPI();
@@ -99,7 +97,7 @@ export class ProfileView extends Block<ProfileViewProps> {
       case 'view': {
         if (this.props.userId){
           // fetch user data by given ID
-          this.profileAPI.getUserProfile(this.props.userId).then((requestSuccess) => {
+          this.profileAPI.getUserProfileById(this.props.userId).then((requestSuccess) => {
             this.props.profile = requestSuccess as ProfileInterface;
 
             // debug
@@ -113,7 +111,7 @@ export class ProfileView extends Block<ProfileViewProps> {
             throw new Error(`Can't get user profile, user is is: ${this.props.userId}, reason: ${requestError}`)
           })
         } else {
-          this.props.profile = this.getUserProfile();
+          this.props.profile = Store.getItem('profile') as ProfileInterface;
           this.createProfileFields(this.props.profile);
         }
         

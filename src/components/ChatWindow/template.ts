@@ -1,5 +1,5 @@
 import Handlebars from "handlebars";
-import { ChatWindow } from ".";
+import { Store } from "../../model/Store";
 import ImageComponent from "../../partials/ImageComponent";
 import { FormatDate } from "../../utils/FormatDate";
 
@@ -10,7 +10,7 @@ Handlebars.registerHelper('getHoursAndMinutes', function(rawDate){
     return `${FormatDate.addZero(dateObject.getHours())}:${FormatDate.addZero(dateObject.getMinutes())}`
 });
 Handlebars.registerHelper('getLoginById', function(id){
-    const chatUserList = ChatWindow.getChatUsers()
+    const chatUserList = Store.getItem('chatUsers');
     for(let chatUser of chatUserList){
         if(chatUser.id == id) {
             return chatUser.login

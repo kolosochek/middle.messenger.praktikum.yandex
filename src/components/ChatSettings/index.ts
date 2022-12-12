@@ -20,18 +20,6 @@ export class ChatSettings extends Block<ChatSettingsProps> {
 
   init() {
     ShowModal.bindToWindow();
-    this.props.events = {
-      click: (e) => {
-        const target = e.target!.closest<HTMLLinkElement>(`.${styles['b-chat-settings-link']}`);
-        if (target !== null) {
-          e.preventDefault();
-          const element = document.querySelector(`.${styles['b-chat-settings-wrapper']}`)
-          if (target !== null && element){
-            element.classList.toggle('state__visible');
-          }  
-        }
-      }
-    }
   }
 
   

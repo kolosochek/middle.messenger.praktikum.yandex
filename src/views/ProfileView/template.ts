@@ -19,11 +19,11 @@ const ProfilePageTemplate = `
         <section class="{{styles.b-profile-page-wrapper}}">
             <div class="{{styles.b-profile-page}}">
                 <div class="{{styles.b-profile-goback-wrapper}}">
-                    <a href="/#/" class="{{styles.b-profile-goback}} b-link">Back</a>
+                    <a href="/messenger" class="{{styles.b-profile-goback}} b-link">Back</a>
                 </div>
                 <div class="{{styles.b-profile-wrapper}}">
                     <div class="{{styles.b-profile}}">
-                        {{> ProfileAvatarComponent profile=profile styles=styles}}
+                        {{> ProfileAvatarComponent profile=profile styles=styles isCanChangeProfile=isCanChangeProfile}}
                         <div class="{{styles.b-profile-name-wrapper}}">
                             <h2 class="{{styles.b-profile-name}}">{{profile.first_name}}</h2>
                         </div>
@@ -33,22 +33,24 @@ const ProfilePageTemplate = `
                             {{{profileFieldSecondName}}}
                             {{{profileFieldLogin}}}
                             {{{profileFieldDisplayName}}}
-                            {{{profileFieldPhone}}}                        
-                            <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
-                                <div class='{{styles.b-profile-control}}'>
-                                    <a class='{{styles.b-link}}' href="/#/profile-edit">Edit profile info</a>
+                            {{{profileFieldPhone}}}   
+                            {{#if isCanChangeProfile}}                     
+                                <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
+                                    <div class='{{styles.b-profile-control}}'>
+                                        <a class='{{styles.b-link}}' href="/settings-edit">Edit profile info</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class='{{styles.b-profile-contol-wrapper}}'>
-                                <div class='{{styles.b-profile-control}}'>
-                                    <a class='{{styles.b-link}}' href="/#/profile-change-password">Change password</a>
+                                <div class='{{styles.b-profile-contol-wrapper}}'>
+                                    <div class='{{styles.b-profile-control}}'>
+                                        <a class='{{styles.b-link}}' href="/settings-change-password">Change password</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class='{{styles.b-profile-contol-wrapper}}'>
-                                <div class='{{styles.b-profile-control}}'>
-                                    <a class='{{styles.b-link}}' href="/#/logout">Logout</a>
+                                <div class='{{styles.b-profile-contol-wrapper}}'>
+                                    <div class='{{styles.b-profile-control}}'>
+                                        <a class='{{styles.b-link}}' href="/logout">Logout</a>
+                                    </div>
                                 </div>
-                            </div>
+                            {{/if}}
                         {{/if_eq}}
                         {{#if_eq this.mode "edit"}}
                             <form class="{{styles.b-profile-form}}">

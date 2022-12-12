@@ -9,9 +9,11 @@ const profileModalTemplate = `<form class={{styles.b-modal-window-content}}><h3 
 const ProfileAvatarComponent = `
 <figure class="{{styles.b-profile-avatar-wrapper}}">
     {{> ImageComponent image_url=profile.avatar_url width='130' height='130' class=styles.b-profile-avatar}}
+    {{#if isCanChangeProfile}}
     <div class="{{styles.b-profile-avatar-change-wrapper}}">
         <a class="{{styles.b-link}}" onclick="showModal('${profileModalTemplate}', '{{styles.b-profile-page}}')">Change picture</a>
     </div>
+    {{/if}}
 </figure>
 `
 

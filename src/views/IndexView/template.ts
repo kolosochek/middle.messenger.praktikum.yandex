@@ -10,7 +10,7 @@ const IndexPageTemplate = `
                         <!-- aside search -->
                         {{{chatAsideSearch}}}
                         <!-- conversations list -->
-                        {{{chatConversationList}}}
+                        {{{chatList}}}
                     </div>
                 </aside>
                 <!-- ChatWindow -->

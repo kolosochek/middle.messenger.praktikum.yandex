@@ -44,7 +44,19 @@
     padding: 5px;
     font-size: 1.1em;
   }
+
+  .b-submit-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 0 0 30px 0;
+
+    .b-submit {
+      margin: 0 0 0px;
+      margin-right: 20px;
+    }
+  }
 }
+
 
 .b-chat-info-wrapper {
   display: flex;
@@ -55,6 +67,20 @@
   .b-chat-info {
     display: flex;
     width: 100%;
+
+    .b-chat-users-wrapper {
+      display: flex;
+
+      .b-chat-user {
+        display: flex;
+        align-items: center;
+
+        .b-link {
+          padding: 3px 0 6px 5px;
+          font-size: 1.3em;
+        }
+      }
+    }
 
     .b-avatar-wrapper {
       align-self: center;

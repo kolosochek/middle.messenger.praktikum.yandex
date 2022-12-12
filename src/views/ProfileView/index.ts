@@ -1,6 +1,9 @@
 import Block from '../../utils/Block';
-import { User } from '../../model/user';
-import { ProfileField } from '../../components/ProfileField';
+import { Router } from '../../utils/Router';
+import { Store } from '../../model/Store';
+import { ProfileAPI } from '../../utils/ProfileAPI';
+import { ProfileInterface } from '../../model/user';
+import { InputComponent } from '../../components/InputComponent';
 import { Validation } from '../../utils/Validation';
 import { ShowModal } from '../../utils/ShowModal';
 import template from './template';
@@ -8,8 +11,11 @@ import styles from './style.module.less';
 
 
 interface ProfileViewProps {
-  mode: "view" | "edit"| "change-password";
-  profile?: object;
+  mode: "view" | "edit" | "change-password";
+  router: Router;
+  profile?: ProfileInterface;
+  userId?: number;
+  isCanChangeProfile: boolean;
 
   events?: {
     submit: (e: SubmitEvent) => void;
@@ -18,257 +24,244 @@ interface ProfileViewProps {
 
 
 export class ProfileView extends Block<ProfileViewProps> {
+  public profileAPI:ProfileAPI;
+
+
+  private createProfileFields(profile:ProfileInterface):void {
+    //ProfileFieldEmail
+    this.children.profileFieldEmail = new InputComponent({
+      name: 'email',
+      label: 'Email:',
+      value: profile.email,
+      type: 'text',
+      class: `${styles['b-profile-field']}`,
+      isDisabled: true,
+    });
+
+    //ProfileFieldFirstName
+    this.children.profileFieldFirstName = new InputComponent({
+      name: 'first_name',
+      label: 'First name:',
+      value: profile.first_name,
+      class: `${styles['b-profile-field']}`,
+      isDisabled: true,
+    });
+
+    //ProfileFieldSecondName
+    this.children.profileFieldSecondName = new InputComponent({
+      name: 'second_name',
+      label: 'Last name:',
+      value: profile.second_name,
+      class: `${styles['b-profile-field']}`,
+      isDisabled: true,
+    });
+
+    //ProfileFieldLogin
+    this.children.profileFieldLogin = new InputComponent({
+      name: 'login',
+      label: 'Login:',
+      value: profile.login,
+      class: `${styles['b-profile-field']}`,
+      isDisabled: true,
+    });
+
+    //ProfileFieldDisplayName
+    this.children.profileFieldDisplayName = new InputComponent({
+      name: 'display_name',
+      label: 'Display name:',
+      value: profile.login,
+      class: `${styles['b-profile-field']}`,
+      isDisabled: true,
+    });
+
+    //ProfileFieldPhone
+    this.children.profileFieldPhone = new InputComponent({
+      name: 'phone',
+      label: 'Phone:',
+      value: profile.phone,
+      class: `${styles['b-profile-field']}`,
+      isDisabled: true,
+    });
+  }
+
+
   init() {
-    ShowModal.bindToWindow();
-    const viewMode = this.props.mode;
+    this.profileAPI = new ProfileAPI();
+    this.props.isCanChangeProfile = true;
+    // modal
+    ShowModal.bindToWindow();    
+    
+    // get View mode and switch it
+    const viewMode = this.props.mode as ProfileViewProps['mode'];
     switch (viewMode) {
       case 'view': {
-        this.props.profile = User.getUserProfile();
+        if (this.props.userId){
+          // fetch user data by given ID
+          this.profileAPI.getUserProfileById(this.props.userId).then((requestSuccess) => {
+            this.props.profile = requestSuccess as ProfileInterface;
 
-        //ProfileFieldEmail
-        this.children.profileFieldEmail = new ProfileField({
-          name: 'email',
-          label: 'Email:',
-          value: this.props.profile.email,
-        });
+            // debug
+            console.log('this.props.profile')
+            console.log(this.props.profile)
+            //
 
-        //ProfileFieldFirstName
-        this.children.profileFieldFirstName = new ProfileField({
-          name: 'first_name',
-          label: 'First name:',
-          value: this.props.profile.first_name,
-        });
-
-        //ProfileFieldSecondName
-        this.children.profileFieldSecondName = new ProfileField({
-          name: 'second_name',
-          label: 'Last name:',
-          value: this.props.profile.last_name,
-        });
-
-        //ProfileFieldLogin
-        this.children.profileFieldLogin = new ProfileField({
-          name: 'login',
-          label: 'Login:',
-          value: this.props.profile.login,
-        });
-
-        //ProfileFieldDisplayName
-        this.children.profileFieldDisplayName = new ProfileField({
-          name: 'display_name',
-          label: 'Display name:',
-          value: this.props.profile.login,
-        });
-
-        //ProfileFieldPhone
-        this.children.profileFieldPhone = new ProfileField({
-          name: 'phone',
-          label: 'Phone:',
-          value: this.props.profile.phone,
-        });
+            this.props.isCanChangeProfile = false;
+            this.createProfileFields(this.props.profile);
+          }).catch((requestError) => {
+            throw new Error(`Can't get user profile, user is is: ${this.props.userId}, reason: ${requestError}`)
+          })
+        } else {
+          this.props.profile = Store.getItem('profile') as ProfileInterface;
+          this.createProfileFields(this.props.profile);
+        }
+        
+        /*
+        {
+          "id": 133,
+          "first_name": "Slatrex",
+          "second_name": "Slatrex",
+          "display_name": null,
+          "login": "slatrex",
+          "avatar": "/a1c13f2b-fe82-43ee-9c02-1d5c7899b837/0ad1c483-befa-4eb5-8fa9-e6d1962d3b32_ivana-la-2N6wr_tVIgM-unsplash.jpg",
+          "email": "slatrex+11@yandex.ru",
+          "phone": "8888888888888"
+        }
+        */
 
         break;
       }
       case 'edit': {
-        this.props.profile = User.getUserProfile();
-
         //ProfileFieldEmail
-        this.children.profileFieldEmail = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldEmail = new InputComponent({
           name: 'email',
           label: 'Email:',
-          value: this.props.profile.email,
-          errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
+          placeholder: this.props.profile.email,
+          type: 'text',
+          class: `${styles['b-profile-field']}`,
+          errorMessage: 'Email is invalid!',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
         //ProfileFieldFirstName
-        this.children.profileFieldFirstName = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldFirstName = new InputComponent({
           name: 'first_name',
           label: 'First name:',
-          value: this.props.profile.first_name,
+          placeholder: this.props.profile.first_name,
+          class: `${styles['b-profile-field']}`,
           errorMessage: 'First name is invalid!',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
         //ProfileFieldSecondName
-        this.children.profileFieldSecondName = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldSecondName = new InputComponent({
           name: 'second_name',
           label: 'Last name:',
-          value: this.props.profile.last_name,
+          placeholder: this.props.profile.last_name,
+          class: `${styles['b-profile-field']}`,
           errorMessage: 'Last name is invalid!',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
         //ProfileFieldLogin
-        this.children.profileFieldLogin = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldLogin = new InputComponent({
           name: 'login',
           label: 'Login:',
-          value: this.props.profile.login,
+          placeholder: this.props.profile.login,
+          class: `${styles['b-profile-field']}`,
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
         //ProfileFieldDisplayName
-        this.children.profileFieldDisplayName = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldDisplayName = new InputComponent({
           name: 'display_name',
           label: 'Display name:',
-          value: this.props.profile.login,
+          placeholder: this.props.profile.login,
+          class: `${styles['b-profile-field']}`,
         });
 
         //ProfileFieldPhone
-        this.children.profileFieldPhone = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldPhone = new InputComponent({
           name: 'phone',
           label: 'Phone:',
-          value: this.props.profile.phone,
+          placeholder: this.props.profile.phone,
+          class: `${styles['b-profile-field']}`,
           errorMessage: 'Phone is invalid',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
         break;
       }
       case 'change-password': {
-        this.props.profile = User.getUserProfile();
-
         //ProfileFieldOldPassword
-        this.children.profileFieldOldPassword = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldOldPassword = new InputComponent({
           name: 'old_password',
           label: 'Old password:',
           type: 'password',
-          value: '**********',
+          placeholder: '**********',
+          class: `${styles['b-profile-field']}`,
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
         //ProfileFieldNewPassword
-        this.children.profileFieldNewPassword = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldNewPassword = new InputComponent({
           name: 'password',
           label: 'New password:',
           type: 'password',
-          value: '**********',
+          placeholder: '**********',
+          class: `${styles['b-profile-field']}`,
           defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
 
         //ProfileFieldNewPassword
-        this.children.profileFieldConfirmPassword = new ProfileField({
-          mode: viewMode,
+        this.children.profileFieldConfirmPassword = new InputComponent({
           name: 'confirm_password',
           label: 'Confirm new password:',
           type: 'password',
-          value: '**********',
+          placeholder: '**********',
+          class: `${styles['b-profile-field']}`,
           defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
 
           events: {
-            focus: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
-            blur: (e) => {
-              Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-                ? Validation.removeFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-                : Validation.setFieldIsValid(e.target, e.target.parentNode.parentNode, styles)
-            },
+            focus: (e) => Validation.validateField(e, styles),
+            blur: (e) => Validation.validateField(e, styles),
           }
         });
         break;
       }
       default: {
-        this.props.profile = User.getUserProfile();
         break;
       }
     }
@@ -276,31 +269,12 @@ export class ProfileView extends Block<ProfileViewProps> {
     this.props.events = {
       submit: (e) => {
         e.preventDefault();
-        const form = e.target;
-        const formAllFields = form.querySelectorAll('input');
+        const form = e.target! as HTMLFormElement;
+        const formAllFields = form.querySelectorAll<HTMLInputElement>('input');
         if (formAllFields.length) {
-          formAllFields.forEach((element) => {
-            Validation.validateFieldByType(element?.getAttribute('name'), element.value)
-              ? Validation.removeFieldIsValid(element, element.parentNode.parentNode, styles)
-              : Validation.setFieldIsValid(element, element.parentNode.parentNode, styles)
+          formAllFields.forEach((element: HTMLInputElement) => {
+            Validation.validateField(element, styles)
           });
-        }
-
-        if (this.props.mode === 'change-password') {
-          // check passwords for equality
-          const passwordFields = form.querySelectorAll('input[name="password"], input[name="confirm_password"]');
-          if (passwordFields.length == 2) {
-            passwordFields.forEach((element) => {
-              if (element.value && Validation.validateFieldByType(element.getAttribute('name'), element.value)) {
-                Validation.compareFields(passwordFields[0].value, passwordFields[1].value)
-                  ? Validation.removeFieldIsValid(element, element.parentNode.parentNode, styles, "Passwords didn't match")
-                  : Validation.setFieldIsValid(element, element.parentNode.parentNode, styles, "Passwords didn't match")
-              } else {
-                Validation.setFieldIsValid(element, element.parentNode.parentNode, styles);
-              }
-            })
-          }
-          //
         }
 
         const formInvalidFields = form.querySelectorAll('input[isinvalid="true"]');
@@ -308,15 +282,33 @@ export class ProfileView extends Block<ProfileViewProps> {
           form.classList.add(`${styles['state__invalid']}`);
         } else {
           form.classList.remove(`${styles['state__invalid']}`);
-          // TODO: remove me
-          // sprint_2_task
-          const formData = Object.fromEntries(new FormData(form));
-          console.log(formData);
-          //
-          const result = prompt('Change page?', `yeah`)
-          if (result !== null) {
-            window.location.hash = '/profile';
-            window.dispatchEvent(new HashChangeEvent("hashchange"));
+          // check password for equality
+          if (this.props.mode === 'change-password') {
+            // check passwords for equality
+            const passwordField = form.querySelector<HTMLInputElement>('input[name="password"]');
+            const confirmPasswordField = form.querySelector<HTMLInputElement>('input[name="confirm_password"]');
+            if (Validation.comparePasswordFields(passwordField, confirmPasswordField, styles)) {
+              /* TODO: remove me
+              // sprint_2_task
+              const formData = Object.fromEntries(new FormData(form));
+              console.log(formData);
+              */
+              const result = prompt('Change page?', `yeah`)
+              if (result !== null) {
+                Router.go("/settings")
+              }
+              }
+            //
+          } else {
+            // TODO: remove me
+            // sprint_2_task
+            const formData = Object.fromEntries(new FormData(form));
+            console.log(formData);
+            //
+            const result = prompt('Change page?', `yeah`)
+            if (result !== null) {
+              Router.go("/settings")
+            }
           }
         }
       }

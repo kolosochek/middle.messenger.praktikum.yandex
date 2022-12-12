@@ -6,8 +6,8 @@ import styles from './style.module.less';
 
 interface ChatReplyProps {
   events?: {
-    click?: (e:MouseEvent) => void;
-    submit?: (e:SubmitEvent) => void;
+    click?: (e: MouseEvent) => void;
+    submit?: (e: SubmitEvent) => void;
   }
 }
 
@@ -15,39 +15,36 @@ export class ChatReply extends Block<ChatReplyProps> {
   constructor(props: ChatReplyProps) {
     super({ ...props });
     this.props.events = Object.assign({
-      click: (e) => {
+      click: (e: MouseEvent) => {
         const target = e.target.closest(`.${styles['b-attach-file-link']}`);
-        const element = document.querySelector(`.${styles['b-chat-reply-attachment-wrapper']}`);
-        if (target !== null && element){
+        const element = document.querySelector<HTMLElement>(`.${styles['b-chat-reply-attachment-wrapper']}`);
+        if (target !== null && element) {
           element.classList.toggle('state__visible');
         }
-      }, 
-  }, this.props.events);
+      },
+    }, this.props.events);
   }
 
   init() {
     this.children.messageInputComponent = new InputComponent({
       name: 'message',
       type: 'text',
-      nowrap: 'true',
       errorMessage: "Can't be empty",
-
+      tabindex: '0',
+      /*
       events: {
         focus: (e) => {
-          Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-            ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-            : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+          Validation.validateField(e.target, styles)
         },
         blur: (e) => {
-          Validation.validateFieldByType(e.target?.getAttribute('name'), e.target?.value)
-            ? Validation.removeFieldIsValid(e.target, e.target.parentNode, styles)
-            : Validation.setFieldIsValid(e.target, e.target.parentNode, styles)
+          Validation.validateField(e.target, styles)
         },
       }
+      */
     });
   }
 
-  
+
   render() {
     return this.compile(template, { ...this.props, styles });
   }

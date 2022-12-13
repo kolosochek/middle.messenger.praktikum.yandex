@@ -1,14 +1,16 @@
 import Block from '../../utils/Block';
+import { ShowModal } from '../../utils/ShowModal';
 import { Router } from '../../utils/Router';
 import { Store } from '../../model/Store';
+import { AuthAPI } from '../../utils/AuthAPI';
 import { ProfileAPI } from '../../utils/ProfileAPI';
 import { UpdateProfileInterface, ProfileInterface, UpdateProfilePasswordInterface } from '../../model/Store';
 import { InputComponent } from '../../components/InputComponent';
 import { Validation } from '../../utils/Validation';
-import { ShowModal } from '../../utils/ShowModal';
+import { GoBack } from '../../components/GoBack';
+import { ProfileAvatar } from '../../components/ProfileAvatar';
 import template from './template';
 import styles from './style.module.less';
-import { GoBack } from '../../components/GoBack';
 
 
 interface ProfileViewProps {
@@ -26,6 +28,7 @@ interface ProfileViewProps {
 
 export class ProfileView extends Block<ProfileViewProps> {
   public profileAPI:ProfileAPI;
+  public authAPI:AuthAPI;
 
 
   private createProfileFields(profile:ProfileInterface):void {
@@ -89,16 +92,11 @@ export class ProfileView extends Block<ProfileViewProps> {
   init() {
     this.props.profile = Store.getItem('profile') as ProfileInterface;
     this.profileAPI = new ProfileAPI();
+    this.authAPI = new AuthAPI();
     this.props.isCanChangeProfile = true;
     // modal
     ShowModal.bindToWindow();    
 
-    // goback button
-    this.children.goBack = new GoBack({ 
-      router: this.props.router,
-      class: styles['b-profile-goback'],
-      title: 'Back'
-     })
     
     // get View mode and switch it
     const viewMode = this.props.mode as ProfileViewProps['mode'];
@@ -120,7 +118,6 @@ export class ProfileView extends Block<ProfileViewProps> {
             throw new Error(`Can't get user profile, user is is: ${this.props.userId}, reason: ${requestError}`)
           })
         } else {
-          this.props.profile = Store.getItem('profile') as ProfileInterface;
           this.createProfileFields(this.props.profile);
         }
         break;
@@ -259,6 +256,43 @@ export class ProfileView extends Block<ProfileViewProps> {
         break;
       }
     }
+    // goback button
+    this.children.goBack = new GoBack({ 
+      router: this.props.router,
+      class: styles['b-profile-goback'],
+      title: 'Back'
+    });
+
+    // profile avatar
+    this.children.profileAvatar = new ProfileAvatar({ 
+      profile: Store.getItem('profile'),
+      isCanChangeProfile: this.props.isCanChangeProfile,
+      profileStyles: styles,
+      events: {
+        click: (e:MouseEvent) => {
+          const link:HTMLLIElement = e.target!.closest("a");
+          if(link !== null) {
+            const form:HTMLFormElement = document.querySelector('form#upload_avatar')!;
+            if (form !== null) {
+              form.addEventListener('submit', (e:SubmitEvent) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                this.profileAPI.changeUserAvatar(formData).then((newProfile) => {
+                  Store.setItem('profile', newProfile);
+                  this.init();
+                  form.parentNode!.parentNode!.click();
+                }).catch((requestError) => {
+                  throw new Error(`Can't change user avatar, reason: ${requestError.reason ?? requestError}`)
+                })
+              })
+            }
+          }
+        }
+      }
+    });
+
+
+
 
     this.props.events = {
       submit: (e) => {
@@ -300,13 +334,19 @@ export class ProfileView extends Block<ProfileViewProps> {
           } else if (this.props.mode === 'edit') {
             const formData:ProfileInterface = Object.fromEntries(new FormData(form));
             this.profileAPI.setUserProfile(formData as UpdateProfileInterface).then(() => {
-              Store.updateUserProfile();
-              this.props.router.go("/settings");
+              this.authAPI.getUserInfo()
+              .then((profile) => {
+                  Store.setItem('profile', profile);
+                  this.props.router.go("/settings");
+              })
+              .catch((requestError) => {
+                throw new Error(`Can't get user profile ${Store.getUserId()}, reason: ${requestError.reason ?? requestError}`)
+              })
             }).catch((requestError) => {
               if (requestError.reason) {
                 Validation.setFormError(form, styles, requestError.reason);
               } else {
-                throw new Error(`Can't update user profile ${Store.getUserId()}, reason: ${requestError.toString()}`)
+                throw new Error(`Can't update user profile ${Store.getUserId()}, reason: ${requestError.reason ?? requestError}`)
               }
             })
             

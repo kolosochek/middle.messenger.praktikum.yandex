@@ -12,8 +12,10 @@ export interface ChatListMessageInterface {
 
 export class ChatAPI extends HTTPTransport{
     public chatListUrl = '/chats'
-    public chatTokenUrl = '/chats/token/'
     public createChatUrl = '/chats'
+    public chatTokenUrl = '/chats/token/'
+    public findUserUrl = '/user/search/'
+    public addRemoveUserUrl = '/chats/users/'
     public userId:string;
 
     async getChatList():Promise<Response>{
@@ -34,5 +36,17 @@ export class ChatAPI extends HTTPTransport{
 
     async deleteChat(chatId:string){
         return this.delete(this.createChatUrl, { 'chatId': `${chatId}`})
+    }
+
+    async findUser(query: Record<string, string>){
+        return this.post(this.findUserUrl, query)
+    }
+
+    async addUser(query: Record<string, string | string[]>){
+        return this.put(this.addRemoveUserUrl, query)
+    }
+
+    async removeUser(query: Record<string, string | string[]>){
+        return this.delete(this.addRemoveUserUrl, query)
     }
 }

@@ -19,7 +19,8 @@ export class GoBack extends Block<GoBackProps> {
     this.props.events = {
       click: (e) => {
         e.preventDefault();
-        this.props.router.goBack();
+        this.props.router.go('/messenger')
+        //this.props.router.goBack();
       }
     }
   }

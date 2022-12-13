@@ -6,7 +6,8 @@ export class ProfileAPI extends HTTPTransport {
     public userGetProfileUrl = "/user";
     public userSetProfileUrl = "/user/profile";
     public userSetPasswordUrl = "/user/password";
-    public userSearchdUrl = "/user/search";
+    public userSearchUrl = "/user/search";
+    public userChangeAvatarUrl = "/user/profile/avatar";
 
 
     async getUserProfileById(userId:string|number) {
@@ -25,7 +26,12 @@ export class ProfileAPI extends HTTPTransport {
     }
 
     async searchUserByLogin(userLogin:string) {
-        const result = await this.post(`${this.userSearchdUrl}`, userLogin) 
+        const result = await this.post(`${this.userSearchUrl}`, userLogin) 
+        return result
+    }
+
+    async changeUserAvatar(formData:FormData) {
+        const result = await this.put(`${this.userChangeAvatarUrl}`, formData) 
         return result
     }
 }

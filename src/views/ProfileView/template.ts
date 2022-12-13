@@ -1,7 +1,5 @@
 import Handlebars from "handlebars";
-import ProfileAvatarComponent from "../../partials/ProfileAvatarComponent";
 
-Handlebars.registerPartial('ProfileAvatarComponent', ProfileAvatarComponent);
 Handlebars.registerHelper('if_eq', function(a, b, opts) {
     if (a == b) {
         return opts.fn(this);
@@ -23,7 +21,7 @@ const ProfilePageTemplate = `
                 </div>
                 <div class="{{styles.b-profile-wrapper}}">
                     <div class="{{styles.b-profile}}">
-                        {{> ProfileAvatarComponent profile=profile styles=styles isCanChangeProfile=isCanChangeProfile}}
+                        {{{profileAvatar}}}
                         <div class="{{styles.b-profile-name-wrapper}}">
                             <h2 class="{{styles.b-profile-name}}">{{profile.display_name}}</h2>
                         </div>

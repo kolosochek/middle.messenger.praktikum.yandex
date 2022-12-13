@@ -27,13 +27,10 @@ export class WebSocketAPI {
     // keep socket alive
     public keepAlive() {
         setInterval(() => {
-            // debug
-            console.log('ping...')
-            //
             this.socket.addEventListener('open', () => {
                 this.socket.send(JSON.stringify({
                     content: '',
-                    type: 'ping',
+                    type: 'message',
                 }));
             });
         }, this.socketPingInterval);

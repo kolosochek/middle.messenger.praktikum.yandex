@@ -1,6 +1,6 @@
 import Block from '../../utils/Block';
 import { Router } from '../../utils/Router';
-import { Store } from '../../model/Store'
+import { ProfileInterface, Store } from '../../model/Store'
 import { ChatAsideProfile } from '../../components/ChatAsideProfile';
 import { ChatAsideSearch } from '../../components/ChatAsideSearch';
 import { ChatList } from '../../components/ChatList';
@@ -26,6 +26,16 @@ export class IndexView extends Block<IndexViewProps> {
   public activeChatToken: string;
   public userId: string | number;
 
+
+  public updateChatUsers() {
+    // get chatUsers
+    this.chatAPI.getChatUsers(Store.getItem('activeChatId')!).then((chatUsersObject) => {
+      Store.setItem('chatUsers', chatUsersObject)
+    })
+      .catch((responseError) => {
+        throw new Error(`Can't get chat users. Reason: ${responseError}`)
+      })
+  }
 
   constructor() {
     super({});
@@ -55,20 +65,14 @@ export class IndexView extends Block<IndexViewProps> {
             activeChatId: Store.getItem('activeChatId'),
           });
 
-          // get chatUsers
-          this.chatAPI.getChatUsers(Store.getItem('activeChatId')!).then((chatUsersObject) => {
-            Store.setItem('chatUsers', chatUsersObject)
-          })
-          .catch((responseError) => {
-            throw new Error(`Can't get chat users. Reason: ${responseError}`)
-          })
+          this.updateChatUsers();
 
           // get chat token
           this.chatAPI.getChatToken(Store.getItem('activeChatId')! as number).then((activeChatObject) => {
             this.activeChatToken = activeChatObject['token'];
             // create new webSocket
             this.webSocket = new WebSocketAPI(this.userId, Store.getItem('activeChatId')!, this.activeChatToken)
-            //this.webSocket.keepAlive();
+            this.webSocket.keepAlive();
             this.webSocket.socket.addEventListener('open', () => {
               this.webSocket.getOldChatMessages();
             })
@@ -78,7 +82,7 @@ export class IndexView extends Block<IndexViewProps> {
               const dataObject = JSON.parse(event.data);
               // if we got a new message(!Array)
               if (!Array.isArray(dataObject)) {
-                if(dataObject.type == 'message'){
+                if (dataObject.type == 'message' && dataObject.content) {
                   // got new message
                   this.chatAPI.getChatList().then((chatList) => {
                     this.chatList = chatList;
@@ -91,17 +95,14 @@ export class IndexView extends Block<IndexViewProps> {
                   // refresh messages in the chat
                   this.webSocket.getOldChatMessages();
                 }
-                if(dataObject.type == 'pong'){
+                if (dataObject.type == 'pong') {
                   console.log('keepAlive response')
                 } else {
-                  console.log(dataObject)
                 }
-                
-              } else if(Array.isArray(dataObject)) {
-                
-                  console.log(dataObject)
+
+              } else if (Array.isArray(dataObject)) {
                 // old chat messages recieved
-                const oldMessages:ChatMessageInterface[] = dataObject as ChatMessageInterface[];
+                const oldMessages: ChatMessageInterface[] = dataObject as ChatMessageInterface[];
                 // let's update children components
                 this.children.chatWindow.setProps({
                   chatMessages: oldMessages.reverse(),
@@ -124,26 +125,26 @@ export class IndexView extends Block<IndexViewProps> {
     this.children.chatAsideProfile = new ChatAsideProfile({});
     // create new chat
     this.children.chatAsideProfile.props.events = {
-      click: (e:MouseEvent) => {
-        const target:HTMLLinkElement = e.target!.closest('#create_chat');
-        if (target !== null){
+      click: (e: MouseEvent) => {
+        const target: HTMLLinkElement = e.target!.closest('#create_chat');
+        if (target !== null) {
           e.preventDefault();
-  
+
           document.querySelector("form#create_chat_form")!.addEventListener('submit', (e) => {
             e.preventDefault();
-            const form:HTMLFormElement = e.target!.closest('form');
-            const input:HTMLInputElement = form.querySelector('input')!;
-            if (form !== null && input !== null && input.value.length){
+            const form: HTMLFormElement = e.target!.closest('form');
+            const input: HTMLInputElement = form.querySelector('input')!;
+            if (form !== null && input !== null && input.value.length) {
               this.chatAPI.createChat(input.value).then(() => {
-                const element:HTMLDivElement = document.querySelector(`div#modalwindow`)!;
-                if (element !== null){
+                const element: HTMLDivElement = document.querySelector(`div#modalwindow`)!;
+                if (element !== null) {
                   this.children.chatList.init()
                   element.classList.toggle('state__visible');
                 }
               })
-              .catch((requestError) => {
-                throw new Error(`Can't create new chat, reason: ${requestError.reason}`)
-              })
+                .catch((requestError) => {
+                  throw new Error(`Can't create new chat, reason: ${requestError.reason}`)
+                })
             }
           })
         }
@@ -158,21 +159,136 @@ export class IndexView extends Block<IndexViewProps> {
 
     //chatSettings click
     this.children.chatWindow.children.chatSettings.props.events = {
-      click: (e:MouseEvent) => {
+      click: (e: MouseEvent) => {
         const target = e.target!.closest<HTMLLinkElement>(`.${chatSettingsStyles['b-chat-settings-link']}`);
         if (target !== null) {
           e.preventDefault();
           const element = document.querySelector<HTMLDivElement>(`.${chatSettingsStyles['b-chat-settings-wrapper']}`)
-          if (target !== null && element){
+          if (target !== null && element) {
             element.classList.toggle('state__visible');
+            // add user to the chat
+            const addUserLink = element.querySelector<HTMLLinkElement>('#add_user_link');
+            if (addUserLink !== null) {
+              addUserLink.addEventListener('click', () => {
+                element.classList.toggle('state__visible');
+                const addUserChatForm = document.querySelector<HTMLFormElement>('form#add_user');
+                if (addUserChatForm !== null) {
+                  addUserChatForm.addEventListener('submit', (e: SubmitEvent) => {
+                    e.preventDefault();
+                    if (addUserChatForm.login.value) {
+                      this.chatAPI.findUser({
+                        'login': addUserChatForm.login.value,
+                      }).then((foundUsers) => {
+                        if (foundUsers && Array.isArray(foundUsers) && foundUsers.length) {
+                          Validation.setFormError(addUserChatForm, chatSettingsStyles, '');
+                          const getExistingChatUsersId = (): string[] => {
+                            let resultArr = []
+                            const chatUsers = Store.getItem('chatUsers');
+                            for (let user of chatUsers) {
+                              resultArr.push(user.id)
+                            }
+                            return resultArr
+                          }
+                          const userFound = foundUsers[0];
+                          let users = getExistingChatUsersId();
+                          let isUserAlreadyInChat = false;
+                          users.forEach((id) => {
+                            if (id == userFound.id) {
+                              isUserAlreadyInChat = true;
+                            }
+                          })
+                          if (isUserAlreadyInChat) {
+                            Validation.setFormError(addUserChatForm, chatSettingsStyles, `User ${addUserChatForm.login.value} is already in the chat!`);
+                          } else {
+                            users.push(userFound.id)
+                            this.chatAPI.addUser({
+                              "users": users,
+                              "chatId": Store.getItem('activeChatId'),
+                            }).then(() => {
+                              this.chatAPI.getChatUsers(Store.getItem('activeChatId')!).then((chatUsersObject) => {
+                                Store.setItem('chatUsers', chatUsersObject)
+                                this.children.chatWindow.children.chatSettings.setProps({
+                                  chatUsers: Store.getItem('chatUsers'),
+                                })
+                                addUserChatForm.parentNode!.parentNode!.click();
+                              })
+                              .catch((responseError) => {
+                                throw new Error(`Can't get chat users. Reason: ${responseError}`)
+                              })
+                            }).catch((requestError) => {
+                              Validation.setFormError(addUserChatForm, chatSettingsStyles, requestError.reason);
+                            })
+                          }
 
+                        } else {
+                          Validation.setFormError(addUserChatForm, chatSettingsStyles, `No users has been found!`)
+                        }
+                      }).catch((requestError) => {
+                        Validation.setFormError(addUserChatForm, chatSettingsStyles, requestError.reason);
+                      })
+                    } else {
+                      Validation.setFormError(addUserChatForm, chatSettingsStyles, `Username can't be empty!`);
+                    }
+                  })
+                }
+              })
+            }
+            // remove user from chat
+            const removeUserLink = element.querySelector<HTMLLinkElement>('#remove_user_link');
+            if (removeUserLink !== null) {
+              removeUserLink.addEventListener('click', () => {
+                element.classList.toggle('state__visible');
+                const removeUserChatForm = document.querySelector<HTMLFormElement>('form#remove_user');
+                if (removeUserChatForm !== null) {
+                  removeUserChatForm.addEventListener('submit', (e: SubmitEvent) => {
+                    e.preventDefault();
+                    if (removeUserChatForm.login.value) {
+                      const isUserAlreadyInChat = (username: string): string | boolean => {
+                        let isUserInChat: string | boolean = false;
+                        for (let user of Store.getItem('chatUsers')) {
+                          if (username == user.login) {
+                            isUserInChat = user.id
+                          }
+                        }
+                        return isUserInChat;
+                      }
+                      const userInChat = isUserAlreadyInChat(removeUserChatForm.login.value);
+                      if (userInChat) {
+                        this.chatAPI.removeUser({
+                          "users": [`${userInChat}`],
+                          "chatId": Store.getItem('activeChatId'),
+                        }).then(() => {
+                          this.chatAPI.getChatUsers(Store.getItem('activeChatId')!).then((chatUsersObject) => {
+                            Store.setItem('chatUsers', chatUsersObject)
+                            this.children.chatWindow.children.chatSettings.setProps({
+                              chatUsers: Store.getItem('chatUsers'),
+                            })
+                            removeUserChatForm.parentNode!.parentNode!.click();
+                          })
+                          .catch((responseError) => {
+                            throw new Error(`Can't get chat users. Reason: ${responseError}`)
+                          })
+                        }).catch((requestError) => {
+                          Validation.setFormError(removeUserChatForm, chatSettingsStyles, requestError.reason);
+                        })
+                      } else {
+                        Validation.setFormError(removeUserChatForm, chatSettingsStyles, `User ${removeUserChatForm.login.value} is not in the chat!`);
+                      }
+                    } else {
+                      Validation.setFormError(removeUserChatForm, chatSettingsStyles, `Username can't be empty!`);
+                    }
+                  })
+                }
+              })
+            }
+            // delete chat
             const deleteChatLink = element.querySelector<HTMLLinkElement>('#delete_chat_link');
-            if (deleteChatLink !== null){
-              deleteChatLink.addEventListener('click', (e:MouseEvent) => {
-                // delete chat
-                const deleteChatForm:HTMLFormElement|null = document.querySelector('form#delete_chat');
+            if (deleteChatLink !== null) {
+              deleteChatLink.addEventListener('click', () => {
+                element.classList.toggle('state__visible');
+                const deleteChatForm = document.querySelector<HTMLFormElement>('form#delete_chat');
                 if (deleteChatForm !== null) {
-                  deleteChatForm.addEventListener('submit', (e:SubmitEvent) => {
+                  deleteChatForm.addEventListener('submit', (e: SubmitEvent) => {
                     e.preventDefault();
                     this.chatAPI.deleteChat(Store.getItem('activeChatId')).then(() => {
                       Store.clean();
@@ -181,17 +297,16 @@ export class IndexView extends Block<IndexViewProps> {
                         chatUsers: null,
                       });
                       const closeModal = e.target.querySelector<HTMLButtonElement>("#close_modal")!
-                      element.classList.toggle('state__visible');
                       closeModal.click();
                       //e.target.closest('#close_modal').trigger('click');
                     }).catch((requestError) => {
-                      throw new Error(`Can't delete chat by id ${Store.getItem('activeChatId')}, reason: ${requestError}`)
+                      throw new Error(`Can't delete chat by id ${Store.getItem('activeChatId')}, reason: ${requestError.reason ?? requestError}`)
                     })
                   })
                 }
               })
             }
-          }  
+          }
         }
       }
     }
@@ -213,15 +328,20 @@ export class IndexView extends Block<IndexViewProps> {
           form.classList.add(`${chatReplyStyles['state__invalid']}`);
         } else {
           form.classList.remove(`${chatReplyStyles['state__invalid']}`);
-          // formData
-          const formData = Object.fromEntries(new FormData(form));
           this.webSocket.socket.send(JSON.stringify({
-            content: `${formData.message}`,
+            content: Validation.escapeHtml(form.message.value),
             type: 'message',
           }));
           message.value = '';
         }
-      }
+      },
+      click: (e: MouseEvent) => {
+        const target = e.target!.closest(`.${chatReplyStyles['b-attach-file-link']}`);
+        const element = document.querySelector<HTMLElement>(`.${chatReplyStyles['b-chat-reply-attachment-wrapper']}`);
+        if (target !== null && element) {
+          element.classList.toggle('state__visible');
+        }
+      },
     }
   }
 

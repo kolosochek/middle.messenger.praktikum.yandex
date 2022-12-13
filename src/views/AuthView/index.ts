@@ -20,6 +20,7 @@ export class AuthView extends Block<AuthViewProps> {
   public authAPI: AuthAPI;
 
   private _logoutUser(): void {
+    Store.clean();
     Store.removeItem('isAuthorized');
     Store.removeItem('profile');
   }

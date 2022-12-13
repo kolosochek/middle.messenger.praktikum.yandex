@@ -19,13 +19,13 @@ const ProfilePageTemplate = `
         <section class="{{styles.b-profile-page-wrapper}}">
             <div class="{{styles.b-profile-page}}">
                 <div class="{{styles.b-profile-goback-wrapper}}">
-                    <a href="/messenger" class="{{styles.b-profile-goback}} b-link">Back</a>
+                    {{{goBack}}}
                 </div>
                 <div class="{{styles.b-profile-wrapper}}">
                     <div class="{{styles.b-profile}}">
                         {{> ProfileAvatarComponent profile=profile styles=styles isCanChangeProfile=isCanChangeProfile}}
                         <div class="{{styles.b-profile-name-wrapper}}">
-                            <h2 class="{{styles.b-profile-name}}">{{profile.first_name}}</h2>
+                            <h2 class="{{styles.b-profile-name}}">{{profile.display_name}}</h2>
                         </div>
                         {{#if_eq this.mode "view"}}
                             {{{profileFieldEmail}}}
@@ -60,6 +60,9 @@ const ProfilePageTemplate = `
                             {{{profileFieldLogin}}}
                             {{{profileFieldDisplayName}}}
                             {{{profileFieldPhone}}}
+                            <div class="{{styles.b-form-error}}">
+                                <p class="{{styles.b-form-error-text}}"></p>
+                            </div>
                             <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                 <div class='{{styles.b-profile-control}}'>
                                     <button type='submit' class='{{styles.b-submit}}'>Save changes</button>
@@ -72,6 +75,9 @@ const ProfilePageTemplate = `
                             {{{profileFieldOldPassword}}}
                             {{{profileFieldNewPassword}}}
                             {{{profileFieldConfirmPassword}}}
+                            <div class="{{styles.b-form-error}}">
+                                <p class="{{styles.b-form-error-text}}"></p>
+                            </div>
                             <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                 <div class='{{styles.b-profile-control}}'>
                                     <button type='submit' class='{{styles.b-submit}}'>Save changes</button>

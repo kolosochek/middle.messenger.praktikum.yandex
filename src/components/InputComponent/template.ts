@@ -3,7 +3,7 @@ const InputComponentTemplate = `
         {{#if label}}<label class="{{styles.b-label}}" for="{{name}}">{{label}}</label>{{/if}}  
         <input 
         class="{{styles.b-input}}" 
-        name="{{name}}" type="{{type}}" 
+        name="{{name}}" {{#if type}}type="{{type}}"{{else}}type="text"{{/if}} 
         {{#if placeholder}}placeholder="{{placeholder}}"{{/if}}  
         {{#if value}}value="{{value}}"{{/if}} 
         {{#if pattern}}pattern="{{pattern}}"{{/if}}

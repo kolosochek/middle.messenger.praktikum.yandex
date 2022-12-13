@@ -28,13 +28,29 @@
         display: flex;
         flex-grow: 1;
         justify-content: center;
+        padding: 30px 0 50px;
 
         .b-profile {
           width: 600px;
           text-align: center;
+          
 
           .b-profile-form {
             min-width: 600px;
+
+            .b-form-error {
+              text-align: left;
+              display: none;
+              padding-top: 2px;
+      
+              .b-form-error-text {
+                color: @highlight-color;
+              }
+      
+              &.state__error {
+                display: block;
+              }
+            }
           }
 
           & > form {

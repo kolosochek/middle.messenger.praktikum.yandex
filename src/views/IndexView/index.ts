@@ -76,9 +76,6 @@ export class IndexView extends Block<IndexViewProps> {
             // new message recieved
             this.webSocket.socket.addEventListener('message', (event) => {
               const dataObject = JSON.parse(event.data);
-              //
-              console.log(dataObject);
-              //
               // if we got a new message(!Array)
               if (!Array.isArray(dataObject)) {
                 if(dataObject.type == 'message'){
@@ -94,8 +91,15 @@ export class IndexView extends Block<IndexViewProps> {
                   // refresh messages in the chat
                   this.webSocket.getOldChatMessages();
                 }
+                if(dataObject.type == 'pong'){
+                  console.log('keepAlive response')
+                } else {
+                  console.log(dataObject)
+                }
                 
               } else if(Array.isArray(dataObject)) {
+                
+                  console.log(dataObject)
                 // old chat messages recieved
                 const oldMessages:ChatMessageInterface[] = dataObject as ChatMessageInterface[];
                 // let's update children components

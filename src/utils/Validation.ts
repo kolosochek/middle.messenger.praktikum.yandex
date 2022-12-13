@@ -94,6 +94,8 @@ export class Validation {
       const errorMessageNode = form.querySelector<HTMLParagraphElement>(`p.${styles['b-form-error-text']}`)!;
       errorMessageNode.textContent = errorMessage;
       errorMessageNode.parentNode?.classList.add(`${styles['state__error']}`);
+    } else {
+      throw new Error(`Given form is empty`);
     }
   }
 

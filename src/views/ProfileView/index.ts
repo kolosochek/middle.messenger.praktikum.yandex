@@ -2,12 +2,13 @@ import Block from '../../utils/Block';
 import { Router } from '../../utils/Router';
 import { Store } from '../../model/Store';
 import { ProfileAPI } from '../../utils/ProfileAPI';
-import { ProfileInterface } from '../../model/user';
+import { UpdateProfileInterface, ProfileInterface, UpdateProfilePasswordInterface } from '../../model/Store';
 import { InputComponent } from '../../components/InputComponent';
 import { Validation } from '../../utils/Validation';
 import { ShowModal } from '../../utils/ShowModal';
 import template from './template';
 import styles from './style.module.less';
+import { GoBack } from '../../components/GoBack';
 
 
 interface ProfileViewProps {
@@ -69,7 +70,7 @@ export class ProfileView extends Block<ProfileViewProps> {
     this.children.profileFieldDisplayName = new InputComponent({
       name: 'display_name',
       label: 'Display name:',
-      value: profile.login,
+      value: profile.display_name,
       class: `${styles['b-profile-field']}`,
       isDisabled: true,
     });
@@ -86,10 +87,18 @@ export class ProfileView extends Block<ProfileViewProps> {
 
 
   init() {
+    this.props.profile = Store.getItem('profile') as ProfileInterface;
     this.profileAPI = new ProfileAPI();
     this.props.isCanChangeProfile = true;
     // modal
     ShowModal.bindToWindow();    
+
+    // goback button
+    this.children.goBack = new GoBack({ 
+      router: this.props.router,
+      class: styles['b-profile-goback'],
+      title: 'Back'
+     })
     
     // get View mode and switch it
     const viewMode = this.props.mode as ProfileViewProps['mode'];
@@ -114,20 +123,6 @@ export class ProfileView extends Block<ProfileViewProps> {
           this.props.profile = Store.getItem('profile') as ProfileInterface;
           this.createProfileFields(this.props.profile);
         }
-        
-        /*
-        {
-          "id": 133,
-          "first_name": "Slatrex",
-          "second_name": "Slatrex",
-          "display_name": null,
-          "login": "slatrex",
-          "avatar": "/a1c13f2b-fe82-43ee-9c02-1d5c7899b837/0ad1c483-befa-4eb5-8fa9-e6d1962d3b32_ivana-la-2N6wr_tVIgM-unsplash.jpg",
-          "email": "slatrex+11@yandex.ru",
-          "phone": "8888888888888"
-        }
-        */
-
         break;
       }
       case 'edit': {
@@ -136,7 +131,6 @@ export class ProfileView extends Block<ProfileViewProps> {
           name: 'email',
           label: 'Email:',
           placeholder: this.props.profile.email,
-          type: 'text',
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Email is invalid!',
 
@@ -164,7 +158,7 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldSecondName = new InputComponent({
           name: 'second_name',
           label: 'Last name:',
-          placeholder: this.props.profile.last_name,
+          placeholder: this.props.profile.second_name,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Last name is invalid!',
 
@@ -192,7 +186,7 @@ export class ProfileView extends Block<ProfileViewProps> {
         this.children.profileFieldDisplayName = new InputComponent({
           name: 'display_name',
           label: 'Display name:',
-          placeholder: this.props.profile.login,
+          placeholder: this.props.profile.display_name,
           class: `${styles['b-profile-field']}`,
         });
 
@@ -285,30 +279,37 @@ export class ProfileView extends Block<ProfileViewProps> {
           // check password for equality
           if (this.props.mode === 'change-password') {
             // check passwords for equality
-            const passwordField = form.querySelector<HTMLInputElement>('input[name="password"]');
-            const confirmPasswordField = form.querySelector<HTMLInputElement>('input[name="confirm_password"]');
+            const oldPasswordField = form.querySelector<HTMLInputElement>('input[name="old_password"]')!;
+            const passwordField = form.querySelector<HTMLInputElement>('input[name="password"]')!;
+            const confirmPasswordField = form.querySelector<HTMLInputElement>('input[name="confirm_password"]')!;
             if (Validation.comparePasswordFields(passwordField, confirmPasswordField, styles)) {
-              /* TODO: remove me
-              // sprint_2_task
-              const formData = Object.fromEntries(new FormData(form));
-              console.log(formData);
-              */
-              const result = prompt('Change page?', `yeah`)
-              if (result !== null) {
-                Router.go("/settings")
-              }
+              this.profileAPI.setUserPassword({
+                'oldPassword': oldPasswordField.value,
+                'newPassword': passwordField.value, 
+              } as UpdateProfilePasswordInterface).then(() => {
+                this.props.router.go('/settings')
+              }).catch((requestError) => {
+                if (requestError.reason) {
+                  Validation.setFormError(form, styles, requestError.reason);
+                } else {
+                  throw new Error(`Can't update user profile ${Store.getUserId()}, reason: ${requestError.toString()}`)
+                }
+              })
               }
             //
-          } else {
-            // TODO: remove me
-            // sprint_2_task
-            const formData = Object.fromEntries(new FormData(form));
-            console.log(formData);
-            //
-            const result = prompt('Change page?', `yeah`)
-            if (result !== null) {
-              Router.go("/settings")
-            }
+          } else if (this.props.mode === 'edit') {
+            const formData:ProfileInterface = Object.fromEntries(new FormData(form));
+            this.profileAPI.setUserProfile(formData as UpdateProfileInterface).then(() => {
+              Store.updateUserProfile();
+              this.props.router.go("/settings");
+            }).catch((requestError) => {
+              if (requestError.reason) {
+                Validation.setFormError(form, styles, requestError.reason);
+              } else {
+                throw new Error(`Can't update user profile ${Store.getUserId()}, reason: ${requestError.toString()}`)
+              }
+            })
+            
           }
         }
       }

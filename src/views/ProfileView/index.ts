@@ -17,7 +17,7 @@ interface ProfileViewProps {
   mode: "view" | "edit" | "change-password";
   router: Router;
   profile?: ProfileInterface;
-  userId?: number;
+  userId?: number|string;
   isCanChangeProfile: boolean;
 
   events?: {
@@ -31,7 +31,7 @@ export class ProfileView extends Block<ProfileViewProps> {
   public authAPI:AuthAPI;
 
 
-  private createProfileFields(profile:ProfileInterface):void {
+  public createProfileFields(profile:ProfileInterface):void {
     //ProfileFieldEmail
     this.children.profileFieldEmail = new InputComponent({
       name: 'email',
@@ -93,7 +93,6 @@ export class ProfileView extends Block<ProfileViewProps> {
     this.props.profile = Store.getItem('profile') as ProfileInterface;
     this.profileAPI = new ProfileAPI();
     this.authAPI = new AuthAPI();
-    this.props.isCanChangeProfile = true;
     // modal
     ShowModal.bindToWindow();    
 
@@ -102,27 +101,26 @@ export class ProfileView extends Block<ProfileViewProps> {
     const viewMode = this.props.mode as ProfileViewProps['mode'];
     switch (viewMode) {
       case 'view': {
-        if (this.props.userId){
-          // fetch user data by given ID
-          this.profileAPI.getUserProfileById(this.props.userId).then((requestSuccess) => {
-            this.props.profile = requestSuccess as ProfileInterface;
-
-            // debug
-            console.log('this.props.profile')
-            console.log(this.props.profile)
-            //
-
-            this.props.isCanChangeProfile = false;
-            this.createProfileFields(this.props.profile);
+        if (this.props.userId) {
+          this.profileAPI.getUserProfileById(this.props.userId).then((data)=> {
+            this.createProfileFields(data as ProfileInterface)
+            this.setProps({
+              profile: data as ProfileInterface
+            })
+            this.children.profileAvatar.setProps({
+              profile: data as ProfileInterface
+            })
           }).catch((requestError) => {
-            throw new Error(`Can't get user profile, user is is: ${this.props.userId}, reason: ${requestError}`)
+            throw new Error(`Can't get user by id ${this.props.userId}, reason: ${requestError.reason ?? requestError}`)
           })
         } else {
-          this.createProfileFields(this.props.profile);
+          this.props.isCanChangeProfile = true;
+          this.createProfileFields(this.props.profile)
         }
         break;
       }
       case 'edit': {
+        this.props.isCanChangeProfile = true;
         //ProfileFieldEmail
         this.children.profileFieldEmail = new InputComponent({
           name: 'email',
@@ -265,7 +263,7 @@ export class ProfileView extends Block<ProfileViewProps> {
 
     // profile avatar
     this.children.profileAvatar = new ProfileAvatar({ 
-      profile: Store.getItem('profile'),
+      profile: this.props.profile,
       isCanChangeProfile: this.props.isCanChangeProfile,
       profileStyles: styles,
       events: {

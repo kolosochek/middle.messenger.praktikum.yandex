@@ -4,10 +4,10 @@ import { HTTPTransport } from "./HTTPTransport";
 export interface ChatListMessageInterface {
         id: number,
         title: string,
-        avatar: any | null,
+        avatar: string | null,
         created_by: number,
         unread_count: number,
-        last_message: any | null
+        last_message: unknown
 }
 
 export class ChatAPI extends HTTPTransport{

@@ -46,7 +46,7 @@ export class HTTPTransport {
             if (method === METHOD.GET) {
                 if (data) {
                     url = `${url}?${Object.entries(data)
-                        .map(([key, value]: [key: string, value: any]): string => {
+                        .map(([key, value]: [key: string, value: unknown]): string => {
                             return `${key}=${value}`;
                         })
                         .join('&')}`;

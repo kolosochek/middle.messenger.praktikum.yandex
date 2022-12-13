@@ -1,7 +1,7 @@
 // this class can show modal view(window) by given raw html template string.
 // you can also specify the parent container class by passing @context param
 export class ShowModal{
-    public static showModal(template:string, context:string = ''):void {
+    public static showModal(template:string, context = ''):void {
         if (!template) {
             throw new Error('showModal function, no template is given!')
         }

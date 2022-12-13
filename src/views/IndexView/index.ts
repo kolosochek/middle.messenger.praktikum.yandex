@@ -1,6 +1,7 @@
 import Block from '../../utils/Block';
 import { Router } from '../../utils/Router';
-import { ProfileInterface, Store } from '../../model/Store'
+import { Store } from '../../model/Store'
+import { ChatListItemInterface, ChatMessageInterface, ChatUserInterface } from '../../model/Store';
 import { ChatAsideProfile } from '../../components/ChatAsideProfile';
 import { ChatAsideSearch } from '../../components/ChatAsideSearch';
 import { ChatList } from '../../components/ChatList';
@@ -8,7 +9,6 @@ import { ChatWindow } from '../../components/ChatWindow';
 import { Validation } from '../../utils/Validation';
 import { ChatAPI } from '../../utils/ChatAPI'
 import { WebSocketAPI } from '../../utils/WebSocketAPI'
-import { ChatListItemInterface, ChatMessageInterface, ChatUserInterface } from '../../model/Store';
 import template from './template';
 import styles from './style.module.less';
 import chatReplyStyles from '../../components/ChatReply/style.module.less'
@@ -48,6 +48,7 @@ export class IndexView extends Block<IndexViewProps> {
     this.userId = Store.getUserId();
     // get aside chatList items
     this.chatAPI.getChatList().then((chatList) => {
+      Store.setItem('chatList', chatList);
       this.chatList = chatList;
     }).catch((responseError) => {
       throw new Error(`Can't get chat List, reason: ${responseError.reason}`)
@@ -97,8 +98,7 @@ export class IndexView extends Block<IndexViewProps> {
                 }
                 if (dataObject.type == 'pong') {
                   console.log('keepAlive response')
-                } else {
-                }
+                } 
 
               } else if (Array.isArray(dataObject)) {
                 // old chat messages recieved
@@ -182,15 +182,15 @@ export class IndexView extends Block<IndexViewProps> {
                         if (foundUsers && Array.isArray(foundUsers) && foundUsers.length) {
                           Validation.setFormError(addUserChatForm, chatSettingsStyles, '');
                           const getExistingChatUsersId = (): string[] => {
-                            let resultArr = []
+                            const resultArr = []
                             const chatUsers = Store.getItem('chatUsers');
-                            for (let user of chatUsers) {
+                            for (const user of chatUsers) {
                               resultArr.push(user.id)
                             }
                             return resultArr
                           }
                           const userFound = foundUsers[0];
-                          let users = getExistingChatUsersId();
+                          const users = getExistingChatUsersId();
                           let isUserAlreadyInChat = false;
                           users.forEach((id) => {
                             if (id == userFound.id) {
@@ -245,7 +245,7 @@ export class IndexView extends Block<IndexViewProps> {
                     if (removeUserChatForm.login.value) {
                       const isUserAlreadyInChat = (username: string): string | boolean => {
                         let isUserInChat: string | boolean = false;
-                        for (let user of Store.getItem('chatUsers')) {
+                        for (const user of Store.getItem('chatUsers')) {
                           if (username == user.login) {
                             isUserInChat = user.id
                           }

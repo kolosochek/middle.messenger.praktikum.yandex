@@ -1,7 +1,7 @@
 export class WebSocketAPI {
     public baseUrl = 'wss://ya-praktikum.tech/ws/chats'
     public socket: WebSocket;
-    public socketPingInterval = 10000;
+    public socketPingInterval = 5000;
     public socketWaitForReadyStateInterval = 500;
     public socketRetriesCount = 5;
 

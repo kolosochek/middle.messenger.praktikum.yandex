@@ -16,7 +16,7 @@ const ChatSettingsTemplate = `
         <div class="{{styles.b-chat-users-wrapper}}">
             {{#each this.chatUsers}}
                 <div class="{{../styles.b-chat-user}}">
-                    {{> AvatarComponent image_url=this.avatar_url styles=../styles}}     
+                    {{> AvatarComponent avatar_url=this.avatar styles=../styles}}     
                     <a class="{{../styles.b-link}}" href="{{#if_eq this.id ../userId}}/settings{{else}}/users/{{this.id}}{{/if_eq}}">{{this.login}}{{#if @last}}{{else}},{{/if}}</a>
                 </div>
             {{/each}}
@@ -29,7 +29,9 @@ const ChatSettingsTemplate = `
         <div class="{{styles.b-chat-settings}}">
             <a id="add_user_link" class="{{styles.b-link}} {{styles.b-user-add}}" onclick="showModal('${addUserTemplate}', '{{styles.b-chat-page}}')"> + Add user</a>
             <a id="remove_user_link" class="{{styles.b-link}} {{styles.b-user-remove}}" onclick="showModal('${removeUserTemplate}', '{{styles.b-chat-page}}')"> &#215; Remove user</a>
+            {{#if isChatAdmin}}
             <a id="delete_chat_link" class="{{styles.b-link}} {{styles.b-user-remove}}" onclick="showModal('${deleteChatTemplate}', '{{styles.b-chat-page}}')"> ! Delete chat</a>
+            {{/if}}
         </div>
     </div>
 </div>

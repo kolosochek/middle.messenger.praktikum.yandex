@@ -1,5 +1,4 @@
 import { ShowModal } from '../../utils/ShowModal';
-import { ChatAPI } from '../../utils/ChatAPI';
 import Block from '../../utils/Block';
 import template from './template';
 import styles from './style.module.less';

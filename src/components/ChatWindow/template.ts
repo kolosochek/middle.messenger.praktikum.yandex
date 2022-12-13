@@ -11,7 +11,7 @@ Handlebars.registerHelper('getHoursAndMinutes', function(rawDate){
 });
 Handlebars.registerHelper('getLoginById', function(id){
     const chatUserList = Store.getItem('chatUsers');
-    for(let chatUser of chatUserList){
+    for(const chatUser of chatUserList){
         if(chatUser.id == id) {
             return chatUser.login
         }

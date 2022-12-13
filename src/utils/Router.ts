@@ -16,7 +16,6 @@ export type pathType =
     | '/error404'
     | '/error500'
     | '/user'
-    | '/user/'
 
 interface Route {
     path: pathType,
@@ -31,17 +30,21 @@ export class Router {
     public currentRoute: Route;
     public currentView: Route['view'];
     public currentPath: Route['path'] | false;
+    public currentViewParams: Record<string, string>
     public isExternalRoute: boolean;
 
 
-    public getInstance(){
-        // debug
-        console.log('router._instance')
-        //
-    }
-
-    public _parseLocation = (): pathType => {
-        return window.location.pathname.toLowerCase() as pathType || '/';
+    public _parseLocation = ():pathType => {
+        const path = window.location.pathname.toLowerCase() as pathType || '/'
+        const onlyNumbers = new RegExp(/(\d+)/)
+        const usersDynamicalParams = new RegExp(/^\/users\/(\d)*/g);
+        if (usersDynamicalParams.test(path) && path.match(onlyNumbers)){
+            this.currentViewParams = {
+                userId: path.match(onlyNumbers)![0]
+            }
+            return '/user'
+        }
+        return path;
     }
 
     public goBack(): void {
@@ -52,12 +55,8 @@ export class Router {
         window.history.forward();
     }
 
-    public useRoute(route: Route, actions?:object): void {
-        if (actions){
-
-        } else {
-            this.routesArray.push(route);
-        }
+    public useRoute(route: Route): void {        
+        this.routesArray.push(route);
     }
 
     public go(path: Route['path']): void {
@@ -163,7 +162,10 @@ export class Router {
         if (root !== null) {
             root.innerHTML = '';
             // render view && inject compiled HTML to DOM
-            const view = new router.currentRoute.view(router.currentRoute.options);
+            let view = new router.currentRoute.view(router.currentRoute.options);
+            if (this.currentViewParams){
+                view = new router.currentRoute.view(Object.assign(router.currentRoute.options, this.currentViewParams))
+            } 
             root.appendChild(view.getContent()!);
             view.dispatchComponentDidMount();
         } else {

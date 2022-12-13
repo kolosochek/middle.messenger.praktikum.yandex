@@ -69,7 +69,7 @@ export class IndexView extends Block<IndexViewProps> {
           this.updateChatUsers();
 
           // get chat token
-          this.chatAPI.getChatToken(Store.getItem('activeChatId')! as number).then((activeChatObject) => {
+          this.chatAPI.getChatToken(Store.getItem('activeChatId')!).then((activeChatObject) => {
             this.activeChatToken = activeChatObject['token'];
             // create new webSocket
             this.webSocket = new WebSocketAPI(this.userId, Store.getItem('activeChatId')!, this.activeChatToken)
@@ -98,7 +98,7 @@ export class IndexView extends Block<IndexViewProps> {
                 }
                 if (dataObject.type == 'pong') {
                   console.log('keepAlive response')
-                } 
+                }
 
               } else if (Array.isArray(dataObject)) {
                 // old chat messages recieved
@@ -212,9 +212,9 @@ export class IndexView extends Block<IndexViewProps> {
                                 })
                                 addUserChatForm.parentNode!.parentNode!.click();
                               })
-                              .catch((responseError) => {
-                                throw new Error(`Can't get chat users. Reason: ${responseError}`)
-                              })
+                                .catch((responseError) => {
+                                  throw new Error(`Can't get chat users. Reason: ${responseError}`)
+                                })
                             }).catch((requestError) => {
                               Validation.setFormError(addUserChatForm, chatSettingsStyles, requestError.reason);
                             })
@@ -265,9 +265,9 @@ export class IndexView extends Block<IndexViewProps> {
                             })
                             removeUserChatForm.parentNode!.parentNode!.click();
                           })
-                          .catch((responseError) => {
-                            throw new Error(`Can't get chat users. Reason: ${responseError}`)
-                          })
+                            .catch((responseError) => {
+                              throw new Error(`Can't get chat users. Reason: ${responseError}`)
+                            })
                         }).catch((requestError) => {
                           Validation.setFormError(removeUserChatForm, chatSettingsStyles, requestError.reason);
                         })
@@ -288,19 +288,26 @@ export class IndexView extends Block<IndexViewProps> {
                 element.classList.toggle('state__visible');
                 const deleteChatForm = document.querySelector<HTMLFormElement>('form#delete_chat');
                 if (deleteChatForm !== null) {
+                  const closeModal = deleteChatForm.querySelector<HTMLButtonElement>("#close_modal")!
+                  closeModal.addEventListener('click', (e: MouseEvent) => {
+                    e.preventDefault();
+                    deleteChatForm.parentNode!.parentNode!.click();
+                  })
                   deleteChatForm.addEventListener('submit', (e: SubmitEvent) => {
                     e.preventDefault();
+                    // debug
+                    console.log(Store.getItem('activeChatId'))
+                    //
                     this.chatAPI.deleteChat(Store.getItem('activeChatId')).then(() => {
                       Store.clean();
                       this.children.chatList.init();
                       this.children.chatWindow.setProps({
                         chatUsers: null,
                       });
-                      const closeModal = e.target.querySelector<HTMLButtonElement>("#close_modal")!
-                      closeModal.click();
-                      //e.target.closest('#close_modal').trigger('click');
-                    }).catch((requestError) => {
-                      throw new Error(`Can't delete chat by id ${Store.getItem('activeChatId')}, reason: ${requestError.reason ?? requestError}`)
+                      deleteChatForm.parentNode!.parentNode!.click();
+                    }).catch(() => {
+                      deleteChatForm.parentNode!.parentNode!.click();
+                      //throw new Error(`Can't delete chat by id ${Store.getItem('activeChatId')}, reason: ${requestError.reason ?? requestError}`)
                     })
                   })
                 }

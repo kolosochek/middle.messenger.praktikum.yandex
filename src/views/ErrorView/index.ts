@@ -16,18 +16,6 @@ interface ErrorViewProps {
 
 export class ErrorView extends Block<ErrorViewProps> {
   init() {
-    this.props.events = {
-      click: (e) => {
-        if (e.target !== null) {
-          const node = e.target.closest("a");
-          if (node !== null) {
-            e.preventDefault();
-            Router.goBack();
-          }
-        }
-
-      }
-    }
     const mode = this.props.mode;
     //Maybe we'll want to pass custom props by given mode 
     switch (mode) {

@@ -31,11 +31,11 @@ export class ChatAPI extends HTTPTransport{
     }
 
     async createChat(title:string){
-        return this.post(this.createChatUrl, { 'title': `${title}`})
+        return this.post(this.createChatUrl, { 'title': `${title}` })
     }
 
     async deleteChat(chatId:string){
-        return this.delete(this.createChatUrl, { 'chatId': `${chatId}`})
+        return this.delete(this.createChatUrl, { 'chatId': `${chatId}` })
     }
 
     async findUser(query: Record<string, string>){

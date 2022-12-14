@@ -16,22 +16,22 @@ export class ProfileAPI extends HTTPTransport {
     }
 
     async setUserProfile(userProfile:UpdateProfileInterface) {
-        const result = await this.put(`${this.userSetProfileUrl}`, userProfile) 
+        const result = await this.put(`${this.userSetProfileUrl}`, { data: userProfile }) 
         return result
     }
 
     async setUserPassword(userPassword:UpdateProfilePasswordInterface) {
-        const result = await this.put(`${this.userSetPasswordUrl}`, userPassword) 
+        const result = await this.put(`${this.userSetPasswordUrl}`, { data: userPassword }) 
         return result
     }
 
     async searchUserByLogin(userLogin:string) {
-        const result = await this.post(`${this.userSearchUrl}`, userLogin) 
+        const result = await this.post(`${this.userSearchUrl}`, { data: userLogin }) 
         return result
     }
 
     async changeUserAvatar(formData:FormData) {
-        const result = await this.put(`${this.userChangeAvatarUrl}`, formData) 
+        const result = await this.put(`${this.userChangeAvatarUrl}`, { data: formData }) 
         return result
     }
 }

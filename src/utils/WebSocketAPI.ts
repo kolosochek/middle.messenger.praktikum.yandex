@@ -59,16 +59,4 @@ export class WebSocketAPI {
     public close(): void {
         this.socket.close();
     }
-
-    temp() {
-        socket.addEventListener('open', () => {
-            console.log('Соединение установлено');
-
-            socket.send(JSON.stringify({
-                content: 'Моё второе сообщение миру!',
-                type: 'message',
-            }));
-        });
-
-    }
 }

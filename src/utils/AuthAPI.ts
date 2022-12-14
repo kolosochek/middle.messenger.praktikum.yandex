@@ -23,11 +23,11 @@ export class AuthAPI extends HTTPTransport {
 
 
     authorizeUser(authFormData: AuthFormInterface): Promise<Response> {
-        return this.post(this.authUserUrl, authFormData)        
+        return this.post(this.authUserUrl, { data: authFormData })        
     }
 
     registerUser(registerFormData: RegisterFormInterface): Promise<Response> {
-        return this.post(this.registerUserUrl, registerFormData)    
+        return this.post(this.registerUserUrl, { data: registerFormData })    
     }
 
     getUserInfo(): Promise<Response> {
@@ -35,6 +35,6 @@ export class AuthAPI extends HTTPTransport {
     }
     
     logoutUser(): Promise<Response> {
-        return this.post(this.logoutUserUrl, {})
+        return this.post(this.logoutUserUrl, { data: {}})
     }
 }

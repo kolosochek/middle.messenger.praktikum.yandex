@@ -4,8 +4,9 @@ import { Validation } from '../../utils/Validation';
 import { AuthAPI, AuthFormInterface, RegisterFormInterface } from '../../utils/AuthAPI';
 import { Store } from '../../model/Store';
 import { InputComponent } from '../../components/InputComponent';
+import { Link } from '../../components/Link';
 import template from './template';
-import styles from './style.module.less';
+import * as styles from './style.module.less';
 
 
 interface AuthViewProps {
@@ -20,6 +21,7 @@ export class AuthView extends Block<AuthViewProps> {
   public authAPI: AuthAPI;
 
   private _logoutUser(): void {
+    Store.clean();
     Store.removeItem('isAuthorized');
     Store.removeItem('profile');
   }
@@ -46,10 +48,7 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'login',
           type: 'text',
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         // passwordInputComponent
         this.children.passwordInputComponent = new InputComponent({
@@ -57,11 +56,15 @@ export class AuthView extends Block<AuthViewProps> {
           name: 'password',
           type: 'password',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
+        // signup link
+        this.children.signupLink = new Link({
+          router: this.props.router,
+          href: "/sign-up",
+          title: "Sign up",
+          class: styles['b-link']
+        })
         break;
       }
       // signup
@@ -73,10 +76,7 @@ export class AuthView extends Block<AuthViewProps> {
           type: 'email',
           placeholder: 'sebastian1337@gmail.com',
           errorMessage: 'Email is invalid!',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         // firstNameInputComponent
         this.children.firstNameInputComponent = new InputComponent({
@@ -85,10 +85,7 @@ export class AuthView extends Block<AuthViewProps> {
           type: 'text',
           placeholder: 'Sebastian',
           errorMessage: 'First name is invalid',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         // lastNameInputComponent
         this.children.lastNameInputComponent = new InputComponent({
@@ -97,10 +94,7 @@ export class AuthView extends Block<AuthViewProps> {
           type: 'text',
           placeholder: 'Pereiro',
           errorMessage: 'Last name is invalid',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         // loginInputComponent
         this.children.loginInputComponent = new InputComponent({
@@ -109,10 +103,7 @@ export class AuthView extends Block<AuthViewProps> {
           type: 'text',
           placeholder: 'sebastian1337',
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         // phoneInputComponent
         this.children.phoneInputComponent = new InputComponent({
@@ -122,10 +113,7 @@ export class AuthView extends Block<AuthViewProps> {
           //pattern: '[+]{1}[0-9]{6,14}',
           placeholder: '+79048891488',
           errorMessage: 'Phone is invalid',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         // passwordInputComponent
         this.children.passwordInputComponent = new InputComponent({
@@ -135,10 +123,7 @@ export class AuthView extends Block<AuthViewProps> {
           placeholder: 'ASDASDASD2',
           defaultErrorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         // confirmPasswordInputComponent
         this.children.confirmPasswordInputComponent = new InputComponent({
@@ -148,11 +133,15 @@ export class AuthView extends Block<AuthViewProps> {
           placeholder: 'ASDASDASD2',
           defaultErrorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, contain at least one Capital letter, and digit',
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
+        // signin link
+        this.children.loginLink = new Link({
+          router: this.props.router,
+          href: "/",
+          title: "Login",
+          class: styles['b-link']
+        })
         break;
       }
       // logout

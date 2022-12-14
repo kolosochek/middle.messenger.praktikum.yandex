@@ -7,10 +7,11 @@ enum METHOD {
 }
 
 type Options = {
-    method: METHOD;
+    method?: METHOD;
     data?: unknown;
 };
 
+type HTTPMethod<TResponse> = (url: string, options?: Options) => Promise<TResponse>
 
 export class HTTPTransport {
     public baseUrl = 'https://ya-praktikum.tech/api/v2';
@@ -18,26 +19,26 @@ export class HTTPTransport {
         return Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')));
     }
 
-    async get<TResponse>(url: string, data?: {}): Promise<TResponse> {
-        return this.request(url, {method: METHOD.GET, data});
+    get: HTTPMethod<Response> = (url, options = {}) => (
+        this.request(url, {...options, method: METHOD.GET })
+    )
+
+    post: HTTPMethod<Response> = (url: string, data: {}) => {
+        return this.request(url, { method: METHOD.POST, data });
     }
 
-    async post<TResponse>(url: string, data: {}): Promise<TResponse> {
-        return this.request(url, {method: METHOD.POST, data});
+    put: HTTPMethod<Response> = (url: string, data: {}) => {
+        return this.request(url, { method: METHOD.PUT, data });
     }
 
-    async put<TResponse>(url: string, data: {}): Promise<TResponse> {
-        return this.request(url, {method: METHOD.PUT, data});
+    delete: HTTPMethod<Response> = (url: string, data: {}) => {
+        return this.request(url, { method: METHOD.DELETE, data });
     }
 
-    async delete<TResponse>(url: string, data: {}): Promise<TResponse> {
-        return this.request(url, {method: METHOD.DELETE, data});
-    }
-
-    async request<TResponse>(
+    request: HTTPMethod<Response> = (
         url: string,
-        options: Options = {method: METHOD.GET},
-    ): Promise<TResponse> {
+        options: Options = { method: METHOD.GET },
+    ) => {
         return new Promise((resolve, reject) => {
             const {method, data} = options;
 
@@ -46,7 +47,7 @@ export class HTTPTransport {
             if (method === METHOD.GET) {
                 if (data) {
                     url = `${url}?${Object.entries(data)
-                        .map(([key, value]: [key: string, value: any]): string => {
+                        .map(([key, value]: [key: string, value: unknown]): string => {
                             return `${key}=${value}`;
                         })
                         .join('&')}`;

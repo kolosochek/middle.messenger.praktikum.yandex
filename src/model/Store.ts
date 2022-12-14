@@ -1,17 +1,28 @@
 import { AuthAPI } from "../utils/AuthAPI";
 
 export interface ProfileInterface {
-    //
-    id?: string|number,
+    id?: string | number,
     avatar?: string,
-    //
-    avatar_url?: string,
     login?: string,
     first_name?: string,
     second_name?: string,
+    display_name?: string,
     email?: string,
     phone?: string,
-    password?: string, 
+    password?: string,
+}
+export interface UpdateProfileInterface {
+    first_name?: string,
+    second_name?: string,
+    display_name?: string,
+    login?: string,
+    email?: string,
+    phone?: string,
+}
+
+export interface UpdateProfilePasswordInterface {
+    oldPassword: string,
+    newPassword: string,
 }
 
 export interface ChatListItemLastMessageInterface {
@@ -45,7 +56,7 @@ export interface ChatMessageInterface {
     file: unknown
 }
 
-export interface ChatUserInterface  {
+export interface ChatUserInterface {
     id: number,
     first_name: string,
     ssecond_name: string,
@@ -55,26 +66,31 @@ export interface ChatUserInterface  {
     email: string,
     phone: string,
     role: "regular" | "admin"
-  }
+}
 
 
 export class Store {
     public static authAPI = new AuthAPI();
 
 
+    public static updateUserProfile() {
+        Store.authAPI.getUserInfo()
+            .then((profile) => {
+                Store.setItem('profile', profile);
+                return profile.id;
+            })
+            .catch((requestError) => {
+                throw new Error(requestError)
+            })
+    }
+
     public static getUserId() {
         if (Store.getItem('profile')) {
             const profile = Store.getItem('profile')!;
             return profile.id;
         } else {
-            Store.authAPI.getUserInfo()
-                .then((profile) => {
-                    Store.setItem('profile', profile);
-                    return profile.id
-                })
-                .catch((requestError) => {
-                    throw new Error(requestError)
-                })
+            return Store.updateUserProfile();
+            
         }
     }
 
@@ -94,12 +110,12 @@ export class Store {
     public static setItem(keyName: string, value: object | boolean | string) {
         if (keyName && value) {
             try {
-                if(value instanceof Object) {
+                if (value instanceof Object) {
                     window.localStorage.setItem(keyName, JSON.stringify(value))
                 } else {
                     window.localStorage.setItem(keyName, value.toString())
                 }
-                
+
             }
             catch (e) {
                 throw new Error(`Can't set { ${keyName}: ${value} }`);
@@ -125,6 +141,5 @@ export class Store {
     public static clean(): void {
         Store.removeItem('activeChatId');
         Store.removeItem('chatUsers');
-        //Store.removeItem('profile');
-      }
+    }
 }

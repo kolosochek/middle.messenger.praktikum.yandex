@@ -16,7 +16,6 @@ export type pathType =
     | '/error404'
     | '/error500'
     | '/user'
-    | '/user/'
 
 interface Route {
     path: pathType,
@@ -27,21 +26,34 @@ interface Route {
 }
 
 export class Router {
+    private static _instance: Router;
     public routesArray: Route[] = [];
     public currentRoute: Route;
     public currentView: Route['view'];
     public currentPath: Route['path'] | false;
+    public currentViewParams: Record<string, string>
     public isExternalRoute: boolean;
 
 
-    public getInstance(){
-        // debug
-        console.log('router._instance')
-        //
-    }
+    constructor() {
+        if (Router._instance) {
+          return Router._instance;
+        }
+    
+        Router._instance = this;
+      }
 
-    public _parseLocation = (): pathType => {
-        return window.location.pathname.toLowerCase() as pathType || '/';
+    public _parseLocation = ():pathType => {
+        const path = window.location.pathname.toLowerCase() as pathType || '/'
+        const onlyNumbers = new RegExp(/(\d+)/)
+        const usersDynamicalParams = new RegExp(/^\/users\/(\d)*/g);
+        if (usersDynamicalParams.test(path) && path.match(onlyNumbers)){
+            this.currentViewParams = {
+                userId: path.match(onlyNumbers)![0]
+            }
+            return '/user'
+        }
+        return path;
     }
 
     public goBack(): void {
@@ -52,20 +64,16 @@ export class Router {
         window.history.forward();
     }
 
-    public useRoute(route: Route, actions?:object): void {
-        if (actions){
-
-        } else {
-            this.routesArray.push(route);
-        }
+    public useRoute(route: Route): void {        
+        this.routesArray.push(route);
     }
 
     public go(path: Route['path']): void {
+        this.isExternalRoute = true;
         this.currentRoute = this.getRouteByPath(path);
         this.currentPath = path;
-        this.isExternalRoute = true;
-        window.location.pathname = path;
-        window.dispatchEvent(new HashChangeEvent("popstate"));
+        window.history.pushState({}, '', path);
+        this.renderRoute()
     }
 
     public getRouteByPath(path: Route['path']): Route {
@@ -146,24 +154,26 @@ export class Router {
         router.useRoute({ path: '/error500', view: ErrorView, options: { mode: 'error500', router: router } ,isAuthorizationRequired: true }); 
     }
 
-    public renderRoute(router:Router): void {
-        const path: pathType = router.currentPath || router._parseLocation();
-        if (router.isExternalRoute) {
-            router.isExternalRoute = false;
-            router.currentPath = false;
+    public renderRoute(): void {
+        const path: pathType = this.currentPath || this._parseLocation();
+        if (this.isExternalRoute) {
+            this.isExternalRoute = false;
+            this.currentPath = false;
         } else {
             if(AuthView.getIsAuthorized() && path == '/') {
-                router.go('/messenger')
+                this.go('/messenger')
             } else {
-                router.currentRoute = router.getRouteByPath(path);
-                router.currentView = router.currentRoute.view;
+                this.currentRoute = this.getRouteByPath(path);
+                this.currentView = this.currentRoute.view;
             }
         }
         const root = document.getElementById('root') as HTMLDivElement;
         if (root !== null) {
             root.innerHTML = '';
-            // render view && inject compiled HTML to DOM
-            const view = new router.currentRoute.view(router.currentRoute.options);
+            let view = new this.currentRoute.view(this.currentRoute.options);
+            if (this.currentViewParams){
+                view = new this.currentRoute.view(Object.assign(this.currentRoute.options, this.currentViewParams))
+            } 
             root.appendChild(view.getContent()!);
             view.dispatchComponentDidMount();
         } else {

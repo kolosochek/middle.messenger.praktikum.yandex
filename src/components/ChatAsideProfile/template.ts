@@ -4,7 +4,7 @@ const ChatAsideProfileTemplate = `
 <section class="{{styles.b-profile-navigation-wrapper}}">
     <div class="{{styles.b-profile-navigation}}">
         <a id="create_chat" class="{{styles.b-link}} {{styles.b-logout}}" href="#" onclick="showModal('${createChatTemplate}', '{{styles.b-chat-page}}')">Create chat</a>
-        <a class="{{styles.b-link}} {{styles.b-profile}}" href="/settings">My Profile</a>
+        {{{myProfileLink}}}
     </div>
 </section>
 `

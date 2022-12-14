@@ -19,7 +19,7 @@ const ChatListTemplate = `
             {{#each chatList}}
             <div class="{{../styles.b-conversation-wrapper}}{{#if_eq ../activeChatId this.id}} {{../styles.state__active}}{{/if_eq}}">
                 <div class="{{../styles.b-conversation}}" chat_id="{{this.id}}">
-                    {{> AvatarComponent image_url=this.avatar styles=../styles}}
+                    {{> AvatarComponent avatar_url=this.avatar styles=../styles}}
                     <div class="{{../styles.b-message-wrapper}}">
                         <div class="{{../styles.b-message}}">
                             <p class="{{../styles.b-profile-title}}">{{this.title}}</p>

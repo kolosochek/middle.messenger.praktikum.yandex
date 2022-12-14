@@ -28,6 +28,7 @@
         display: flex;
         flex-grow: 1;
         justify-content: center;
+        padding: 30px 0 50px;
 
         .b-profile {
           width: 600px;
@@ -35,6 +36,20 @@
 
           .b-profile-form {
             min-width: 600px;
+
+            .b-form-error {
+              text-align: left;
+              display: none;
+              padding-top: 2px;
+
+              .b-form-error-text {
+                color: @highlight-color;
+              }
+
+              &.state__error {
+                display: block;
+              }
+            }
           }
 
           & > form {
@@ -55,39 +70,6 @@
 
               & > p {
                 display: block;
-              }
-            }
-          }
-
-          .b-profile-avatar-wrapper {
-            margin: 60px 0 20px;
-            height: 130px;
-            position: relative;
-            z-index: 100;
-            overflow: hidden;
-
-            &:hover .b-profile-avatar-change-wrapper {
-              transition: 500ms ease-out top;
-              top: -136px;
-            }
-
-            .b-profile-avatar {
-              border-radius: 50%;
-            }
-
-            .b-profile-avatar-change-wrapper {
-              transition: 500ms ease-out top;
-              position: relative;
-              z-index: 10;
-              top: 135px;
-
-              & > .b-link {
-                line-height: 130px;
-                background: @shadow-color;
-                display: inline-block;
-                width: 132px;
-                height: 132px;
-                border-radius: 50%;
               }
             }
           }

@@ -1,7 +1,5 @@
 import Handlebars from "handlebars";
-import ProfileAvatarComponent from "../../partials/ProfileAvatarComponent";
 
-Handlebars.registerPartial('ProfileAvatarComponent', ProfileAvatarComponent);
 Handlebars.registerHelper('if_eq', function(a, b, opts) {
     if (a == b) {
         return opts.fn(this);
@@ -19,13 +17,13 @@ const ProfilePageTemplate = `
         <section class="{{styles.b-profile-page-wrapper}}">
             <div class="{{styles.b-profile-page}}">
                 <div class="{{styles.b-profile-goback-wrapper}}">
-                    <a href="/messenger" class="{{styles.b-profile-goback}} b-link">Back</a>
+                    {{{goBackLink}}}
                 </div>
                 <div class="{{styles.b-profile-wrapper}}">
                     <div class="{{styles.b-profile}}">
-                        {{> ProfileAvatarComponent profile=profile styles=styles isCanChangeProfile=isCanChangeProfile}}
+                        {{{profileAvatar}}}
                         <div class="{{styles.b-profile-name-wrapper}}">
-                            <h2 class="{{styles.b-profile-name}}">{{profile.first_name}}</h2>
+                            <h2 class="{{styles.b-profile-name}}">{{profile.display_name}}</h2>
                         </div>
                         {{#if_eq this.mode "view"}}
                             {{{profileFieldEmail}}}
@@ -37,17 +35,17 @@ const ProfilePageTemplate = `
                             {{#if isCanChangeProfile}}                     
                                 <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                     <div class='{{styles.b-profile-control}}'>
-                                        <a class='{{styles.b-link}}' href="/settings-edit">Edit profile info</a>
+                                        {{{editProfileLink}}}
                                     </div>
                                 </div>
                                 <div class='{{styles.b-profile-contol-wrapper}}'>
                                     <div class='{{styles.b-profile-control}}'>
-                                        <a class='{{styles.b-link}}' href="/settings-change-password">Change password</a>
+                                        {{{changePasswordLink}}}
                                     </div>
                                 </div>
                                 <div class='{{styles.b-profile-contol-wrapper}}'>
                                     <div class='{{styles.b-profile-control}}'>
-                                        <a class='{{styles.b-link}}' href="/logout">Logout</a>
+                                        {{{logoutLink}}}
                                     </div>
                                 </div>
                             {{/if}}
@@ -60,6 +58,9 @@ const ProfilePageTemplate = `
                             {{{profileFieldLogin}}}
                             {{{profileFieldDisplayName}}}
                             {{{profileFieldPhone}}}
+                            <div class="{{styles.b-form-error}}">
+                                <p class="{{styles.b-form-error-text}}"></p>
+                            </div>
                             <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                 <div class='{{styles.b-profile-control}}'>
                                     <button type='submit' class='{{styles.b-submit}}'>Save changes</button>
@@ -72,6 +73,9 @@ const ProfilePageTemplate = `
                             {{{profileFieldOldPassword}}}
                             {{{profileFieldNewPassword}}}
                             {{{profileFieldConfirmPassword}}}
+                            <div class="{{styles.b-form-error}}">
+                                <p class="{{styles.b-form-error-text}}"></p>
+                            </div>
                             <div class='{{styles.b-profile-contol-wrapper}} {{styles.first}}'>
                                 <div class='{{styles.b-profile-control}}'>
                                     <button type='submit' class='{{styles.b-submit}}'>Save changes</button>

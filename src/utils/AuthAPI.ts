@@ -22,19 +22,19 @@ export class AuthAPI extends HTTPTransport {
     public userInfoUrl = "/auth/user";
 
 
-    async authorizeUser(authFormData: AuthFormInterface): Promise<Response> {
+    authorizeUser(authFormData: AuthFormInterface): Promise<Response> {
         return this.post(this.authUserUrl, authFormData)        
     }
 
-    async registerUser(registerFormData: RegisterFormInterface): Promise<Response> {
+    registerUser(registerFormData: RegisterFormInterface): Promise<Response> {
         return this.post(this.registerUserUrl, registerFormData)    
     }
 
-    async getUserInfo(): Promise<Response> {
+    getUserInfo(): Promise<Response> {
         return this.get(this.userInfoUrl)
     }
     
-    async logoutUser(): Promise<Response> {
+    logoutUser(): Promise<Response> {
         return this.post(this.logoutUserUrl, {})
     }
 }

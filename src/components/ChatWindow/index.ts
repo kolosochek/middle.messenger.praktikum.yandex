@@ -2,9 +2,9 @@ import Block from '../../utils/Block';
 import { ChatSettings } from '../ChatSettings';
 import { ChatReply } from '../ChatReply';
 import { ChatMessageInterface, ChatUserInterface } from '../../model/Store';
-import template from './template';
-import styles from './style.module.less';
 import { Store } from '../../model/Store';
+import template from './template';
+import * as styles from './style.module.less';
 
 interface ChatWindowProps {
   chatUsers?: string|number|null;

@@ -1,20 +1,23 @@
 import Block from '../../utils/Block';
+import { ShowModal } from '../../utils/ShowModal';
 import { Router } from '../../utils/Router';
 import { Store } from '../../model/Store';
+import { AuthAPI } from '../../utils/AuthAPI';
 import { ProfileAPI } from '../../utils/ProfileAPI';
-import { ProfileInterface } from '../../model/user';
+import { UpdateProfileInterface, ProfileInterface, UpdateProfilePasswordInterface } from '../../model/Store';
 import { InputComponent } from '../../components/InputComponent';
 import { Validation } from '../../utils/Validation';
-import { ShowModal } from '../../utils/ShowModal';
+import { Link } from '../../components/Link';
+import { ProfileAvatar } from '../../components/ProfileAvatar';
 import template from './template';
-import styles from './style.module.less';
+import * as styles from './style.module.less';
 
 
 interface ProfileViewProps {
   mode: "view" | "edit" | "change-password";
   router: Router;
   profile?: ProfileInterface;
-  userId?: number;
+  userId?: number|string;
   isCanChangeProfile: boolean;
 
   events?: {
@@ -25,9 +28,10 @@ interface ProfileViewProps {
 
 export class ProfileView extends Block<ProfileViewProps> {
   public profileAPI:ProfileAPI;
+  public authAPI:AuthAPI;
 
 
-  private createProfileFields(profile:ProfileInterface):void {
+  public createProfileFields(profile:ProfileInterface):void {
     //ProfileFieldEmail
     this.children.profileFieldEmail = new InputComponent({
       name: 'email',
@@ -69,7 +73,7 @@ export class ProfileView extends Block<ProfileViewProps> {
     this.children.profileFieldDisplayName = new InputComponent({
       name: 'display_name',
       label: 'Display name:',
-      value: profile.login,
+      value: profile.display_name,
       class: `${styles['b-profile-field']}`,
       isDisabled: true,
     });
@@ -86,128 +90,120 @@ export class ProfileView extends Block<ProfileViewProps> {
 
 
   init() {
-    this.profileAPI = new ProfileAPI();
-    this.props.isCanChangeProfile = true;
     // modal
     ShowModal.bindToWindow();    
+    this.props.profile = Store.getItem('profile') as ProfileInterface;
+    this.profileAPI = new ProfileAPI();
+    this.authAPI = new AuthAPI();
+
     
     // get View mode and switch it
     const viewMode = this.props.mode as ProfileViewProps['mode'];
     switch (viewMode) {
       case 'view': {
-        if (this.props.userId){
-          // fetch user data by given ID
-          this.profileAPI.getUserProfileById(this.props.userId).then((requestSuccess) => {
-            this.props.profile = requestSuccess as ProfileInterface;
-
-            // debug
-            console.log('this.props.profile')
-            console.log(this.props.profile)
-            //
-
-            this.props.isCanChangeProfile = false;
-            this.createProfileFields(this.props.profile);
+        if (this.props.userId) {
+          this.profileAPI.getUserProfileById(this.props.userId).then((data)=> {
+            this.createProfileFields(data as ProfileInterface)
+            this.setProps({
+              profile: data as ProfileInterface
+            })
+            this.children.profileAvatar.setProps({
+              profile: data as ProfileInterface
+            })
           }).catch((requestError) => {
-            throw new Error(`Can't get user profile, user is is: ${this.props.userId}, reason: ${requestError}`)
+            throw new Error(`Can't get user by id ${this.props.userId}, reason: ${requestError.reason ?? requestError}`)
           })
         } else {
-          this.props.profile = Store.getItem('profile') as ProfileInterface;
-          this.createProfileFields(this.props.profile);
+          this.props.isCanChangeProfile = true;
+          this.createProfileFields(this.props.profile)
         }
-        
-        /*
-        {
-          "id": 133,
-          "first_name": "Slatrex",
-          "second_name": "Slatrex",
-          "display_name": null,
-          "login": "slatrex",
-          "avatar": "/a1c13f2b-fe82-43ee-9c02-1d5c7899b837/0ad1c483-befa-4eb5-8fa9-e6d1962d3b32_ivana-la-2N6wr_tVIgM-unsplash.jpg",
-          "email": "slatrex+11@yandex.ru",
-          "phone": "8888888888888"
-        }
-        */
 
+        // edit profile link
+        this.children.editProfileLink = new Link({ 
+          router: this.props.router,
+          href: '/settings-edit',
+          title: 'Edit profile info',
+          class: styles['b-link'],
+        });
+        // change profile password link
+        this.children.changePasswordLink = new Link({ 
+          router: this.props.router,
+          href: '/settings-change-password',
+          title: 'Change password',
+          class: styles['b-link'],
+        });
+        // change profile password link
+        this.children.logoutLink = new Link({ 
+          router: this.props.router,
+          href: '/logout',
+          title: 'Logout',
+          class: styles['b-link'],
+        });
         break;
       }
       case 'edit': {
+        this.props.isCanChangeProfile = true;
         //ProfileFieldEmail
         this.children.profileFieldEmail = new InputComponent({
           name: 'email',
           label: 'Email:',
-          placeholder: this.props.profile.email,
-          type: 'text',
+          value: this.props.profile.email,
           class: `${styles['b-profile-field']}`,
-          errorMessage: 'Email is invalid!',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          errorMessage: 'Email is invalid!', 
+          styles: styles,         
         });
 
         //ProfileFieldFirstName
         this.children.profileFieldFirstName = new InputComponent({
           name: 'first_name',
           label: 'First name:',
-          placeholder: this.props.profile.first_name,
+          value: this.props.profile.first_name,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'First name is invalid!',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
 
         //ProfileFieldSecondName
         this.children.profileFieldSecondName = new InputComponent({
           name: 'second_name',
           label: 'Last name:',
-          placeholder: this.props.profile.last_name,
+          value: this.props.profile.second_name,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Last name is invalid!',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
 
         //ProfileFieldLogin
         this.children.profileFieldLogin = new InputComponent({
           name: 'login',
           label: 'Login:',
-          placeholder: this.props.profile.login,
+          value: this.props.profile.login,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Login must be 3-20 length, only letters, digits and _ or -',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
 
         //ProfileFieldDisplayName
         this.children.profileFieldDisplayName = new InputComponent({
           name: 'display_name',
           label: 'Display name:',
-          placeholder: this.props.profile.login,
+          value: this.props.profile.display_name,
           class: `${styles['b-profile-field']}`,
+          styles: styles,
+          events: {
+            focus: () => {},
+            blur: () => {},
+          }
         });
 
         //ProfileFieldPhone
         this.children.profileFieldPhone = new InputComponent({
           name: 'phone',
           label: 'Phone:',
-          placeholder: this.props.profile.phone,
+          value: this.props.profile.phone,
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Phone is invalid',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
 
         break;
@@ -221,11 +217,7 @@ export class ProfileView extends Block<ProfileViewProps> {
           placeholder: '**********',
           class: `${styles['b-profile-field']}`,
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
 
         //ProfileFieldNewPassword
@@ -237,11 +229,7 @@ export class ProfileView extends Block<ProfileViewProps> {
           class: `${styles['b-profile-field']}`,
           defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
 
         //ProfileFieldNewPassword
@@ -253,11 +241,7 @@ export class ProfileView extends Block<ProfileViewProps> {
           class: `${styles['b-profile-field']}`,
           defaultErrorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
           errorMessage: 'Password must be 8-40 length, with one Capital letter, and digit',
-
-          events: {
-            focus: (e) => Validation.validateField(e, styles),
-            blur: (e) => Validation.validateField(e, styles),
-          }
+          styles: styles,
         });
         break;
       }
@@ -265,6 +249,44 @@ export class ProfileView extends Block<ProfileViewProps> {
         break;
       }
     }
+    // goback link
+    this.children.goBackLink = new Link({ 
+      router: this.props.router,
+      href: '/messenger',
+      title: 'Back',
+      class: styles['b-profile-goback'],
+    });
+
+    // profile avatar
+    this.children.profileAvatar = new ProfileAvatar({ 
+      profile: this.props.profile,
+      isCanChangeProfile: this.props.isCanChangeProfile,
+      profileStyles: styles,
+      events: {
+        click: (e:MouseEvent) => {
+          const link:HTMLLIElement = e.target!.closest("a");
+          if(link !== null) {
+            const form:HTMLFormElement = document.querySelector('form#upload_avatar')!;
+            if (form !== null) {
+              form.addEventListener('submit', (e:SubmitEvent) => {
+                e.preventDefault();
+                const formData = new FormData(form);
+                this.profileAPI.changeUserAvatar(formData).then((newProfile) => {
+                  Store.setItem('profile', newProfile);
+                  this.init();
+                  form.parentNode!.parentNode!.click();
+                }).catch((requestError) => {
+                  throw new Error(`Can't change user avatar, reason: ${requestError.reason ?? requestError}`)
+                })
+              })
+            }
+          }
+        }
+      }
+    });
+
+
+
 
     this.props.events = {
       submit: (e) => {
@@ -285,30 +307,43 @@ export class ProfileView extends Block<ProfileViewProps> {
           // check password for equality
           if (this.props.mode === 'change-password') {
             // check passwords for equality
-            const passwordField = form.querySelector<HTMLInputElement>('input[name="password"]');
-            const confirmPasswordField = form.querySelector<HTMLInputElement>('input[name="confirm_password"]');
+            const oldPasswordField = form.querySelector<HTMLInputElement>('input[name="old_password"]')!;
+            const passwordField = form.querySelector<HTMLInputElement>('input[name="password"]')!;
+            const confirmPasswordField = form.querySelector<HTMLInputElement>('input[name="confirm_password"]')!;
             if (Validation.comparePasswordFields(passwordField, confirmPasswordField, styles)) {
-              /* TODO: remove me
-              // sprint_2_task
-              const formData = Object.fromEntries(new FormData(form));
-              console.log(formData);
-              */
-              const result = prompt('Change page?', `yeah`)
-              if (result !== null) {
-                Router.go("/settings")
-              }
+              this.profileAPI.setUserPassword({
+                'oldPassword': oldPasswordField.value,
+                'newPassword': passwordField.value, 
+              } as UpdateProfilePasswordInterface).then(() => {
+                this.props.router.go('/settings')
+              }).catch((requestError) => {
+                if (requestError.reason) {
+                  Validation.setFormError(form, styles, requestError.reason);
+                } else {
+                  throw new Error(`Can't update user profile ${Store.getUserId()}, reason: ${requestError.toString()}`)
+                }
+              })
               }
             //
-          } else {
-            // TODO: remove me
-            // sprint_2_task
-            const formData = Object.fromEntries(new FormData(form));
-            console.log(formData);
-            //
-            const result = prompt('Change page?', `yeah`)
-            if (result !== null) {
-              Router.go("/settings")
-            }
+          } else if (this.props.mode === 'edit') {
+            const formData:ProfileInterface = Object.fromEntries(new FormData(form));
+            this.profileAPI.setUserProfile(formData as UpdateProfileInterface).then(() => {
+              this.authAPI.getUserInfo()
+              .then((profile) => {
+                  Store.setItem('profile', profile);
+                  this.props.router.go("/settings");
+              })
+              .catch((requestError) => {
+                throw new Error(`Can't get user profile ${Store.getUserId()}, reason: ${requestError.reason ?? requestError}`)
+              })
+            }).catch((requestError) => {
+              if (requestError.reason) {
+                Validation.setFormError(form, styles, requestError.reason);
+              } else {
+                throw new Error(`Can't update user profile ${Store.getUserId()}, reason: ${requestError.reason ?? requestError}`)
+              }
+            })
+            
           }
         }
       }

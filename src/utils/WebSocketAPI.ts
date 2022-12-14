@@ -1,7 +1,7 @@
 export class WebSocketAPI {
     public baseUrl = 'wss://ya-praktikum.tech/ws/chats'
     public socket: WebSocket;
-    public socketPingInterval = 10000;
+    public socketPingInterval = 5000;
     public socketWaitForReadyStateInterval = 500;
     public socketRetriesCount = 5;
 
@@ -27,13 +27,10 @@ export class WebSocketAPI {
     // keep socket alive
     public keepAlive() {
         setInterval(() => {
-            // debug
-            console.log('ping...')
-            //
             this.socket.addEventListener('open', () => {
                 this.socket.send(JSON.stringify({
                     content: '',
-                    type: 'ping',
+                    type: 'message',
                 }));
             });
         }, this.socketPingInterval);

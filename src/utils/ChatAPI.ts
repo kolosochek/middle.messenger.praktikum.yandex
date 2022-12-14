@@ -4,16 +4,18 @@ import { HTTPTransport } from "./HTTPTransport";
 export interface ChatListMessageInterface {
         id: number,
         title: string,
-        avatar: any | null,
+        avatar: string | null,
         created_by: number,
         unread_count: number,
-        last_message: any | null
+        last_message: unknown
 }
 
 export class ChatAPI extends HTTPTransport{
     public chatListUrl = '/chats'
-    public chatTokenUrl = '/chats/token/'
     public createChatUrl = '/chats'
+    public chatTokenUrl = '/chats/token/'
+    public findUserUrl = '/user/search/'
+    public addRemoveUserUrl = '/chats/users/'
     public userId:string;
 
     async getChatList():Promise<Response>{
@@ -29,10 +31,22 @@ export class ChatAPI extends HTTPTransport{
     }
 
     async createChat(title:string){
-        return this.post(this.createChatUrl, { 'title': `${title}`})
+        return this.post(this.createChatUrl, { 'title': `${title}` })
     }
 
     async deleteChat(chatId:string){
-        return this.delete(this.createChatUrl, { 'chatId': `${chatId}`})
+        return this.delete(this.createChatUrl, { 'chatId': `${chatId}` })
+    }
+
+    async findUser(query: Record<string, string>){
+        return this.post(this.findUserUrl, query)
+    }
+
+    async addUser(query: Record<string, string | string[]>){
+        return this.put(this.addRemoveUserUrl, query)
+    }
+
+    async removeUser(query: Record<string, string | string[]>){
+        return this.delete(this.addRemoveUserUrl, query)
     }
 }

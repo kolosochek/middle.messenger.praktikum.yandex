@@ -89,11 +89,13 @@ export class Validation {
       return false;
     }
 
-  public static setFormError(form:HTMLFormElement | null, styles: object[], errorMessage:string = ''){
+  public static setFormError(form:HTMLFormElement | null, styles: object[], errorMessage = ''){
     if (form !== null){
       const errorMessageNode = form.querySelector<HTMLParagraphElement>(`p.${styles['b-form-error-text']}`)!;
       errorMessageNode.textContent = errorMessage;
       errorMessageNode.parentNode?.classList.add(`${styles['state__error']}`);
+    } else {
+      throw new Error(`Given form is empty`);
     }
   }
 
@@ -108,5 +110,9 @@ export class Validation {
         : Validation.setFieldIsInvalid(element.target, styles)
     }
   }
+
+  public static escapeHtml(unsafe:string) {
+    return unsafe.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;').replaceAll('"', '&quot;').replaceAll("'", '&#039;');
+}
 
 }

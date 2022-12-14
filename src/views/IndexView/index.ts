@@ -220,7 +220,6 @@ export class IndexView extends Block<IndexViewProps> {
                               Validation.setFormError(addUserChatForm, chatSettingsStyles, requestError.reason);
                             })
                           }
-
                         } else {
                           Validation.setFormError(addUserChatForm, chatSettingsStyles, `No users has been found!`)
                         }

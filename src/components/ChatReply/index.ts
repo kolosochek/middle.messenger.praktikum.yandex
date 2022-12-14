@@ -17,6 +17,7 @@ export class ChatReply extends Block<ChatReplyProps> {
       type: 'text',
       errorMessage: "Can't be empty",
       tabindex: '0',
+      styles: styles,
     });
   }
 

@@ -40,9 +40,32 @@
     background: @shadow-color;
     border-color: @link-color;
     outline-color: @link-color;
-    margin: 0 0 30px;
+    margin: 30px 0;
     padding: 5px;
     font-size: 1.1em;
+  }
+
+  .b-submit-wrapper {
+    display: flex;
+    flex-direction: row;
+    padding: 0 0 30px;
+
+    .b-submit {
+      margin: 0;
+      margin-right: 20px;
+    }
+  }
+}
+
+.b-form-error {
+  display: none;
+
+  .b-form-error-text {
+    color: @highlight-color;
+  }
+
+  &.state__error {
+    display: block;
   }
 }
 
@@ -55,6 +78,20 @@
   .b-chat-info {
     display: flex;
     width: 100%;
+
+    .b-chat-users-wrapper {
+      display: flex;
+
+      .b-chat-user {
+        display: flex;
+        align-items: center;
+
+        .b-link {
+          padding: 3px 0 6px 5px;
+          font-size: 1.3em;
+        }
+      }
+    }
 
     .b-avatar-wrapper {
       align-self: center;

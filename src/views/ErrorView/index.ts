@@ -1,10 +1,16 @@
 import Block from '../../utils/Block';
+import { Router } from '../../utils/Router';
 import template from './template';
-import styles from './style.module.less';
+import * as styles from './style.module.less';
 
 
 interface ErrorViewProps {
-  mode?: 'Error404' | 'Error500';
+  mode: 'error404' | 'error500';
+  router: Router;
+
+  events?: {
+    click?: (e: MouseEvent) => void;
+  }
 }
 
 
@@ -13,14 +19,13 @@ export class ErrorView extends Block<ErrorViewProps> {
     const mode = this.props.mode;
     //Maybe we'll want to pass custom props by given mode 
     switch (mode) {
-      case 'Error500': {
+      case 'error500': {
         break;
       }
-      case 'Error404': {
+      case 'error404': {
         break;
       }
       default: {
-
         break;
       }
 

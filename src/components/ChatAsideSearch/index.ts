@@ -1,9 +1,9 @@
 import Block from '../../utils/Block';
 import template from './template';
-import styles from './style.module.less';
+import * as styles from './style.module.less';
 
 interface ChatAsideSearchProps {
-  events?: Record<string, never> 
+  events?: never; 
 }
 
 export class ChatAsideSearch extends Block<ChatAsideSearchProps> {

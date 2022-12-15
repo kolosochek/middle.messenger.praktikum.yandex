@@ -19,14 +19,17 @@ const AuthViewTemplate = `
             <div class="{{styles.b-auth-page}}">
                 <form class="{{styles.b-form}}" action="/">
                 {{#if_eq mode "auth"}}
-                    <h2 class="{{styles.b-page-title}}">Sign In</h2>
+                <h2 class="{{styles.b-page-title}}">Sign In</h2>
                     {{{loginInputComponent}}}
-                    {{{passwordInputComponent}}}
+                    {{{passwordInputComponent}}}                    
+                    <div class="{{styles.b-form-error}}">
+                        <p class="{{styles.b-form-error-text}}"></p>
+                    </div>  
                     <div class="{{styles.b-submit-wrapper}}">
                         <button class="{{styles.b-submit}}" type="submit">Authorize</button>
                     </div>
                     <div class="{{styles.b-sign-in-wrapper}}">
-                        <a class="{{styles.b-link}}" href="/#/signup">Sign Up</a>
+                        {{{signupLink}}}
                     </div>
                 {{/if_eq}}
                 {{#if_eq mode "signup"}}
@@ -37,12 +40,15 @@ const AuthViewTemplate = `
                     {{{loginInputComponent}}}                 
                     {{{phoneInputComponent}}}                  
                     {{{passwordInputComponent}}}                 
-                    {{{confirmPasswordInputComponent}}}               
+                    {{{confirmPasswordInputComponent}}} 
+                    <div class="{{styles.b-form-error}}">
+                        <p class="{{styles.b-form-error-text}}"></p>
+                    </div>              
                     <div class="{{styles.b-submit-wrapper}}">
                         <button class="{{styles.b-submit}}" type="submit">SignUp</button>
                     </div>
                     <div class="{{styles.b-sign-in-wrapper}}">
-                        <a class="{{styles.b-link}}" href="/#/auth">Login</a>
+                        {{{loginLink}}}
                     </div>
                 {{/if_eq}}
                 </form>

@@ -1,19 +1,23 @@
+import { Validation } from '../../utils/Validation';
 import Block from '../../utils/Block';
 import template from './template';
-import styles from './style.module.less';
+import * as styles from './style.module.less';
 
 interface InputComponentProps {
-    title?: string;
+    label?: string;
     name?: string;
     type?: "text" | "password" | "email" | "tel" |"number" | "file";
     placeholder?: string;
+    class?: string;
     value?: string;
     pattern?: string;
-    isRequired?: boolean;
     isValid?: string;
-    nowrap?: string;
     defaultErrorMessage?: string;
     errorMessage?: string;
+    tabindex?: string;
+    isRequired?: boolean;
+    isDisabled?: boolean;
+    styles?: Record<string, string>
   
     events?: {
       focus?: (e:FocusEvent) => void;
@@ -24,6 +28,11 @@ interface InputComponentProps {
 export class InputComponent extends Block<InputComponentProps> {
   constructor(props: InputComponentProps) {
     super({ ...props, });
+    
+    this.props.events = {
+      focus: (e) => Validation.validateField(e, this.props.styles),
+      blur: (e) => Validation.validateField(e, this.props.styles),
+    }
   }
 
 

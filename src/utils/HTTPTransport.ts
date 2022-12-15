@@ -1,79 +1,91 @@
-enum Methods {
+enum METHOD {
     GET = 'GET',
     POST = 'POST',
     PUT = 'PUT',
+    PATCH = 'PATCH',
     DELETE = 'DELETE',
 }
 
 type Options = {
-    method: string;
-    headers?: Record<string, string>;
-    query?: unknown;
-    timeout?: number;
+    method?: METHOD;
+    data?: unknown;
 };
 
-class HTTPTransport {
+type HTTPMethod<TResponse> = (url: string, options?: Options) => Promise<TResponse>
+
+export class HTTPTransport {
+    public baseUrl = 'https://ya-praktikum.tech/api/v2';
+
+
     public queryStringify(data: Record<string, string>) {
         return "?" + Object
          .entries(data)
          .map(([key, value]) => `${key}=${value}`)
          .join("&")
         }
-        
-    public get = (url: string, options: Options) => {
-        let urlAddon = '';
 
-        if (options.query) {
-            urlAddon = this.queryStringify(options.query);
-        }
+    public static getCookiesObject():object {
+        return Object.fromEntries(document.cookie.split('; ').map(c => c.split('=')));
+    }
 
-        return this.request(`${url}${urlAddon}`, {
-            ...options,
-            method: Methods.GET,
-        });
-    };
+    public get: HTTPMethod<Response> = (url, options = {}) => {
+        return this.request(url, {...options, method: METHOD.GET, data: options.data ? this.queryStringify(options.data as Record<string, string>) : {} })
+    }
 
-    public post = (url: string, options: Options) => {
-        return this.request(url, { ...options, method: Methods.POST });
-    };
+    public post: HTTPMethod<Response> = (url, options = {}) => {
+        return this.request(url, {...options, method: METHOD.POST, data: options.data })
+    }
 
-    public put = (url: string, options: Options) => {
-        return this.request(url, { ...options, method: Methods.PUT });
-    };
+    public put: HTTPMethod<Response> = (url: string, options = {}) => {
+        return this.request(url, {...options, method: METHOD.PUT, data: options.data });
+    }
 
-    public delete = (url: string, options: Options) => {
-        return this.request(url, { ...options, method: Methods.DELETE });
-    };
+    public delete: HTTPMethod<Response> = (url: string, options = {}) => {
+        return this.request(url, {...options, method: METHOD.DELETE, data: options.data });
+    }
 
-    private request = (url: string, options: Options) => {
-        const { headers = {}, method } = options;
-
+    public request: HTTPMethod<Response> = (
+        url: string,
+        options: Options = { method: METHOD.GET },
+    ) => {
         return new Promise((resolve, reject) => {
+            const {method, data} = options;
             const xhr = new XMLHttpRequest();
 
-            if (!method) {
-                reject('Нет метода');
-            }
+            xhr.open(method!, this.baseUrl ? this.baseUrl + url : url);
+            xhr.withCredentials = true;
 
-            xhr.open(method, url);
+            xhr.onload = function () {
+                let resp;
+                if (~xhr?.getResponseHeader('Content-Type')?.indexOf('application/json')!) {
+                    resp = JSON.parse(xhr.response)
+                } else {
+                    resp = xhr.response;
+                }
+                if (xhr.status === 200) {
+                    resolve(resp);
 
-            Object.keys(headers).forEach((key) => {
-                xhr.setRequestHeader(key, headers[key]);
-            });
-
-            if (options.timeout) {
-                xhr.timeout = options.timeout;
-            }
-
-            xhr.onload = () => resolve(xhr);
+                } else {
+                    reject(resp);
+                }
+            };
 
             xhr.onabort = reject;
             xhr.onerror = reject;
             xhr.ontimeout = reject;
 
-            xhr.send();
-        });
-    };
-}
+            if (method === METHOD.GET || !data) {
+                xhr.send();
+            } else {
+                if (data instanceof FormData) {
+                    // xhr.setRequestHeader("Content-Type", "multipart/form-data");
+                    xhr.send(data);
+                } else {
+                    xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');
+                    xhr.send(JSON.stringify(data));
+                }
 
-export default HTTPTransport;
+            }
+        });
+    }
+}

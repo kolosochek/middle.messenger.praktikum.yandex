@@ -1,6 +1,6 @@
 {
     "name": "sprint_4",
-    "version": "1.3",
+    "version": "1.4",
     "description": "ModemWebchat App. Slowest thing you've ever saw!",
     "scripts": {
         "dev": "npm run copy-images & parcel --no-cache index.html & node server.js",
@@ -36,7 +36,6 @@
         "stream-http": "3.2.0",
         "stylelint": "14.15.0",
         "stylelint-config-standard": "29.0.0",
-        "ts-mocha": "^10.0.0",
         "url": "0.11.0",
         "util": "0.12.5"
     },

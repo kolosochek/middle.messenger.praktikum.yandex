@@ -13,7 +13,7 @@ import template from './template';
 import * as styles from './style.module.less';
 
 
-interface ProfileViewProps {
+export interface ProfileViewProps {
   mode: "view" | "edit" | "change-password";
   router: Router;
   profile?: ProfileInterface;
@@ -191,8 +191,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           class: `${styles['b-profile-field']}`,
           styles: styles,
           events: {
-            focus: () => {},
-            blur: () => {},
+            focus: () => {return},
+            blur: () => {return},
           }
         });
 
@@ -264,7 +264,7 @@ export class ProfileView extends Block<ProfileViewProps> {
       profileStyles: styles,
       events: {
         click: (e:MouseEvent) => {
-          const link:HTMLLIElement = e.target!.closest("a");
+          const link = (e.target! as HTMLElement).closest("a");
           if(link !== null) {
             const form:HTMLFormElement = document.querySelector('form#upload_avatar')!;
             if (form !== null) {
@@ -274,7 +274,7 @@ export class ProfileView extends Block<ProfileViewProps> {
                 this.profileAPI.changeUserAvatar(formData).then((newProfile) => {
                   Store.setItem('profile', newProfile);
                   this.init();
-                  form.parentNode!.parentNode!.click();
+                  (form.parentNode!.parentNode! as HTMLElement).click();
                 }).catch((requestError) => {
                   throw new Error(`Can't change user avatar, reason: ${requestError.reason ?? requestError}`)
                 })

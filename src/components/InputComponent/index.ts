@@ -30,8 +30,8 @@ export class InputComponent extends Block<InputComponentProps> {
     super({ ...props, });
     
     this.props.events = {
-      focus: (e) => Validation.validateField(e, this.props.styles),
-      blur: (e) => Validation.validateField(e, this.props.styles),
+      focus: (e) => Validation.validateField(e, (this.props.styles as Record<string, string>)),
+      blur: (e) => Validation.validateField(e, (this.props.styles as Record<string, string>)),
     }
   }
 

@@ -4,7 +4,7 @@ import template from './template';
 import * as styles from './style.module.less';
 
 
-interface ErrorViewProps {
+export interface ErrorViewProps {
   mode: 'error404' | 'error500';
   router: Router;
 

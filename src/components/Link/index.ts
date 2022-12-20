@@ -1,6 +1,6 @@
 import Block from '../../utils/Block';
 import template from './template';
-import { Router } from '../../utils/Router';
+import {RouteI, Router} from '../../utils/Router';
 import * as styles from './style.module.less';
 
 interface LinkProps {
@@ -21,7 +21,7 @@ export class Link extends Block<LinkProps> {
       click: (e) => {
         e.preventDefault();
         if (this.props.href){
-          this.props.router.go(this.props.href)
+          this.props.router.go(this.props.href as RouteI['path'])
         } else {
           this.props.router.goBack()
         }

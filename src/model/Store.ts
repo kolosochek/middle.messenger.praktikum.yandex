@@ -77,7 +77,7 @@ export class Store {
         Store.authAPI.getUserInfo()
             .then((profile) => {
                 Store.setItem('profile', profile);
-                return profile.id;
+                return (profile as unknown as Record<string, string>).id;
             })
             .catch((requestError) => {
                 throw new Error(requestError)

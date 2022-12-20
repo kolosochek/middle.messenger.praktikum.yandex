@@ -16,7 +16,7 @@ export class ShowModal{
             existingModalWindow.remove();
         }
         // append template to <body />
-        document.body.insertAdjacentHTML('afterBegin', htmlTemplate);
+        document.body.insertAdjacentHTML('afterbegin', htmlTemplate);
         const modalWindowNode = document.querySelector<HTMLDivElement>('#modalwindow');
         const modalWindowContent = document.querySelector<HTMLDivElement>('#modalwindow #modalcontent');
 
@@ -34,7 +34,7 @@ export class ShowModal{
                 modalWindowNode.classList.toggle('state__visible');
             });
 
-            const uploadFileLink = document.querySelector<HTMLDivElement>('#modalwindow a');
+            const uploadFileLink = document.querySelector<HTMLLinkElement>('#modalwindow a');
             const fileInput = document.querySelector<HTMLInputElement>('#modalwindow input[type=file]');
 
             if (uploadFileLink !== null && fileInput !== null) {
@@ -44,7 +44,7 @@ export class ShowModal{
                 });
 
                 fileInput.addEventListener('change', () => {
-                    uploadFileLink.text = fileInput.value;
+                    uploadFileLink.textContent = fileInput.value;
                 });
             }  
         }
@@ -52,6 +52,6 @@ export class ShowModal{
     }
 
     public static bindToWindow(){
-        window.showModal = ShowModal.showModal; 
+        (window as any).showModal = ShowModal.showModal;
     }
 }

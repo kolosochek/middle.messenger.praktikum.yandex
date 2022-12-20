@@ -1,5 +1,5 @@
 {
-    "name": "sprint_3",
+    "name": "sprint_4",
     "version": "1.3",
     "description": "ModemWebchat App. Slowest thing you've ever saw!",
     "scripts": {
@@ -9,13 +9,16 @@
         "lint": "npm run eslint && npm run csslint",
         "eslint": "eslint . --fix",
         "csslint": "npx stylelint '**/*.less' --fix",
-        "start": "parcel index.html & node server.js"
+        "start": "parcel index.html & node server.js",
+        "test": "mocha -r ts-node -r .mochaConf.js 'src/**/*.test.ts'"
     },
     "keywords": [],
     "author": "kolosochek",
     "license": "MIT",
     "devDependencies": {
         "@parcel/transformer-less": "^2.8.0",
+        "@types/expect": "^24.3.0",
+        "@types/mocha": "^10.0.1",
         "@typescript-eslint/eslint-plugin": "^5.45.0",
         "@typescript-eslint/parser": "^5.43.0",
         "assert": "2.0.0",
@@ -33,6 +36,7 @@
         "stream-http": "3.2.0",
         "stylelint": "14.15.0",
         "stylelint-config-standard": "29.0.0",
+        "ts-mocha": "^10.0.0",
         "url": "0.11.0",
         "util": "0.12.5"
     },
@@ -40,9 +44,15 @@
         "@anikin/parcel-transformer-handlebars": "^1.0.9",
         "@anikin/parcel-transformer-handlebars-precompile": "^1.0.1",
         "@parcel/transformer-css": "^2.8.0",
+        "@types/chai": "^4.3.4",
+        "@types/less": "^3.0.3",
+        "chai": "^4.3.7",
         "express": "4.18.2",
         "handlebars": "4.7.7",
-        "mocha": "10.2.0"
+        "jsdom": "^20.0.3",
+        "less": "^4.1.3",
+        "mocha": "10.2.0",
+        "ts-node": "^10.9.1"
     },
     "engines": {
         "node": ">=12.0.0",

@@ -15,7 +15,7 @@ class Block<P extends Record<string, any> = any> {
     public id = (Math.random() + 1).toString(36).substring(3);
     public context: object;
     protected props: P;
-    public children: Block | Block[];
+    public children: Record<string, Block | Block[] | any>;
     private _element: HTMLElement | null = null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public template: any;
@@ -24,7 +24,7 @@ class Block<P extends Record<string, any> = any> {
         const eventBus = new EventBus();
         const { props, children } = this._getChildrenAndProps(propsWithChildren);
         this.children = children;
-        this.props = this._makePropsProxy(props);
+        this.props = this._makePropsProxy(props) as any;
         this.eventBus = () => eventBus;
         this._registerEvents(eventBus);
         eventBus.emit(Block.EVENTS.INIT);
@@ -148,7 +148,7 @@ class Block<P extends Record<string, any> = any> {
 
                 Object.entries(component.children).forEach(([key, value]) => {
                     //console.log(`key: ${key}, value: ${value}`)
-                    contextAndStubs[key] = `<div data-id="${value.id}"></div>`;
+                    contextAndStubs[key] = `<div data-id="${(value as any).id}"></div>`;
                 });
 
             } else {

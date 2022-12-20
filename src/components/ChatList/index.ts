@@ -27,7 +27,7 @@ export class ChatList extends Block<ChatListProps> {
     this.chatAPI = new ChatAPI();
     this.chatAPI.getChatList()
     .then((chatList) => {
-      this.chatList = chatList as ChatListItemInterface[];
+      this.chatList = chatList as unknown as ChatListItemInterface[];
       this.setProps({
         chatList: this.chatList,
       })

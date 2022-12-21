@@ -1,4 +1,4 @@
-enum METHOD {
+export enum METHOD {
     GET = 'GET',
     POST = 'POST',
     PUT = 'PUT',
@@ -33,7 +33,7 @@ export class HTTPTransport {
     }
 
     public post: HTTPMethod<Response> = (url, options = {}) => {
-        return this.request(url, {...options, method: METHOD.POST, data: options.data })
+        return this.request(url, {...options, method: METHOD.POST, data: options.data });
     }
 
     public put: HTTPMethod<Response> = (url: string, options = {}) => {
@@ -78,7 +78,6 @@ export class HTTPTransport {
                 xhr.send();
             } else {
                 if (data instanceof FormData) {
-                    // xhr.setRequestHeader("Content-Type", "multipart/form-data");
                     xhr.send(data);
                 } else {
                     xhr.setRequestHeader('Content-Type', 'application/json; charset=utf-8');

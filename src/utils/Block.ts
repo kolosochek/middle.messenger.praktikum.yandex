@@ -139,7 +139,7 @@ class Block<P extends Record<string, any> = any> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    protected compile(template: any, context: any) {
+    public compile(template: any, context: any) {
         const contextAndStubs = { ...context };
 
         Object.entries(this.children).forEach(([name, component]) => {
@@ -168,7 +168,7 @@ class Block<P extends Record<string, any> = any> {
                 return;
             }
             component.getContent()?.append(...Array.from(stub.childNodes));
-            stub.replaceWith(component.getContent());
+            stub.replaceWith((component.getContent() as Node));
         }
 
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -184,7 +184,7 @@ class Block<P extends Record<string, any> = any> {
         return temp.content;
     }
 
-    protected render(): DocumentFragment {
+    public render(): DocumentFragment {
         return new DocumentFragment();
     }
 

@@ -52,6 +52,7 @@ export class ShowModal{
     }
 
     public static bindToWindow(){
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         (window as any).showModal = ShowModal.showModal;
     }
 }

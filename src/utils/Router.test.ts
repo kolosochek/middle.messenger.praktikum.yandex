@@ -4,6 +4,7 @@ import { Router, RouteI } from "./Router";
 import sinon from "sinon"
 import Block from "./Block";
 describe('Router', () => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     interface BlockConstructable<P = any> {
         new(props: P): Block<P>;
     }

@@ -32,7 +32,7 @@ export class IndexView extends Block<IndexViewProps> {
       Store.setItem('chatUsers', chatUsersObject)
     })
       .catch((responseError) => {
-        throw new Error(`Can't get chat users. Reason: ${responseError}`)
+        throw new Error(`Can't get chat users. Reason: ${responseError.reason ?? responseError}`)
       })
   }
 
@@ -209,14 +209,15 @@ export class IndexView extends Block<IndexViewProps> {
                                 this.children.chatWindow.children.chatSettings.setProps({
                                   chatUsers: Store.getItem('chatUsers'),
                                 })
-                                const closeModalNode = addUserChatForm.parentNode!.parentNode! as HTMLElement
-                                closeModalNode.click();
                               })
                                 .catch((responseError) => {
-                                  throw new Error(`Can't get chat users. Reason: ${responseError}`)
+                                  throw new Error(`Can't get chat users. Reason: ${responseError.reason ?? responseError}`)
                                 })
                             }).catch((requestError) => {
                               Validation.setFormError(addUserChatForm as HTMLFormElement, chatSettingsStyles, requestError.reason);
+                            }).finally(() => {
+                              const closeModalNode = addUserChatForm.parentNode!.parentNode! as HTMLElement
+                              closeModalNode.classList.remove('state__visible');
                             })
                           }
                         } else {
@@ -262,14 +263,15 @@ export class IndexView extends Block<IndexViewProps> {
                             this.children.chatWindow.children.chatSettings.setProps({
                               chatUsers: Store.getItem('chatUsers')
                             })
-                            const closeModalNode = removeUserChatForm.parentNode!.parentNode! as HTMLElement
-                            closeModalNode.click();
                           })
                             .catch((responseError) => {
-                              throw new Error(`Can't get chat users. Reason: ${responseError}`)
+                              throw new Error(`Can't get chat users. Reason: ${responseError.reason ?? responseError}`)
                             })
                         }).catch((requestError) => {
                           Validation.setFormError(removeUserChatForm, chatSettingsStyles, requestError.reason);
+                        }).finally(() => {
+                          const closeModalNode = removeUserChatForm.parentNode!.parentNode! as HTMLElement
+                          closeModalNode.classList.remove('state__visible');
                         })
                       } else {
                         Validation.setFormError(removeUserChatForm, chatSettingsStyles, `User ${removeUserChatForm.login.value} is not in the chat! Or can't remove self!`);
@@ -304,10 +306,11 @@ export class IndexView extends Block<IndexViewProps> {
                       });
                       const closeModalNode = deleteChatForm.parentNode!.parentNode! as HTMLElement
                       closeModalNode.click();
-                    }).catch(() => {
+                    }).catch((responseError) => {
+                      console.log(`Can't delete chat. Reason: ${responseError.reason ?? responseError}`)
+                    }).finally(() => {
                       const closeModalNode = deleteChatForm.parentNode!.parentNode! as HTMLElement
-                      closeModalNode.click();
-                      //throw new Error(`Can't delete chat by id ${Store.getItem('activeChatId')}, reason: ${requestError.reason ?? requestError}`)
+                      closeModalNode.classList.remove('state__visible');
                     })
                   })
                 }
@@ -322,7 +325,7 @@ export class IndexView extends Block<IndexViewProps> {
           if (chatUserLinks.length){
             chatUserLinks.forEach((link:HTMLLinkElement) => {
               if (link !== null){
-                this.props.router.go(link.getAttribute('href') as RouteI['path'])
+                this.props.router.go(`/settings` as RouteI['path'])
               }
             })
           }

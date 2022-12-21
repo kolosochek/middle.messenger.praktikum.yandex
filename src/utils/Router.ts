@@ -20,7 +20,7 @@ export type pathType =
 export interface RouteI {
     path: pathType,
     view: typeof IndexView | typeof AuthView | typeof ProfileView | typeof ErrorView,
-    options?: Partial<IndexViewProps> | Partial<AuthViewProps> | Partial<ProfileViewProps> | Partial<ErrorViewProps>  | never,
+    options?: Partial<IndexViewProps> | Partial<AuthViewProps> | Partial<ProfileViewProps> | Partial<ErrorViewProps>,
     isAuthorizationRequired: boolean,
     _instance?: IndexView | AuthView | ProfileView | ErrorView | undefined,
 }
@@ -45,14 +45,6 @@ export class Router {
 
     public _parseLocation = ():pathType => {
         const path = window.location.pathname.toLowerCase() as pathType || '/'
-        const onlyNumbers = new RegExp(/(\d+)/)
-        const usersDynamicalParams = new RegExp(/^\/users\/(\d)*/g);
-        if (usersDynamicalParams.test(path) && path.match(onlyNumbers)){
-            this.currentViewParams = {
-                userId: path.match(onlyNumbers)![0]
-            }
-            return '/user'
-        }
         return path;
     }
 
@@ -147,8 +139,6 @@ export class Router {
         router.useRoute({ path: '/settings', view: ProfileView, options: { mode: 'view', router: router }, isAuthorizationRequired: true });
         router.useRoute({ path: '/settings-edit', view: ProfileView, options: { mode: 'edit', router: router }, isAuthorizationRequired: true });
         router.useRoute({ path: '/settings-change-password', view: ProfileView, options: { mode: 'change-password', router: router }, isAuthorizationRequired: true });
-        // user
-        router.useRoute({ path: '/user', view: ProfileView, options: { mode: 'view', router: router, isCanChangeProfile: false}, isAuthorizationRequired: true });
         // error
         router.useRoute({ path: '/error404', view: ErrorView, options: { mode: 'error404', router: router }, isAuthorizationRequired: true });
         router.useRoute({ path: '/error500', view: ErrorView, options: { mode: 'error500', router: router } ,isAuthorizationRequired: true }); 
@@ -170,9 +160,11 @@ export class Router {
         const root = document.getElementById('root') as HTMLDivElement;
         if (root !== null) {
             root.innerHTML = '';
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             let view = new this.currentRoute.view(this.currentRoute.options! as any);
             if (this.currentViewParams){
                 this.currentRoute.options = Object.assign(this.currentRoute.options!, this.currentViewParams)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
                 view = new this.currentRoute.view(this.currentRoute.options as any)
             } 
             root.appendChild(view.getContent()!);

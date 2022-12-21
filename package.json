@@ -3,13 +3,12 @@
     "version": "1.4",
     "description": "ModemWebchat App. Slowest thing you've ever saw!",
     "scripts": {
-        "dev": "npm run test && webpack serve",
+        "dev": "npm run lint && npm run test && webpack serve",
         "build": "webpack build",
-        "copy-images": "mkdir ./dist; cp ./static/*.png ./dist; cp ./_redirects ./dist",
         "lint": "npm run eslint && npm run csslint",
         "eslint": "eslint . --fix",
         "csslint": "npx stylelint '**/*.less' --fix",
-        "start": "webpack src/index.html & node server.js",
+        "start": "webpack serve",
         "test": "mocha -r ts-node -r .mochaConf.js 'src/**/*.test.ts'"
     },
     "keywords": [],

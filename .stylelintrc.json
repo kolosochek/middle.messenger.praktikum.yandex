@@ -12,6 +12,12 @@
           "var"
         ]
       }
+    ],
+    "selector-pseudo-class-no-unknown": [
+      true,
+      {
+        "ignorePseudoClasses": ["global"]
+      }
     ]
   }
 }

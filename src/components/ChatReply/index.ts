@@ -1,7 +1,7 @@
 import Block from '../../utils/Block';
 import { InputComponent } from '../InputComponent';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 interface ChatReplyProps {
   events?: {

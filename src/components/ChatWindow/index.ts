@@ -4,7 +4,7 @@ import { ChatReply } from '../ChatReply';
 import { ChatMessageInterface, ChatUserInterface } from '../../model/Store';
 import { Store } from '../../model/Store';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 interface ChatWindowProps {
   chatUsers?: string|number|null;
@@ -28,7 +28,8 @@ export class ChatWindow extends Block<ChatWindowProps> {
     this.children.chatReply = new ChatReply({});
   }
 
-  public componentDidUpdate(): boolean {
+  // @ts-ignore
+  public componentDidUpdate() {
     this.children.chatSettings.setProps(this.props);
     return true;
   }

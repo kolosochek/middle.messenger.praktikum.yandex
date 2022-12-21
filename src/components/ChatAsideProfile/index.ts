@@ -3,7 +3,7 @@ import { Router } from '../../utils/Router';
 import { Link } from '../Link';
 import Block from '../../utils/Block';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 interface ChatAsideProfileProps {
   router: Router,

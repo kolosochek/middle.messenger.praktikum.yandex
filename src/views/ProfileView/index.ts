@@ -10,7 +10,7 @@ import { Validation } from '../../utils/Validation';
 import { Link } from '../../components/Link';
 import { ProfileAvatar } from '../../components/ProfileAvatar';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 
 export interface ProfileViewProps {

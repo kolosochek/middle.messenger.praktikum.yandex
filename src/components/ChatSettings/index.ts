@@ -2,7 +2,7 @@ import Block from '../../utils/Block';
 import { ShowModal } from '../../utils/ShowModal';
 import { ChatUserInterface } from '../../model/Store';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 interface ChatSettingsProps {
   userId: string;

@@ -170,7 +170,7 @@ class Block<P extends Record<string, any> = any> {
             component.getContent()?.append(...Array.from(stub.childNodes));
             stub.replaceWith((component.getContent() as Node));
         }
-
+        // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         Object.entries(this.children).forEach(([index, component]) => {
             if (Object.keys(component.children).length) {

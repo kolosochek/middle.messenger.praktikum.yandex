@@ -10,21 +10,20 @@ import { Validation } from '../../utils/Validation';
 import { ChatAPI } from '../../utils/ChatAPI'
 import { WebSocketAPI } from '../../utils/WebSocketAPI'
 import template from './template';
-import * as styles from "./style.module.less";
-import * as chatReplyStyles from '../../components/ChatReply/style.module.less'
-import * as chatSettingsStyles from '../../components/ChatSettings/style.module.less'
+import styles from "./style.module.less";
+import chatReplyStyles from '../../components/ChatReply/style.module.less'
+import chatSettingsStyles from '../../components/ChatSettings/style.module.less'
 
 export interface IndexViewProps {
   router: Router;
 }
 
 export class IndexView extends Block<IndexViewProps> {
-  public chatAPI: ChatAPI;
+  public chatAPI = new ChatAPI();
   public webSocket: WebSocketAPI;
   public chatList: Partial<ChatListItemInterface[]> | object;
   public chatUsers: Partial<ChatUserInterface[]>;
   public activeChatToken: string | number;
-  public userId: string | number;
 
 
   public updateChatUsers() {
@@ -43,8 +42,6 @@ export class IndexView extends Block<IndexViewProps> {
     // purge view to default state
     Store.clean();
     this.chatAPI = new ChatAPI();
-    // get current user ID
-    this.userId = Store.getUserId();
     // get aside chatList items
     this.chatAPI.getChatList().then((chatList) => {
       Store.setItem('chatList', chatList);
@@ -72,7 +69,7 @@ export class IndexView extends Block<IndexViewProps> {
             const token = (activeChatObject as unknown as Record<string, string>)['token']
             this.activeChatToken = token;
             // create new webSocket
-            this.webSocket = new WebSocketAPI(this.userId, Store.getItem('activeChatId')!, this.activeChatToken!)
+            this.webSocket = new WebSocketAPI(Store.getUserId()!, Store.getItem('activeChatId')!, this.activeChatToken!)
             this.webSocket.keepAlive();
             this.webSocket.socket.addEventListener('open', () => {
               this.webSocket.getOldChatMessages();
@@ -166,7 +163,7 @@ export class IndexView extends Block<IndexViewProps> {
         if (target !== null) {
           e.preventDefault();
           const element = document.querySelector<HTMLDivElement>(`.${chatSettingsStyles['b-chat-settings-wrapper']}`)
-          if (target !== null && element) {
+          if (target !== null && element !== null) {
             element.classList.toggle('state__visible');
             // add user to the chat
             const addUserLink = element.querySelector<HTMLLinkElement>('#add_user_link');
@@ -212,7 +209,8 @@ export class IndexView extends Block<IndexViewProps> {
                                 this.children.chatWindow.children.chatSettings.setProps({
                                   chatUsers: Store.getItem('chatUsers'),
                                 })
-                                (addUserChatForm.parentNode!.parentNode! as HTMLElement).click();
+                                const closeModalNode = addUserChatForm.parentNode!.parentNode! as HTMLElement
+                                closeModalNode.click();
                               })
                                 .catch((responseError) => {
                                   throw new Error(`Can't get chat users. Reason: ${responseError}`)
@@ -247,7 +245,7 @@ export class IndexView extends Block<IndexViewProps> {
                       const isUserAlreadyInChat = (username: string): string | boolean => {
                         let isUserInChat: string | boolean = false;
                         for (const user of Store.getItem('chatUsers')) {
-                          if (username == user.login) {
+                          if (username == user.login && user.id !== Store.getUserId()) {
                             isUserInChat = user.id
                           }
                         }
@@ -262,9 +260,10 @@ export class IndexView extends Block<IndexViewProps> {
                           this.chatAPI.getChatUsers(Store.getItem('activeChatId')!).then((chatUsersObject) => {
                             Store.setItem('chatUsers', chatUsersObject)
                             this.children.chatWindow.children.chatSettings.setProps({
-                              chatUsers: Store.getItem('chatUsers'),
+                              chatUsers: Store.getItem('chatUsers')
                             })
-                            (removeUserChatForm.parentNode!.parentNode! as HTMLElement).click();
+                            const closeModalNode = removeUserChatForm.parentNode!.parentNode! as HTMLElement
+                            closeModalNode.click();
                           })
                             .catch((responseError) => {
                               throw new Error(`Can't get chat users. Reason: ${responseError}`)
@@ -273,7 +272,7 @@ export class IndexView extends Block<IndexViewProps> {
                           Validation.setFormError(removeUserChatForm, chatSettingsStyles, requestError.reason);
                         })
                       } else {
-                        Validation.setFormError(removeUserChatForm, chatSettingsStyles, `User ${removeUserChatForm.login.value} is not in the chat!`);
+                        Validation.setFormError(removeUserChatForm, chatSettingsStyles, `User ${removeUserChatForm.login.value} is not in the chat! Or can't remove self!`);
                       }
                     } else {
                       Validation.setFormError(removeUserChatForm, chatSettingsStyles, `Username can't be empty!`);
@@ -292,7 +291,8 @@ export class IndexView extends Block<IndexViewProps> {
                   const closeModal = deleteChatForm.querySelector<HTMLButtonElement>("#close_modal")!
                   closeModal.addEventListener('click', (e: MouseEvent) => {
                     e.preventDefault();
-                    (deleteChatForm.parentNode!.parentNode! as HTMLElement).click();
+                    const closeModalNode = deleteChatForm.parentNode!.parentNode! as HTMLElement
+                    closeModalNode.click();
                   })
                   deleteChatForm.addEventListener('submit', (e: SubmitEvent) => {
                     e.preventDefault();
@@ -302,9 +302,11 @@ export class IndexView extends Block<IndexViewProps> {
                       this.children.chatWindow.setProps({
                         chatUsers: null,
                       });
-                      (deleteChatForm.parentNode!.parentNode! as HTMLElement).click();
+                      const closeModalNode = deleteChatForm.parentNode!.parentNode! as HTMLElement
+                      closeModalNode.click();
                     }).catch(() => {
-                      (deleteChatForm.parentNode!.parentNode! as HTMLElement).click();
+                      const closeModalNode = deleteChatForm.parentNode!.parentNode! as HTMLElement
+                      closeModalNode.click();
                       //throw new Error(`Can't delete chat by id ${Store.getItem('activeChatId')}, reason: ${requestError.reason ?? requestError}`)
                     })
                   })

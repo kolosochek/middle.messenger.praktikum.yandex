@@ -6,7 +6,7 @@ import { Store } from '../../model/Store';
 import { InputComponent } from '../../components/InputComponent';
 import { Link } from '../../components/Link';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 
 export interface AuthViewProps {
@@ -18,7 +18,7 @@ export interface AuthViewProps {
 }
 
 export class AuthView extends Block<AuthViewProps> {
-  public authAPI: AuthAPI;
+  public authAPI = new AuthAPI();
 
   private _logoutUser(): void {
     Store.clean();

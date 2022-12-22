@@ -25,7 +25,8 @@ Key features:
 - Own MVC(Model-View-Controller) realisation. All entities are Classes, so there is OOP power.
 - All views are composed of components. Views are composed of components or partials. Any props, events can be passed through. 
 - You can still use Handlebars partials for 'dumb' components, which don't so any logic inside. 
-- Nested components feature. Components can include another components, even inside the other components. 
+- Nested components feature. Components can include another components, even inside the other components.
+- Husky pre-commit.
 - Webpack bundler. Handlebars template processor.
 - Docker container.
 - Deployed at Heroku.

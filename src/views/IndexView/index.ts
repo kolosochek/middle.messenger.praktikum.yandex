@@ -128,13 +128,12 @@ export class IndexView extends Block<IndexViewProps> {
         const target: HTMLLinkElement = (e.target! as Element).closest('#create_chat')!;
         if (target !== null) {
           e.preventDefault();
-
           document.querySelector("form#create_chat_form")!.addEventListener('submit', (e) => {
             e.preventDefault();
             const form: HTMLFormElement = (e.target! as Element).closest('form')!;
             const input: HTMLInputElement = form.querySelector('input')!;
             if (form !== null && input !== null && input.value.length) {
-              this.chatAPI.createChat(input.value).then(() => {
+              this.chatAPI.createChat(Validation.escapeHtml(input.value)).then(() => {
                 const element: HTMLDivElement = document.querySelector(`div#modalwindow`)!;
                 if (element !== null) {
                   this.children.chatList.init()
@@ -176,7 +175,7 @@ export class IndexView extends Block<IndexViewProps> {
                     e.preventDefault();
                     if ((addUserChatForm as HTMLFormElement).login.value) {
                       this.chatAPI.findUser({
-                        'login': (addUserChatForm as HTMLFormElement).login.value,
+                        'login': Validation.escapeHtml((addUserChatForm as HTMLFormElement).login.value),
                       }).then((foundUsers) => {
                         if (foundUsers && Array.isArray(foundUsers) && foundUsers.length) {
                           Validation.setFormError((addUserChatForm as HTMLFormElement), chatSettingsStyles, '');
@@ -274,7 +273,7 @@ export class IndexView extends Block<IndexViewProps> {
                           closeModalNode.classList.remove('state__visible');
                         })
                       } else {
-                        Validation.setFormError(removeUserChatForm, chatSettingsStyles, `User ${removeUserChatForm.login.value} is not in the chat! Or can't remove self!`);
+                        Validation.setFormError(removeUserChatForm, chatSettingsStyles, `User ${Validation.escapeHtml(removeUserChatForm.login.value)} is not in the chat! Or can't remove self!`);
                       }
                     } else {
                       Validation.setFormError(removeUserChatForm, chatSettingsStyles, `Username can't be empty!`);

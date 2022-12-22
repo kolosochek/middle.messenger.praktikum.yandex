@@ -1,4 +1,4 @@
-# ModemWebchat app https://modemwebchat.netlify.app/
+# ModemWebchat app https://modemwebchat.herokuapp.com/
 
 ![I mean theeese times, you know.](/github/slow_file_copy.gif)
 #### So slow. So nasty.
@@ -27,31 +27,33 @@ Key features:
 - You can still use Handlebars partials for 'dumb' components, which don't so any logic inside. 
 - Nested components feature. Components can include another components, even inside the other components. 
 - Webpack bundler. Handlebars template processor.
+- Docker container.
+- Deployed at Heroku.
 
 All possible routes:
 ```
-https://modemwebchat.netlify.app/
-https://modemwebchat.netlify.app/sign-up
-https://modemwebchat.netlify.app/logout
-https://modemwebchat.netlify.app/messenger
-https://modemwebchat.netlify.app/settings
-https://modemwebchat.netlify.app/settings-edit
-https://modemwebchat.netlify.app/settings-change-password
-https://modemwebchat.netlify.app/error404
-https://modemwebchat.netlify.app/error500
+https://modemwebchat.herokuapp.com/
+https://modemwebchat.herokuapp.com/sign-up
+https://modemwebchat.herokuapp.com/logout
+https://modemwebchat.herokuapp.com/messenger
+https://modemwebchat.herokuapp.com/settings
+https://modemwebchat.herokuapp.com/settings-edit
+https://modemwebchat.herokuapp.com/settings-change-password
+https://modemwebchat.herokuapp.com/error404
+https://modemwebchat.herokuapp.com/error500
 ```
 
 You will also get a 404 error page if you'll try to reach something outside theese routes. 
 ```
-https://modemwebchat.netlify.app/funny-cat-videos
+https://modemwebchat.herokuapp.com/funny-cat-videos
 ```
 
 ```
-npm run dev - lint & test & start dev 
-npm run build - build the project
-npm run start - build and start a development server
+npm run dev - lint & test & start webpack dev server
+npm run build - build the project 
+npm run start - build and start nodejs express server
 npm run lint - run css and ts linters with --fix flag
-npm run test - check tests
+npm run test - run tests
 ```
 
 Make love, not war and have fun. See you, space cowboy :metal:!

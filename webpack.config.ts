@@ -17,11 +17,13 @@ const config: webpack.Configuration = {
         filename: 'bundle[fullhash].js',
     },
     devServer: {
+        host: '0.0.0.0',
+        allowedHosts: 'all',
+        port: 1234,
         static: {
             directory: path.join(__dirname, 'public'),
         },
         compress: true,
-        port: 1234,
         historyApiFallback: true,
     },
     module: {

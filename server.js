@@ -6,7 +6,9 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 app.use(express.static(path.join(__dirname, 'dist')));
 
-
+app.get('*', function (request, response) {
+    response.sendFile(path.resolve(__dirname, 'index.html'));
+});
 app.listen(PORT, () => {
     console.log(`Express server has been started on port ${PORT}`)
 })

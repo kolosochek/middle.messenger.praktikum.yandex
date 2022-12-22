@@ -7,7 +7,7 @@ const app = express();
 app.use(express.static(path.join(__dirname, 'dist')));
 
 
-app.listen(PORT,() => {
+app.listen(PORT, () => {
     console.log(`Express server has been started on port ${PORT}`)
 })
-module.exports = app
+module.exports = app;

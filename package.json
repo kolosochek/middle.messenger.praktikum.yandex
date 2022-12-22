@@ -4,8 +4,9 @@
     "description": "ModemWebchat App. Slowest thing you've ever saw!",
     "scripts": {
         "dev": "npm run lint && npm run test && webpack serve",
-        "build": "webpack build",
+        "build": "webpack build && npm run copy-images",
         "lint": "npm run eslint && npm run csslint",
+        "copy-images": "cp ./public/*.png ./dist",
         "eslint": "eslint . --fix",
         "csslint": "npx stylelint '**/*.less' --fix",
         "start": "webpack serve",

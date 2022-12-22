@@ -5,6 +5,7 @@ const PORT = process.env.PORT || 8080;
 //static
 const app = express();
 app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('*', function (request, response) {
     response.sendFile(path.resolve(path.join(__dirname, 'dist'), 'index.html'));

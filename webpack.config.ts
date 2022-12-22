@@ -19,7 +19,7 @@ const config: webpack.Configuration = {
     devServer: {
         host: '0.0.0.0',
         allowedHosts: 'all',
-        port: 80,
+        port: 8080,
         static: {
             directory: path.join(__dirname, 'public'),
         },

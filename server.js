@@ -1,13 +1,16 @@
 const express = require('express');
 const path = require('path');
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
-//static 
-const static_url = path.join(__dirname, 'static')
+//static
 const app = express();
-app.use(express.static(static_url))
+app.use(express.static(path.join(__dirname, 'dist')));
+app.use(express.static(path.join(__dirname, 'public')));
 
-
+app.get('*', function (request, response) {
+    response.sendFile(path.resolve(path.join(__dirname, 'dist'), 'index.html'));
+});
 app.listen(PORT, () => {
-  console.log(`Express server has been started on port ${PORT}`)
+    console.log(`Express server has been started on port ${PORT}`)
 })
+module.exports = app;

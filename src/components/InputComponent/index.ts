@@ -1,7 +1,7 @@
 import { Validation } from '../../utils/Validation';
 import Block from '../../utils/Block';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 interface InputComponentProps {
     label?: string;
@@ -30,8 +30,8 @@ export class InputComponent extends Block<InputComponentProps> {
     super({ ...props, });
     
     this.props.events = {
-      focus: (e) => Validation.validateField(e, this.props.styles),
-      blur: (e) => Validation.validateField(e, this.props.styles),
+      focus: (e) => Validation.validateField(e, (this.props.styles as Record<string, string>)),
+      blur: (e) => Validation.validateField(e, (this.props.styles as Record<string, string>)),
     }
   }
 

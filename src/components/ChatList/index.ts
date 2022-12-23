@@ -2,7 +2,7 @@ import Block from '../../utils/Block';
 import { ChatAPI } from '../../utils/ChatAPI'
 import { ChatListItemInterface } from '../../model/Store';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 
 interface ChatListProps {
@@ -27,7 +27,7 @@ export class ChatList extends Block<ChatListProps> {
     this.chatAPI = new ChatAPI();
     this.chatAPI.getChatList()
     .then((chatList) => {
-      this.chatList = chatList as ChatListItemInterface[];
+      this.chatList = chatList as unknown as ChatListItemInterface[];
       this.setProps({
         chatList: this.chatList,
       })

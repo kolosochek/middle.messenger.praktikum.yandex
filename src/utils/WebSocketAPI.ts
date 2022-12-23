@@ -10,7 +10,7 @@ export class WebSocketAPI {
         // error
         this.socket.addEventListener('error', event => {
             // debug
-            console.log('Ошибка', event.message);
+            console.log('Ошибка', (event as unknown as Record<string, string>).message);
         });
         // close
         this.socket.addEventListener('close', event => {

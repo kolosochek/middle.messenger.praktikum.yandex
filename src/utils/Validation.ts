@@ -22,19 +22,19 @@ export class Validation {
     let validationResult = true;
     Object.entries(Rules).forEach(([key, value]) => {
       if (key === fieldType) {
-        this.fieldRegExp = new RegExp(value);
-        validationResult = this.fieldRegExp.test(fieldValue);
+        const fieldRegExp = new RegExp(value);
+        validationResult = fieldRegExp.test(fieldValue);
       }
     });
     return validationResult;
   }
 
-  public static removeFieldIsInvalid(node: HTMLElement | null, styles: object[], errorMessage?: string): void {
+  public static removeFieldIsInvalid(node: HTMLElement | null, styles: Record<string, string>, errorMessage?: string): void {
     if (node !== null) {
       const parentNode: ParentNode | null = node.parentNode;
       if (parentNode !== null) {
         node.removeAttribute('isinvalid');
-        parentNode.classList.remove(`${styles['state__invalid']}`);
+        (parentNode! as HTMLElement).classList.remove(`${styles['state__invalid']}`);
         if (errorMessage) {
           const errorMessageNode = parentNode.querySelector<HTMLParagraphElement>('p');
           if (errorMessageNode !== null) {
@@ -47,7 +47,7 @@ export class Validation {
     }
   }
 
-  public static setFieldIsInvalid(node: HTMLElement | null, styles: object[], errorMessage?: string): void {
+  public static setFieldIsInvalid(node: HTMLElement | null, styles: Record<string, string>, errorMessage?: string): void {
     if (node !== null) {
       const parentNode: ParentNode | null = node.parentNode;
       if (parentNode !== null) {
@@ -60,7 +60,7 @@ export class Validation {
           Validation.setDefaultErrorMessage(node)
         }
         node.setAttribute('isinvalid', 'true');
-        parentNode.classList.add(`${styles['state__invalid']}`);
+        (parentNode! as HTMLElement).classList.add(`${styles['state__invalid']}`);
       }
     }
   }
@@ -75,7 +75,7 @@ export class Validation {
     }
   }
 
-  public static comparePasswordFields(password:HTMLInputElement | null, confirm_password:HTMLInputElement | null, styles: object[]): boolean {
+  public static comparePasswordFields(password:HTMLInputElement | null, confirm_password:HTMLInputElement | null, styles: Record<string, string>): boolean {
     if (password !== null && confirm_password !== null){
         if(password.value === confirm_password.value) {
           Validation.removeFieldIsInvalid(password, styles)
@@ -89,25 +89,25 @@ export class Validation {
       return false;
     }
 
-  public static setFormError(form:HTMLFormElement | null, styles: object[], errorMessage = ''){
+  public static setFormError(form:HTMLFormElement | null, styles: Record<string, string>, errorMessage = ''){
     if (form !== null){
       const errorMessageNode = form.querySelector<HTMLParagraphElement>(`p.${styles['b-form-error-text']}`)!;
       errorMessageNode.textContent = errorMessage;
-      errorMessageNode.parentNode?.classList.add(`${styles['state__error']}`);
+      (errorMessageNode.parentNode! as HTMLElement).classList.add(`${styles['state__error']}`);
     } else {
       throw new Error(`Given form is empty`);
     }
   }
 
-  public static validateField(element: HTMLInputElement | Event, styles:object[]) {
+  public static validateField(element: HTMLInputElement | Event, styles:Record<string, string>) {
     if (element instanceof HTMLInputElement) {
       Validation.validateFieldByType(element.name, element.value)
         ? Validation.removeFieldIsInvalid(element, styles)
         : Validation.setFieldIsInvalid(element, styles)
     } else {
-      Validation.validateFieldByType(element.target.name, element.target.value)
-        ? Validation.removeFieldIsInvalid(element.target, styles)
-        : Validation.setFieldIsInvalid(element.target, styles)
+      Validation.validateFieldByType((element.target! as HTMLInputElement).name, (element.target! as HTMLInputElement).value)
+        ? Validation.removeFieldIsInvalid((element.target! as HTMLInputElement), styles)
+        : Validation.setFieldIsInvalid((element.target! as HTMLInputElement), styles)
     }
   }
 

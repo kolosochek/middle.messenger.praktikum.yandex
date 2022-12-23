@@ -10,14 +10,13 @@ import { Validation } from '../../utils/Validation';
 import { Link } from '../../components/Link';
 import { ProfileAvatar } from '../../components/ProfileAvatar';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 
-interface ProfileViewProps {
+export interface ProfileViewProps {
   mode: "view" | "edit" | "change-password";
   router: Router;
   profile?: ProfileInterface;
-  userId?: number|string;
   isCanChangeProfile: boolean;
 
   events?: {
@@ -29,64 +28,6 @@ interface ProfileViewProps {
 export class ProfileView extends Block<ProfileViewProps> {
   public profileAPI:ProfileAPI;
   public authAPI:AuthAPI;
-
-
-  public createProfileFields(profile:ProfileInterface):void {
-    //ProfileFieldEmail
-    this.children.profileFieldEmail = new InputComponent({
-      name: 'email',
-      label: 'Email:',
-      value: profile.email,
-      type: 'text',
-      class: `${styles['b-profile-field']}`,
-      isDisabled: true,
-    });
-
-    //ProfileFieldFirstName
-    this.children.profileFieldFirstName = new InputComponent({
-      name: 'first_name',
-      label: 'First name:',
-      value: profile.first_name,
-      class: `${styles['b-profile-field']}`,
-      isDisabled: true,
-    });
-
-    //ProfileFieldSecondName
-    this.children.profileFieldSecondName = new InputComponent({
-      name: 'second_name',
-      label: 'Last name:',
-      value: profile.second_name,
-      class: `${styles['b-profile-field']}`,
-      isDisabled: true,
-    });
-
-    //ProfileFieldLogin
-    this.children.profileFieldLogin = new InputComponent({
-      name: 'login',
-      label: 'Login:',
-      value: profile.login,
-      class: `${styles['b-profile-field']}`,
-      isDisabled: true,
-    });
-
-    //ProfileFieldDisplayName
-    this.children.profileFieldDisplayName = new InputComponent({
-      name: 'display_name',
-      label: 'Display name:',
-      value: profile.display_name,
-      class: `${styles['b-profile-field']}`,
-      isDisabled: true,
-    });
-
-    //ProfileFieldPhone
-    this.children.profileFieldPhone = new InputComponent({
-      name: 'phone',
-      label: 'Phone:',
-      value: profile.phone,
-      class: `${styles['b-profile-field']}`,
-      isDisabled: true,
-    });
-  }
 
 
   init() {
@@ -101,23 +42,62 @@ export class ProfileView extends Block<ProfileViewProps> {
     const viewMode = this.props.mode as ProfileViewProps['mode'];
     switch (viewMode) {
       case 'view': {
-        if (this.props.userId) {
-          this.profileAPI.getUserProfileById(this.props.userId).then((data)=> {
-            this.createProfileFields(data as ProfileInterface)
-            this.setProps({
-              profile: data as ProfileInterface
-            })
-            this.children.profileAvatar.setProps({
-              profile: data as ProfileInterface
-            })
-          }).catch((requestError) => {
-            throw new Error(`Can't get user by id ${this.props.userId}, reason: ${requestError.reason ?? requestError}`)
-          })
-        } else {
-          this.props.isCanChangeProfile = true;
-          this.createProfileFields(this.props.profile)
-        }
+        this.props.isCanChangeProfile = true;
 
+        //ProfileFieldEmail
+        this.children.profileFieldEmail = new InputComponent({
+          name: 'email',
+          label: 'Email:',
+          value: this.props.profile.email,
+          type: 'text',
+          class: `${styles['b-profile-field']}`,
+          isDisabled: true,
+        });
+
+        //ProfileFieldFirstName
+        this.children.profileFieldFirstName = new InputComponent({
+          name: 'first_name',
+          label: 'First name:',
+          value: this.props.profile.first_name,
+          class: `${styles['b-profile-field']}`,
+          isDisabled: true,
+        });
+
+        //ProfileFieldSecondName
+        this.children.profileFieldSecondName = new InputComponent({
+          name: 'second_name',
+          label: 'Last name:',
+          value: this.props.profile.second_name,
+          class: `${styles['b-profile-field']}`,
+          isDisabled: true,
+        });
+
+        //ProfileFieldLogin
+        this.children.profileFieldLogin = new InputComponent({
+          name: 'login',
+          label: 'Login:',
+          value: this.props.profile.login,
+          class: `${styles['b-profile-field']}`,
+          isDisabled: true,
+        });
+
+        //ProfileFieldDisplayName
+        this.children.profileFieldDisplayName = new InputComponent({
+          name: 'display_name',
+          label: 'Display name:',
+          value: this.props.profile.display_name,
+          class: `${styles['b-profile-field']}`,
+          isDisabled: true,
+        });
+
+        //ProfileFieldPhone
+        this.children.profileFieldPhone = new InputComponent({
+          name: 'phone',
+          label: 'Phone:',
+          value: this.props.profile.phone,
+          class: `${styles['b-profile-field']}`,
+          isDisabled: true,
+        });
         // edit profile link
         this.children.editProfileLink = new Link({ 
           router: this.props.router,
@@ -191,8 +171,8 @@ export class ProfileView extends Block<ProfileViewProps> {
           class: `${styles['b-profile-field']}`,
           styles: styles,
           events: {
-            focus: () => {},
-            blur: () => {},
+            focus: () => {return},
+            blur: () => {return},
           }
         });
 
@@ -264,7 +244,7 @@ export class ProfileView extends Block<ProfileViewProps> {
       profileStyles: styles,
       events: {
         click: (e:MouseEvent) => {
-          const link:HTMLLIElement = e.target!.closest("a");
+          const link = (e.target! as HTMLElement).closest("a");
           if(link !== null) {
             const form:HTMLFormElement = document.querySelector('form#upload_avatar')!;
             if (form !== null) {
@@ -274,7 +254,7 @@ export class ProfileView extends Block<ProfileViewProps> {
                 this.profileAPI.changeUserAvatar(formData).then((newProfile) => {
                   Store.setItem('profile', newProfile);
                   this.init();
-                  form.parentNode!.parentNode!.click();
+                  (form.parentNode!.parentNode! as HTMLElement).click();
                 }).catch((requestError) => {
                   throw new Error(`Can't change user avatar, reason: ${requestError.reason ?? requestError}`)
                 })

@@ -1,0 +1,10 @@
+{
+  "extensions": ["ts"],
+  "spec": ["src/**/*.test.*"],
+
+  "watch-ignore": ["node_modules"],
+  "node-option": [
+    "experimental-specifier-resolution=node",
+    "loader=ts-node/esm"
+  ]
+}

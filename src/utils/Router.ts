@@ -1,7 +1,7 @@
-import { IndexView } from '../views/IndexView';
-import { AuthView } from '../views/AuthView';
-import { ProfileView } from '../views/ProfileView';
-import { ErrorView } from '../views/ErrorView';
+import {IndexView, IndexViewProps} from '../views/IndexView';
+import {AuthView, AuthViewProps} from '../views/AuthView';
+import {ProfileView, ProfileViewProps} from '../views/ProfileView';
+import {ErrorView, ErrorViewProps} from '../views/ErrorView';
 
 export type pathType =
     '/'
@@ -17,20 +17,20 @@ export type pathType =
     | '/error500'
     | '/user'
 
-interface Route {
+export interface RouteI {
     path: pathType,
     view: typeof IndexView | typeof AuthView | typeof ProfileView | typeof ErrorView,
-    options?: object | object[],
+    options?: Partial<IndexViewProps> | Partial<AuthViewProps> | Partial<ProfileViewProps> | Partial<ErrorViewProps>,
     isAuthorizationRequired: boolean,
     _instance?: IndexView | AuthView | ProfileView | ErrorView | undefined,
 }
 
 export class Router {
     private static _instance: Router;
-    public routesArray: Route[] = [];
-    public currentRoute: Route;
-    public currentView: Route['view'];
-    public currentPath: Route['path'] | false;
+    public routesArray: RouteI[] = [];
+    public currentRoute: RouteI;
+    public currentView: RouteI['view'];
+    public currentPath: RouteI['path'] | false;
     public currentViewParams: Record<string, string>
     public isExternalRoute: boolean;
 
@@ -45,14 +45,6 @@ export class Router {
 
     public _parseLocation = ():pathType => {
         const path = window.location.pathname.toLowerCase() as pathType || '/'
-        const onlyNumbers = new RegExp(/(\d+)/)
-        const usersDynamicalParams = new RegExp(/^\/users\/(\d)*/g);
-        if (usersDynamicalParams.test(path) && path.match(onlyNumbers)){
-            this.currentViewParams = {
-                userId: path.match(onlyNumbers)![0]
-            }
-            return '/user'
-        }
         return path;
     }
 
@@ -64,11 +56,11 @@ export class Router {
         window.history.forward();
     }
 
-    public useRoute(route: Route): void {        
+    public useRoute(route: RouteI): void {
         this.routesArray.push(route);
     }
 
-    public go(path: Route['path']): void {
+    public go(path: RouteI['path']): void {
         this.isExternalRoute = true;
         this.currentRoute = this.getRouteByPath(path);
         this.currentPath = path;
@@ -76,7 +68,7 @@ export class Router {
         this.renderRoute()
     }
 
-    public getRouteByPath(path: Route['path']): Route {
+    public getRouteByPath(path: RouteI['path']): RouteI {
         const isAuthorized: boolean = AuthView.getIsAuthorized();
         this.currentRoute = {
             path: '/',
@@ -106,13 +98,13 @@ export class Router {
             }
         } else {
             // prepare routes for unauthorized users
-            const unauthorizedRoutes: Route[] = [];
+            const unauthorizedRoutes: RouteI[] = [];
             this.routesArray.forEach((route) => {
                 if (!route.isAuthorizationRequired) {
                     unauthorizedRoutes.push(route);
                 }
             });
-            // iterate trough it and get the proper route
+            // iterate through it and get the proper route
             let isPageNotFound = true;
             unauthorizedRoutes.forEach((route) => {
                 if (route.path == path) {
@@ -123,7 +115,7 @@ export class Router {
             });
             if (isPageNotFound) {
                 // return error404 view if path is unavaliable
-                const route: Route = {
+                const route: RouteI = {
                     path: '/',
                     view: ErrorView,
                     options: { mode: "error404" },
@@ -147,8 +139,6 @@ export class Router {
         router.useRoute({ path: '/settings', view: ProfileView, options: { mode: 'view', router: router }, isAuthorizationRequired: true });
         router.useRoute({ path: '/settings-edit', view: ProfileView, options: { mode: 'edit', router: router }, isAuthorizationRequired: true });
         router.useRoute({ path: '/settings-change-password', view: ProfileView, options: { mode: 'change-password', router: router }, isAuthorizationRequired: true });
-        // user
-        router.useRoute({ path: '/user', view: ProfileView, options: { mode: 'view', router: router, isCanChangeProfile: false}, isAuthorizationRequired: true });
         // error
         router.useRoute({ path: '/error404', view: ErrorView, options: { mode: 'error404', router: router }, isAuthorizationRequired: true });
         router.useRoute({ path: '/error500', view: ErrorView, options: { mode: 'error500', router: router } ,isAuthorizationRequired: true }); 
@@ -170,9 +160,12 @@ export class Router {
         const root = document.getElementById('root') as HTMLDivElement;
         if (root !== null) {
             root.innerHTML = '';
-            let view = new this.currentRoute.view(this.currentRoute.options);
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            let view = new this.currentRoute.view(this.currentRoute.options! as any);
             if (this.currentViewParams){
-                view = new this.currentRoute.view(Object.assign(this.currentRoute.options, this.currentViewParams))
+                this.currentRoute.options = Object.assign(this.currentRoute.options!, this.currentViewParams)
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                view = new this.currentRoute.view(this.currentRoute.options as any)
             } 
             root.appendChild(view.getContent()!);
             view.dispatchComponentDidMount();

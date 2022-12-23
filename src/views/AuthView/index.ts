@@ -6,10 +6,10 @@ import { Store } from '../../model/Store';
 import { InputComponent } from '../../components/InputComponent';
 import { Link } from '../../components/Link';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 
-interface AuthViewProps {
+export interface AuthViewProps {
   mode: 'auth' | 'signup' | 'logout';
   router: Router;
   events?: {
@@ -18,7 +18,7 @@ interface AuthViewProps {
 }
 
 export class AuthView extends Block<AuthViewProps> {
-  public authAPI: AuthAPI;
+  public authAPI = new AuthAPI();
 
   private _logoutUser(): void {
     Store.clean();
@@ -164,7 +164,7 @@ export class AuthView extends Block<AuthViewProps> {
     this.props.events = {
       submit: (e:SubmitEvent) => {
         e.preventDefault();
-        const form: HTMLFormElement = e.target!;
+        const form: HTMLFormElement = (e.target! as HTMLFormElement);
         const formAllFields = form.querySelectorAll<HTMLInputElement>('input');
         if (formAllFields.length) {
           formAllFields.forEach((element: HTMLInputElement) => {
@@ -180,7 +180,7 @@ export class AuthView extends Block<AuthViewProps> {
           if (viewMode === 'auth') {
             const formData = Object.fromEntries(new FormData(form));
             // auth user
-            this.authAPI.authorizeUser(formData as AuthFormInterface).then(() => {
+            this.authAPI.authorizeUser(formData as unknown as AuthFormInterface).then(() => {
               this._loginUser();
               this.props.router.go('/messenger');
             }).catch((requestError) => {
@@ -198,7 +198,7 @@ export class AuthView extends Block<AuthViewProps> {
             if (Validation.comparePasswordFields(passwordField, confirmPasswordField, styles)) {
               const formData = Object.fromEntries(new FormData(form));
               // register user
-              this.authAPI.registerUser(formData as RegisterFormInterface).then(() => {
+              this.authAPI.registerUser(formData as unknown as RegisterFormInterface).then(() => {
                 this._loginUser();
                 this.props.router.go('/messenger');
               }).catch((requestError) => {

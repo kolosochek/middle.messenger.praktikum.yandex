@@ -35,7 +35,7 @@ export class ChatAPI extends HTTPTransport{
     }
 
     async deleteChat(chatId:string){
-        return this.delete(this.createChatUrl, { data: { 'chatId': `${chatId}` }})
+        return this.delete(this.createChatUrl, { data: { 'chatId': Number(chatId) }})
     }
 
     async findUser(query: Record<string, string>){

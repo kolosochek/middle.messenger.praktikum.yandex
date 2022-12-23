@@ -1,7 +1,7 @@
 import Block from '../../utils/Block';
 import { ProfileInterface } from '../../model/Store';
 import template from './template';
-import * as styles from './style.module.less';
+import styles from './style.module.less';
 
 interface ProfileAvatarProps { 
     profile: ProfileInterface,

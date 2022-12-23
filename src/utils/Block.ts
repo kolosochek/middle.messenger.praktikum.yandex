@@ -15,7 +15,8 @@ class Block<P extends Record<string, any> = any> {
     public id = (Math.random() + 1).toString(36).substring(3);
     public context: object;
     protected props: P;
-    public children: Block | Block[];
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    public children: Record<string, Block | Block[] | any>;
     private _element: HTMLElement | null = null;
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     public template: any;
@@ -24,7 +25,8 @@ class Block<P extends Record<string, any> = any> {
         const eventBus = new EventBus();
         const { props, children } = this._getChildrenAndProps(propsWithChildren);
         this.children = children;
-        this.props = this._makePropsProxy(props);
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        this.props = this._makePropsProxy(props) as any;
         this.eventBus = () => eventBus;
         this._registerEvents(eventBus);
         eventBus.emit(Block.EVENTS.INIT);
@@ -139,7 +141,7 @@ class Block<P extends Record<string, any> = any> {
     }
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    protected compile(template: any, context: any) {
+    public compile(template: any, context: any) {
         const contextAndStubs = { ...context };
 
         Object.entries(this.children).forEach(([name, component]) => {
@@ -147,8 +149,8 @@ class Block<P extends Record<string, any> = any> {
                 contextAndStubs[name] = `<div data-id="${component.id}"></div>`;
 
                 Object.entries(component.children).forEach(([key, value]) => {
-                    //console.log(`key: ${key}, value: ${value}`)
-                    contextAndStubs[key] = `<div data-id="${value.id}"></div>`;
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    contextAndStubs[key] = `<div data-id="${(value as any).id}"></div>`;
                 });
 
             } else {
@@ -168,9 +170,9 @@ class Block<P extends Record<string, any> = any> {
                 return;
             }
             component.getContent()?.append(...Array.from(stub.childNodes));
-            stub.replaceWith(component.getContent());
+            stub.replaceWith((component.getContent() as Node));
         }
-
+        // @ts-ignore
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         Object.entries(this.children).forEach(([index, component]) => {
             if (Object.keys(component.children).length) {
@@ -184,7 +186,7 @@ class Block<P extends Record<string, any> = any> {
         return temp.content;
     }
 
-    protected render(): DocumentFragment {
+    public render(): DocumentFragment {
         return new DocumentFragment();
     }
 

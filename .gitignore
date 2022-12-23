@@ -5,3 +5,4 @@ temp.html
 .vscode/
 .eslintrc.json
 .eslintignore
+package-lock.json
